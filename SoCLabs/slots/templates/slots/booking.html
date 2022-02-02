@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css" type="text/css">
+    <!-- <script src="booking.js" async></script> -->
+    <title>Document</title>
+</head>
+<body>
+    <h1 class="page-header booking-header">Book Slot</h2>
+    <section class="container dropdown-option day-option">
+        <form class="dropdown-form" method="POST" action="">
+            <legend class="form-legend">Choose a Day</legend>
+            <select name="days" id="days">
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+            </select>
+            <button class="btn btn-primary btn-form-submit" type="submit">Search</button>
+        </form>
+    </section>
+    <section class="container slot-booking">
+        <div class="flex-container">
+            <div class="table-legend">
+                <div class="legend-item"><div class="box red"></div> : Unavailable</div>
+                <div class="legend-item"><div class="box green"></div> : Available</div>
+                <div class="legend-item"><div class="box orange"></div> : Booked</div>
+            </div>
+            <table class="booking-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Slots</th>
+                        <th scope="col">Board 1</th>
+                        <th scope="col">Board 2</th>
+                        <th scope="col">Board 3</th>
+                        <th scope="col">Board 4</th>
+                        <th scope="col">Board 5</th>
+                        <th scope="col">Board 6</th>
+                        <th scope="col">Board 7</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">17:00-17:30</th>
+                        <td class="slot unavailable">aaa_rno</td>
+                        <td class="slot unavailable">bbb_rno</td>
+                        <td class="slot unavailable">ccc_rno</td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">17:30-18:00</th>
+                        <td class="slot unavailable">ddd_rno</td>
+                        <td class="slot unavailable">fff_rno</td>
+                        <td class="slot unavailable">eee_rno</td>
+                        <td class="slot unavailable">aaa_rno</td>
+                        <td class="slot unavailable">ggg_rno</td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">18:00-18:30</th>
+                        <td class="slot unavailable">hhh_rno</td>
+                        <td class="slot"></td>
+                        <td class="slot unavailable">eee_rno</td>
+                        <td class="slot unavailable">jjj_rno</td>
+                        <td class="slot unavailable">iii_rno</td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">18:30-19:00</th>
+                        <td class="slot unavailable">kkk_rno</td>
+                        <td class="slot unavailable">hhh_rno</td>
+                        <td class="slot unavailable">lll_rno</td>
+                        <td class="slot unavailable">mmm_rno</td>
+                        <td class="slot unavailable">eee_rno</td>
+                        <td class="slot unavailable">nnn_rno</td>
+                        <td class="slot unavailable">ooo_rno</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">19:00-19:30</th>
+                        <td class="slot unavailable">ppp_rno</td>
+                        <td class="slot"></td>
+                        <td class="slot unavailable">nnn_rno</td>
+                        <td class="slot unavailable">mmm_rno</td>
+                        <td class="slot"></td>
+                        <td class="slot unavailable">qqq_rno</td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">19:30-20:00</th>
+                        <td class="slot unavailable">lll_rno</td>
+                        <td class="slot unavailable">rrr_rno</td>
+                        <td class="slot"></td>
+                        <td class="slot unavailable">sss_rno</td>
+                        <td class="slot"></td>
+                        <td class="slot unavailable">qqq_rno</td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">20:00-20:30</th>
+                        <td class="slot unavailable">bbb_rno</td>
+                        <td class="slot unavailable">ttt_rno</td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot unavailable">ooo_rno</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">20:30-21:00</th>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">21:00-21:30</th>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">21:30-22:00</th>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">22:00-22:30</th>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">22:30-23:00</th>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">23:00-23:30</th>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">23:30-0:00</th>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                        <td class="slot"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>    
+        <form class="timing-form" method="POST">
+            <label for="time-slot">Time Slot:</label>
+            <input type="text" name="time-slot" id="time-slot">
+            <br>
+            <label for="board">Board No.:</label>
+            <input type="text" name='board' id="board">
+            <div class="timimg-form-submit">
+                <button class="btn btn-primary btn-timing-submit" type="submit">Submit</button>
+                <button class="btn btn-danger btn-clear" type="button">Clear</button>
+            </div>
+        </form>
+    </section>
+    <script src="booking2.js" async></script>
+</body>
+</html>
