@@ -13,10 +13,6 @@ DAYS_OF_WEEK = (
     ('Saturday','Saturday'),
     ('Sunday','Sunday')
 )
-# TIME_SLOTS = (
-#     ('00:00 - 00:30'),
-
-# )
 HOUR_SLOTS = []
 for i in range(24):
     HOUR_SLOTS.append((str(i).zfill(2),str(i).zfill(2)))
@@ -30,6 +26,17 @@ MINUTE_SLOTS = tuple(MINUTE_SLOTS)
 # class DaySchedule(models.Model):
 #     day = models.CharField(max_length=10,choices=DAYS_OF_WEEK)
 
+class TimeConfig(models.Model):
+    day = models.CharField(max_length=10,choices=DAYS_OF_WEEK,null=True)
+    start_time_hours = models.CharField(max_length=2,choices=HOUR_SLOTS,null=True)
+    start_time_minutes = models.CharField(max_length=2,choices=MINUTE_SLOTS,null=True)
+    end_time_hours = models.CharField(max_length=2,choices=HOUR_SLOTS,null=True)
+    end_time_minutes = models.CharField(max_length=2,choices=MINUTE_SLOTS,null=True)
+    duration = models.IntegerField(null=True)
+
+    def __str__(self):
+        return f'{self.day};Slots from {self.start_time_hours}:{self.start_time_minutes} to {self.end_time_hours}:{self.end_time_minutes};duration:{self.duration} minutes'
+        
 class TimeSlot(models.Model):
     start_time_hours = models.CharField(max_length=2,choices=HOUR_SLOTS,null=True)
     start_time_minutes = models.CharField(max_length=2,choices=MINUTE_SLOTS,null=True)
@@ -40,7 +47,7 @@ class TimeSlot(models.Model):
         return f'{self.start_time_hours}:{self.start_time_minutes} - {self.end_time_hours}:{self.end_time_minutes}'
 
 class TimeSchedule(models.Model):
-    day = models.CharField(max_length=10,choices=DAYS_OF_WEEK,)
+    day = models.CharField(max_length=10,choices=DAYS_OF_WEEK)
     time_slot = models.ForeignKey(TimeSlot,on_delete=models.CASCADE)
     board1 = models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL,related_name='board1_user')
     board2 = models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL,related_name='board2_user')
@@ -51,7 +58,8 @@ class TimeSchedule(models.Model):
     board7 = models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL,related_name='board7_user')
     board8 = models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL,related_name='board8_user')
     board9 = models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL,related_name='board9_user')
-    board10 = models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL,related_name='board10_user')
+    board10= models.ForeignKey(User,null=True,blank=True,on_delete=models.SET_NULL,related_name='board10_user')
+    time_config = models.ForeignKey(TimeConfig,on_delete=models.CASCADE,null=True)
 
     def __str__(self):
-        return self.time_slot
+        return f'{self.day},{self.time_slot.start_time_hours}:{self.time_slot.start_time_minutes} - {self.time_slot.end_time_hours}:{self.time_slot.end_time_minutes}'
