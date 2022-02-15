@@ -3,10 +3,33 @@ const tableBody = document.getElementsByTagName('tbody')[0];
 const slots = document.querySelectorAll('.slot:not(.unavailable)');
 const daySelect = document.getElementById('days');
 
-
-function createTable() {
+fetch("{% url 'book-slots' %}",{
+    headers:{
+        'Accept':'application/json',
+        'X-Requested-With':'XMLHttpRequest'
+    },
+})
+.then(response => {
+    return response.json()
+})
+.then(data => {
     
-}
+    for(i=0;i<data.time_schedule.length;i++){
+        var row = document.createElement("tr")
+        
+        // inserting time header
+        var header = document.createElement('th')
+        var time_slot = data.time_schedule[i].time_slot
+        var header_text = time_slot.start_time_hours+":"+time_slot.start_time_minutes+"-"+time_slot.end_time_hours+":"+time_slot.end_time_minutes
+        header.appendChild(header_text)
+        row.appendChild(header)
+
+        // inserting board entries
+        
+
+    }
+})
+
 populateUI();
 // populating the UI when rendered/reloaded
 function populateUI(){
@@ -46,7 +69,7 @@ function updateTimingForm(){
     document.getElementById('time-slot').value = time;
     document.getElementById('board').value = board;
 }
-// clearing the prviously selected slot 
+// clearing the previously selected slot 
 function clearSelections(){
     for(var i=0;i<slots.length;i++){
         if(slots[i].classList.contains('selected')){

@@ -30,9 +30,13 @@ def create_TimeSlots(sender,instance,created,**kwargs):
             ed_h = str(ed_h).zfill(2)
             ed_m = str(ed%60).zfill(2)
             
-            time_slot = TimeSlot.objects.create(start_time_hours = st_h,start_time_minutes = st_m,end_time_hours = ed_h,end_time_minutes = ed_m)
+            time_slot,done = TimeSlot.objects.get_or_create(start_time_hours = st_h,start_time_minutes = st_m,end_time_hours = ed_h,end_time_minutes = ed_m)
             day = instance.day
             time_schedule = TimeSchedule.objects.create(day = day,time_slot = time_slot,time_config = instance)
+            for i in range(instance.no_of_boards):
+                board = Board.objects.create(day = day,time_slot=time_slot,time_config = instance)
+                time_schedule.boards.add(board)
+
             st_h = ed_h
             st_m = ed_m
             start = int(st_h)*60 + int(st_m)
