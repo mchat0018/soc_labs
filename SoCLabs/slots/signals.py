@@ -34,8 +34,8 @@ def create_TimeSlots(sender,instance,created,**kwargs):
             day = instance.day
             time_schedule = TimeSchedule.objects.create(day = day,time_slot = time_slot,time_config = instance)
             for i in range(instance.no_of_boards):
-                board = Board.objects.create(day = day,time_slot=time_slot,time_config = instance)
-                time_schedule.boards.add(board)
+                board = Board.objects.create(day = day,time_slot=time_slot,time_sched=time_schedule)
+                # time_schedule.boards.add(board)
 
             st_h = ed_h
             st_m = ed_m

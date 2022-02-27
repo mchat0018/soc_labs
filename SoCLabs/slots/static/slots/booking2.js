@@ -3,32 +3,27 @@ const tableBody = document.getElementsByTagName('tbody')[0];
 const slots = document.querySelectorAll('.slot:not(.unavailable)');
 const daySelect = document.getElementById('days');
 
-fetch("{% url 'book-slots' %}",{
-    headers:{
-        'Accept':'application/json',
-        'X-Requested-With':'XMLHttpRequest'
-    },
-})
-.then(response => {
-    return response.json()
-})
-.then(data => {
+
+// const data = JSON.parse(document.getElementById('data'))
+// for(i=0;i<data.time_schedules.length;i++){
+//         var row = document.createElement("tr")
+            
+//         // inserting time header
+//         var header = document.createElement('th')
+//         var time_slot = data.time_schedules[i].time_slot
+//         var header_text = time_slot.start_time_hours+":"+time_slot.start_time_minutes+"-"+time_slot.end_time_hours+":"+time_slot.end_time_minutes
+//         header.appendChild(header_text)
+//         row.appendChild(header)
     
-    for(i=0;i<data.time_schedule.length;i++){
-        var row = document.createElement("tr")
-        
-        // inserting time header
-        var header = document.createElement('th')
-        var time_slot = data.time_schedule[i].time_slot
-        var header_text = time_slot.start_time_hours+":"+time_slot.start_time_minutes+"-"+time_slot.end_time_hours+":"+time_slot.end_time_minutes
-        header.appendChild(header_text)
-        row.appendChild(header)
+//         // inserting board entries
+//         for(j=0;j<data.boards.length;j++){
+//             board = data.boards[j]
+//             if(board.time_slot==time_slot){
 
-        // inserting board entries
-        
-
-    }
-})
+//             }
+//         }
+    
+// }
 
 populateUI();
 // populating the UI when rendered/reloaded

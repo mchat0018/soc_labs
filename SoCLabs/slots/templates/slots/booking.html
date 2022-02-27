@@ -14,13 +14,16 @@
         <form class="dropdown-form" method="POST" action="">
             <legend class="form-legend">Choose a Day</legend>
             <select name="days" id="days">
-                <option value="Thursday">Thursday</option>
+                {% for day in days %}
+                    <option value="{{ day }}">{{day}}</option>
+                {% endfor %}
+                <!-- <option value="Thursday">Thursday</option>
                 <option value="Friday">Friday</option>
                 <option value="Saturday">Saturday</option>
                 <option value="Sunday">Sunday</option>
                 <option value="Monday">Monday</option>
                 <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
+                <option value="Wednesday">Wednesday</option> -->
             </select>
             <button class="btn btn-primary btn-form-submit" type="submit">Search</button>
         </form>
@@ -50,7 +53,21 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for time_sched in time_schedules %}
                     <tr>
+                        <th scope="row">{{time_sched.time_slot}}</th>
+                        {% for board in boards %}
+                            {% if board.time_slot == time_sched.time_slot %}
+                                {% if board.user %}
+                                    <td class="slot unavailable">Unavailable</td>
+                                {% else %}
+                                    <td class="slot"></td>
+                                {% endif %}
+                            {% endfor %}
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    <!-- <tr>
                         <th scope="row">17:00-17:30</th>
                         <td class="slot unavailable">aaa_rno</td>
                         <td class="slot unavailable">bbb_rno</td>
@@ -189,7 +206,7 @@
                         <td class="slot"></td>
                         <td class="slot"></td>
                         <td class="slot"></td>
-                    </tr>
+                    </tr> -->
                 </tbody>
             </table>
         </div>    
@@ -205,6 +222,7 @@
             </div>
         </form>
     </section>
+    <!-- {{data|json_script:"data"}} -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="booking2.js" async></script>
 </body>
