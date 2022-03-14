@@ -13,6 +13,7 @@ def bookSlots(request):
     # making a list of all days left in the lab week
     date_now = date.today()
     day_now = date_now.weekday()
+    today = DAYS_OF_WEEK[day_now]
     days = []
     i = day_now
     while i<7:
@@ -21,7 +22,7 @@ def bookSlots(request):
 
     data = {
         'days': days,
-        'time_schedules': TimeSchedule.objects.filter(day=days[day_now]).all(),
-        'boards': Board.objects.all(day=days[day_now]) 
+        'time_schedules': TimeSchedule.objects.filter(day=today).all(),
+        'boards': Board.objects.filter(day=today).all() 
     }    
     return render(request,'slots/booking.html',context = data)
