@@ -1,0 +1,30 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'users/styles.css' %}" type="text/css">
+        <title>Register</title>
+    </head>
+    <body>
+        <h1 class="page-header register-header">Create Account</h1>
+        <section class="content registration">
+            <form class="user-form" method="POST">
+                {% csrf_token %}
+                <legend class="border-bottom mb-4">Join Today</legend>
+                    {{form|crispy}}
+                <div class="register-form-submit">
+                    <button class="btn btn-primary btn-register" type="submit">Register</button>
+                </div>
+            </form>
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    Already have an account? <a class="ml-2" href="{% url 'login' %}">Sign In</a>
+                </small>
+            </div>
+        </section>
+    </body>
+</html>

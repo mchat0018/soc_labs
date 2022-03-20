@@ -13,6 +13,7 @@
     <h1 class="page-header booking-header">Book Slot</h2>
     <section class="container dropdown-option day-option">
         <form class="dropdown-form" method="POST" action="">
+            {% csrf_token %}
             <legend class="form-legend">Choose a Day</legend>
             <select name="days" id="days">
                 {% for day in days %}
@@ -26,7 +27,7 @@
                 <option value="Tuesday">Tuesday</option>
                 <option value="Wednesday">Wednesday</option> -->
             </select>
-            <button class="btn btn-primary btn-form-submit" type="submit">Search</button>
+            <button class="btn btn-primary btn-form-submit" type="submit" name="select_day">Search</button>
         </form>
     </section>
     <section class="container slot-booking">
@@ -68,157 +69,18 @@
                             {% endfor %}
                         </tr>
                     {% endfor %}
-                    <!-- <tr>
-                        <th scope="row">17:00-17:30</th>
-                        <td class="slot unavailable">aaa_rno</td>
-                        <td class="slot unavailable">bbb_rno</td>
-                        <td class="slot unavailable">ccc_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">17:30-18:00</th>
-                        <td class="slot unavailable">ddd_rno</td>
-                        <td class="slot unavailable">fff_rno</td>
-                        <td class="slot unavailable">eee_rno</td>
-                        <td class="slot unavailable">aaa_rno</td>
-                        <td class="slot unavailable">ggg_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">18:00-18:30</th>
-                        <td class="slot unavailable">hhh_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot unavailable">eee_rno</td>
-                        <td class="slot unavailable">jjj_rno</td>
-                        <td class="slot unavailable">iii_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">18:30-19:00</th>
-                        <td class="slot unavailable">kkk_rno</td>
-                        <td class="slot unavailable">hhh_rno</td>
-                        <td class="slot unavailable">lll_rno</td>
-                        <td class="slot unavailable">mmm_rno</td>
-                        <td class="slot unavailable">eee_rno</td>
-                        <td class="slot unavailable">nnn_rno</td>
-                        <td class="slot unavailable">ooo_rno</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">19:00-19:30</th>
-                        <td class="slot unavailable">ppp_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot unavailable">nnn_rno</td>
-                        <td class="slot unavailable">mmm_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot unavailable">qqq_rno</td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">19:30-20:00</th>
-                        <td class="slot unavailable">lll_rno</td>
-                        <td class="slot unavailable">rrr_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot unavailable">sss_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot unavailable">qqq_rno</td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">20:00-20:30</th>
-                        <td class="slot unavailable">bbb_rno</td>
-                        <td class="slot unavailable">ttt_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot unavailable">ooo_rno</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">20:30-21:00</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">21:00-21:30</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">21:30-22:00</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22:00-22:30</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22:30-23:00</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">23:00-23:30</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">23:30-0:00</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr> -->
                 </tbody>
             </table>
         </div>    
         <form class="timing-form" method="POST">
+            {% csrf_token %}
             <label for="time-slot">Time Slot:</label>
             <input type="text" name="time-slot" id="time-slot">
             <br>
             <label for="board">Board No.:</label>
             <input type="text" name='board' id="board">
             <div class="timimg-form-submit">
-                <button class="btn btn-primary btn-timing-submit" type="submit">Submit</button>
+                <button class="btn btn-primary btn-timing-submit" type="submit" name="select_time">Submit</button>
                 <button class="btn btn-danger btn-clear" type="button">Clear</button>
             </div>
         </form>
