@@ -24,3 +24,24 @@ def register(request):
     }
     
     return render(request,'users/register.html',context)
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST,instance=request.user)
+        p_form = ProfileForm(request.user,instance=request.user.profile)
+        
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request,f'Your profile has been updated')
+            
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileForm(instance=request.user.profile)
+        
+    context = {
+        'u_form':u_form,
+        'p_form':p_form
+    }
+    return render(request,'users/profile.html',context)

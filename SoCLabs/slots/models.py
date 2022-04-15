@@ -60,7 +60,7 @@ class Board(models.Model):
     day = models.CharField(max_length=10,choices=DAYS_OF_WEEK,null=True)
     time_slot = models.ForeignKey(TimeSlot,on_delete=models.CASCADE,null=True)
     time_sched = models.ForeignKey(TimeSchedule,on_delete=models.CASCADE,null=True)
-
+    board_no = models.IntegerField(default=1)
+    
     def __str__(self):
-        board_no = self.id % self.time_sched.time_config.no_of_boards
-        return f'Board{board_no} for {self.day},{self.time_slot.start_time_hours}:{self.time_slot.start_time_minutes} - {self.time_slot.end_time_hours}:{self.time_slot.end_time_minutes}'
+        return f'Board{self.board_no} for {self.day},{self.time_slot.start_time_hours}:{self.time_slot.start_time_minutes} - {self.time_slot.end_time_hours}:{self.time_slot.end_time_minutes}'
