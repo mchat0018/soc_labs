@@ -29,11 +29,12 @@ def bookSlots(request):
             
         if 'select_day' in request.POST:
             selected_day = request.POST['days'] 
+        
         elif 'select_time' in request.POST:
             time_slot = request.POST.get('time-slot',None)
             board = request.POST.get('board',None)
-            print(board)
-            selected_day = today
+            selected_day = request.POST.get('selected_day',None)
+            
             if time_slot is not None and board is not None:
             # retrieving the TimeSlot object
                 start_time,end_time = tuple(time_slot.split('-'))
@@ -62,6 +63,7 @@ def bookSlots(request):
                 messages.error(request,f'Failure to book slot. Please try again.')
             
     data = {
+        'selected_day' : selected_day,
         'days': days,
         'time_schedules': TimeSchedule.objects.filter(day=selected_day).all(),
         'boards': Board.objects.filter(day=selected_day).all() 
