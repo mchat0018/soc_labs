@@ -64,3 +64,7 @@ class Board(models.Model):
     
     def __str__(self):
         return f'Board{self.board_no} for {self.day},{self.time_slot.start_time_hours}:{self.time_slot.start_time_minutes} - {self.time_slot.end_time_hours}:{self.time_slot.end_time_minutes}'
+    
+class IPAddress(models.Model):
+    board = models.OneToOneField(Board,on_delete=models.CASCADE,null=True)
+    ip = models.GenericIPAddressField(protocol='both',null=True)
