@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.db.models import Q
 from .models import TimeSchedule,Board,TimeSlot
 from django.utils import timezone
 from datetime import date, timedelta
@@ -37,16 +38,11 @@ def bookSlots(request):
             
             if time_slot is not None and board is not None:
             # retrieving the TimeSlot object
-                start_time,end_time = tuple(time_slot.split('-'))
+                start_time,end_time = tuple(time_slot.replace(' ','').split('-'))
                 start_time_hours,start_time_minutes = tuple(start_time.split(':'))
                 end_time_hours,end_time_minutes = tuple(end_time.split(':'))
                 # print(f'{start_time_hours}:{start_time_minutes}-{end_time_hours}:{end_time_minutes}')
-                timeSlot = TimeSlot.objects.filter(
-                                                start_time_hours=start_time_hours,
-                                                # start_time_minutes=start_time_minutes,
-                                                # end_time_hours=end_time_hours,
-                                                # end_time_minutes=end_time_minutes
-                                                ).first()
+                timeSlot = TimeSlot.objects.filter(Q(start_time_hours=start_time_hours) & Q(start_time_minutes=start_time_minutes)).first()
                 print(timeSlot)
                 # making the Board object
                 board_user = request.user
@@ -54,7 +50,7 @@ def bookSlots(request):
                 print(time_sched)
                 boardObj = Board.objects.get(board_no=board,day=selected_day,time_slot=timeSlot,time_sched=time_sched)
                 print(boardObj)
-                boardObj.board = board_user
+                boardObj.board_user = board_user
                 boardObj.save()
                 messages.success(request,f'Slot booked for {request.user.username} for {selected_day} at {start_time_hours}:{start_time_minutes}-{end_time_hours}:{end_time_minutes}')
                 return redirect('profile')

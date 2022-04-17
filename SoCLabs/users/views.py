@@ -59,7 +59,7 @@ def profile(request):
     days = DAYS_OF_WEEK[curr_day:]
     print(timeslots[:5])
     # getting the booked slots currently still valid
-    booked_slots = Board.objects.filter(board=request.user).filter(day__in=days).filter(time_slot__in=timeslots).all()
+    booked_slots = Board.objects.filter(board_user=request.user).filter(day__in=days).filter(time_slot__in=timeslots).all()
     
     for slot in booked_slots:
         print(slot)

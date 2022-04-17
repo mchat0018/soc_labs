@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>Video Live Stream</title>
+  </head>
+  <body>
+    <h1>Video Live Stream</h1>
+    <img src="{% url 'fpgaview' '192.168.0.49' %}" width="500">
+    <table class="CredentialsTable">
+      <thead>
+        <tr>
+          <th>IP Address</th>
+          <th>Port</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{IP}}</td>
+          <td>{{Port}}</td>
+        </tr>
+        <tr>
+          <td><input type="submit" class="button" value="Restart Board" style="width: 100%" onclick="addField(this);" /></td>
+          <td><input type="submit" class="button" value="Book Slot" style="width: 100%" onclick="addField(this);" /></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </body>
+</html>
+
+<style>
+  table.CredentialsTable {
+    width: 100%;
+    background-color: #ffffff;
+  border-collapse: separate;
+    border-width: 2px;
+    border-color: #3fb2a3;
+    border-style: groove;
+    color: #000000;
+  }
+  
+  table.CredentialsTable td, table.CredentialsTable th {
+    border-width: 2px;
+    border-color: #3fb2a3;
+    border-style: groove;
+    padding: 1px;
+  }
+  
+  table.CredentialsTable thead {
+    background-color: #3fb2a8;
+  }
+  </style>
+  
+
+  
+  

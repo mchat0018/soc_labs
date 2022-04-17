@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'webcam.apps.WebcamConfig',
     'users.apps.UsersConfig',
     'slots.apps.SlotsConfig',
     'crispy_forms',
