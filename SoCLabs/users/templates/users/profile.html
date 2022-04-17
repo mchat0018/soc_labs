@@ -13,7 +13,7 @@
     </head>
     <body>
         <h1 class="page-header profile-header">User Profile</h1>
-        <section class="content logout">
+        <section class="content profile-info">
             <div class="content-section">
                 <div class="media">
                     <img class="rounded-circle account-img" src="{{user.profile.image.url}}">
@@ -38,6 +38,41 @@
                 </form>
             </div>
         </section>
+        <section class="content profile-slots">
+            <table class="slot-table">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Time Slot</th>
+                        <th>Board No.</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for slot in booked_slots %}
+                        <tr>
+                            <td>{{slot.day}}</td>
+                            <td>{{slot.time_slot}}</td>
+                            <td>{{slot.board_no}}</td>
+                            {% if slot.day == curr_day %}
+                                {% if slot.time_slot.end_time_hours >= curr_time_hours and slot.time_slot.end_time_minutes >= curr_time_minutes %}
+                                    {% if slot.time_slot.start_time_hours <= curr_time_hours and slot.time_slot.start_time_minutes <= curr_time_minutes %}
+                                        <td><a href="#">In Progress</td>
+                                    {% else %}
+                                        <td>Pending</td>
+                                    {% endif %}
+                                {% else %}
+                                    <td>Pending</td>
+                                {% endif %}
+                            {% else %}
+                                <td>Pending</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
     </body>

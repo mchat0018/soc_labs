@@ -15,9 +15,13 @@
         <form class="dropdown-form" method="POST" action="">
             {% csrf_token %}
             <legend class="form-legend">Choose a Day</legend>
-            <select value={{selected_day}} name="days" id="days">
+            <select name="days" id="days">
                 {% for day in days %}
-                    <option value="{{ day }}">{{day}}</option>
+                    {% if day == selected_day %}
+                        <option value="{{ day }}" selected>{{day}}</option>
+                    {% else %}
+                        <option value="{{ day }}">{{day}}</option>
+                    {% endif %}
                 {% endfor %}
             </select>
             <button class="btn btn-primary btn-form-submit" type="submit" name="select_day">Search</button>
@@ -54,7 +58,11 @@
                             {% for board in boards %}
                                 {% if board.time_slot == time_sched.time_slot %}
                                     {% if board.board %}
-                                        <td class="slot unavailable">Unavailable</td>
+                                        {% if user.get_username == board.board.username %}
+                                            <td class="slot booked">Booked</td>
+                                        {% else %}
+                                            <td class="slot unavailable">Unavailable</td>
+                                        {% endif %}
                                     {% else %}
                                         <td class="slot"></td>
                                     {% endif %}
@@ -68,13 +76,13 @@
         <form class="timing-form" method="POST">
             {% csrf_token %}
             <label for="time-slot">Time Slot:</label>
-            <input type="text" name="time-slot" id="time-slot">
+            <input type="text" name="time-slot" id="time-slot" readonly>
             <br>
             <label for="board">Board No.:</label>
-            <input type="text" name='board' id="board">
+            <input type="text" name='board' id="board" readonly>
             <br>
             <label for="day">Day:</label>
-            <input type="text" name='selected_day' id="day-selected" value={{selected_day}}>
+            <input type="text" name='selected_day' id="day-selected" value={{selected_day}} readonly>
             <br>
             <div class="timimg-form-submit">
                 <button class="btn btn-primary btn-timing-submit" type="submit" name="select_time">Submit</button>

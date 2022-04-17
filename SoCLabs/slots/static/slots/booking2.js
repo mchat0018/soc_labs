@@ -52,7 +52,7 @@ function clearSelections(){
 }
 //slot click event
 table.addEventListener('click',(e) => {
-    if(e.target.classList.contains('slot') && !e.target.classList.contains('unavailable')){
+    if(e.target.classList.contains('slot') && !e.target.classList.contains('unavailable') && !e.target.classList.contains('booked')){
         clearSelections();
         e.target.classList.toggle('selected');
         updateTimingForm();
