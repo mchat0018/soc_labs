@@ -19,6 +19,6 @@ from django.urls import path,include
 from webcam import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('board_display/<board_no>/<ip_addr>', views.index, name='index'),
     path('fpgaview/<ip_addr>', views.fpgaview, name='fpgaview')
 ]

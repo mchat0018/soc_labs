@@ -9,7 +9,7 @@ host_name = socket.gethostname()
 host_ip = socket.gethostbyname(host_name)
 print('HOST IP:', host_ip)
 port = 9999
-socket_address = ('192.168.0.49', port)
+socket_address = ('192.168.50.233', port)
 # print(host_ip)
 
 # Socket Bind
