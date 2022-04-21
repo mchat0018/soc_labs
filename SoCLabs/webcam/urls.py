@@ -20,5 +20,5 @@ from webcam import views
 
 urlpatterns = [
     path('board_display/<board_no>/<ip_addr>', views.index, name='index'),
-    path('fpgaview/<ip_addr>', views.fpgaview, name='fpgaview')
+    path('fpgaview/<ip_addr>/<end_time>', views.fpgaview, name='fpgaview')
 ]

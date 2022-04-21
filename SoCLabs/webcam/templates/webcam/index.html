@@ -5,7 +5,7 @@
   <body>
     <h1>Video Live Stream</h1>
     <div>{{u_name}}</div>
-    <img src="{% url 'fpgaview' '192.168.50.233' %}" width="500">
+    <img src="{% url 'fpgaview' IP end_time %}" width="500">
     <table class="CredentialsTable">
       <thead>
         <tr>
@@ -19,8 +19,8 @@
           <td>{{Port}}</td>
         </tr>
         <tr>
-          <td><input type="submit" class="button" value="Restart Board" style="width: 100%" onclick="addField(this);" /></td>
-          <td><input type="submit" class="button" value="Book Slot" style="width: 100%" onclick="addField(this);" /></td>
+          <td><input type="submit" class="button" value="Restart Board" name='restart' style="width: 100%" onclick="addField(this);" /></td>
+          <td><a href="{% url 'book-slots' %}" target='_blank'><input type="submit" class="button" value="Book Slot" name='book' style="width: 100%"/></a></td>
         </tr>
       </tbody>
     </table>
