@@ -19,7 +19,10 @@
           <td>{{Port}}</td>
         </tr>
         <tr>
-          <td><input type="submit" class="button" value="Restart Board" name='restart' style="width: 100%" onclick="addField(this);" /></td>
+          <form method="POST" class="restart-form">  
+            {% csrf_token %}
+            <td><button type="submit" name='restart' style="width: 100%"/>Restart Board</button></td>
+          </form>
           <td><a href="{% url 'book-slots' %}" target='_blank'><input type="submit" class="button" value="Book Slot" name='book' style="width: 100%"/></a></td>
         </tr>
       </tbody>

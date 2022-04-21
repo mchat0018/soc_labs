@@ -164,6 +164,10 @@ def index(request,board_no,ip_addr):
     if booked_slot.board_user is not None and booked_slot.board_user.email == request.user.email and booked_slot.board_user.username == request.user.username:
         hw_port = connection(ip_addr)
         end_time = booked_slot.time_slot.end_time_hours+booked_slot.time_slot.end_time_minutes
+        
+        if request.POST:
+            restart(ip_addr)
+            
         data= {
             'u_name': booked_slot.board_user.username,
             'IP' : ip_addr,
