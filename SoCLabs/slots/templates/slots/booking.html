@@ -36,9 +36,9 @@
     <section class="container slot-booking">
         <div class="flex-container">
             <div class="table-legend">
-                <div class="legend-item"><div class="box red"></div> : Unavailable</div>
-                <div class="legend-item"><div class="box green"></div> : Available</div>
-                <div class="legend-item"><div class="box orange"></div> : Booked</div>
+                <div class="legend-item"><div class="box red"></div>|Unavailable</div>
+                <div class="legend-item"><div class="box green"></div>|Available</div>
+                <div class="legend-item"><div class="box orange"></div>|Booked</div>
             </div>
             <table class="booking-table">
                 <thead>
@@ -79,20 +79,25 @@
                 </tbody>
             </table>
         </div>    
-        <form class="timing-form" method="POST">
+        <form class="timing-form row" method="POST">
             {% csrf_token %}
-            <label for="time-slot">Time Slot:</label>
-            <input type="text" name="time-slot" id="time-slot" readonly>
-            <br>
-            <label for="board">Board No.:</label>
-            <input type="text" name='board' id="board" readonly>
-            <br>
-            <label for="day">Day:</label>
-            <input type="text" name='selected_day' id="day-selected" value={{selected_day}} readonly>
-            <br>
-            <div class="timimg-form-submit">
-                <button class="btn btn-primary btn-timing-submit" type="submit" name="select_time">Submit</button>
-                <button class="btn btn-danger btn-clear" type="button">Clear</button>
+            <div  class="row">
+                <div class="col">
+                    <label for="time-slot">Time Slot:</label>
+                    <input type="text" class="form-control" name="time-slot" id="time-slot" readonly>
+                </div>
+                <div class="col">
+                    <label for="board">Board No.:</label>
+                    <input type="text" class="form-control" name='board' id="board" readonly>
+                </div>
+                <div class="col">
+                    <label for="selected_day">Day:</label>
+                    <input type="text" class="form-control" name='selected_day' id="board" value={{selected_day}} readonly>
+                </div>
+            </div>
+            <div class="btn-group-vertical timimg-form-submit" role="group" aria-label="Basic outlined example">
+                <button class="btn btn-outline-primary btn-timing-submit" type="submit" name="select_time">Submit</button>
+                <button class="btn btn-outline-danger btn-clear" type="button">Clear</button>
             </div>
         </form>
     </section>
