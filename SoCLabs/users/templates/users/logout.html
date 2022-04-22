@@ -14,15 +14,21 @@
         <title>Logout</title>
     </head>
     <body>
-        <h1 class="page-header logout-header">Log Out</h1>
-        <section class="content logout">
-            <h2>You have been logged out</h2>    
-            <div class="border-top pt-3">
-                <small class="text-muted">
-                    <a href="{% url 'login' %}">Log In Again</a>
-                </small>
+        <div class="card text-center" style="width: 30rem;">
+            <div class="card-header">
+                <h1 class="page-header logout-header">Log Out</h1>
             </div>
-        </section>
+            <div class="card-body">
+                <section class="content login">
+                    <h4>You have been logged out</h4>
+                </section>
+            </div>
+            <div class="card-footer text-muted">
+                <div>
+                    <a href="{% url 'login' %}">Log In Again</a>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
     
