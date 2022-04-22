@@ -1,0 +1,62 @@
+/* importing google fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #dcf2f3;
+}
+
+.page-header {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+    font-weight: bold;
+    font-size: 48px;
+    color: #ec65a4;
+    text-align: center;
+    padding: 5px;
+    margin: 10px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.border-bottom {
+    border-bottom: 1px solid black;
+}
+
+.border-top {
+    border-top: 1px solid black;
+}
+
+.pt-3 {
+    padding-top: 3px;
+}
+
+.ml-2 {
+    margin-left: 2px;
+}
+
+.mb-4 {
+    margin-bottom: 4px;
+}
+
+.card {
+    margin: 0 auto;
+    /* Added */
+    float: none;
+    /* Added */
+    margin-top: 4%;
+    margin-bottom: 10px;
+    /* Added */
+}
+
+.vdo {
+    margin-top: 40px;
+}
