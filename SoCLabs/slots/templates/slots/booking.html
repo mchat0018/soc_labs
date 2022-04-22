@@ -14,12 +14,41 @@
     <title>Document</title>
 </head>
 <body>
+    <!--ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link active disabled" aria-current="page" href="{% url 'book-slots' %}">Book Slots</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}">Register</a>
+        </li>
+    </ul>
+    <br><br><br-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand">IIITD</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active " aria-current="page">Book Slots</a>
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <h1 class="page-header booking-header">Book Slot</h2><hr>
     <section class="container dropdown-option day-option">
         <form class="dropdown-form" method="POST" action="">
             {% csrf_token %}
             <legend class="form-legend">Choose a Day</legend>
-            <div class="input-group">
+            <div class="input-group w-25 mx-auto">
                 <select class="form-select" name="days" id="days" aria-label="Example select with button addon">
                     {% for day in days %}
                     {% if day == selected_day %}
@@ -95,7 +124,7 @@
                     <input type="text" class="form-control" name='selected_day' id="board" value={{selected_day}} readonly>
                 </div>
             </div>
-            <div class="btn-group-vertical timimg-form-submit" role="group" aria-label="Basic outlined example">
+            <div class="btn-group-vertical timimg-form-submit w-25" role="group" aria-label="Basic outlined example">
                 <button class="btn btn-outline-primary btn-timing-submit" type="submit" name="select_time">Submit</button>
                 <button class="btn btn-outline-danger btn-clear" type="button">Clear</button>
             </div>
