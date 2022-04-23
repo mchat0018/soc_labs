@@ -1,32 +1,79 @@
+<<<<<<< HEAD
 {% comment %} <html>
+=======
+{% load static %}
+<!DOCTYPE html>
+<html>
+>>>>>>> b1dda60ac4f7cc0463e86b0ba10db69a6f0bf24c
   <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!--link rel="stylesheet" href="styles.css"-->
+
     <title>Video Live Stream</title>
   </head>
   <body>
-    <h1>Video Live Stream</h1>
-    <div>{{u_name}}</div>
-    <img src="{% url 'fpgaview' IP end_time %}" width="500">
-    <table class="CredentialsTable">
-      <thead>
-        <tr>
-          <th>IP Address</th>
-          <th>Port</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>{{IP}}</td>
-          <td>{{Port}}</td>
-        </tr>
-        <tr>
-          <form method="POST" class="restart-form">  
-            {% csrf_token %}
-            <td><button type="submit" name='restart' style="width: 100%"/>Restart Board</button></td>
-          </form>
-          <td><a href="{% url 'book-slots' %}" target='_blank'><input type="submit" class="button" value="Book Slot" name='book' style="width: 100%"/></a></td>
-        </tr>
-      </tbody>
-    </table>
+    <!--div>
+      <h1>Video Live Stream</h1>
+
+      <div>{{u_name}}</div>
+
+      <figure class="figure">
+        <img src="{% url 'fpgaview' IP end_time %}" width="500" class="figure-img img-fluid rounded">
+      </figure>
+
+      <table class="CredentialsTable">
+        <thead>
+          <tr>
+            <th>IP Address</th>
+            <th>Port</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{IP}}</td>
+            <td>{{Port}}</td>
+          </tr>
+          <tr>
+            <form method="POST" class="restart-form">  
+              {% csrf_token %}
+              <td><button type="submit" name='restart' style="width: 100%" class="btn btn-outline-danger">Restart Board</button></td>
+            </form>
+            <td><a href="{% url 'book-slots' %}" target='_blank'><input type="submit" class="button btn btn-outline-primary" value="Book Slot" name='book' style="width: 100%"/></a></td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div-->
+
+    <div class="card" style="width: 40rem;">
+      <img src="{% url 'fpgaview' IP end_time %}" width="500" class="vdo figure-img img-fluid rounded mx-auto">
+      <div class="card-body">
+        <h1>Video Live Stream</h1>
+        <p class="card-text">
+          {{u_name}}
+        </p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          IP Address: <span class="badge rounded-pill bg-info text-dark">{{IP}}</span>
+        </li>
+        <li class="list-group-item">
+          Port: <span class="badge rounded-pill bg-info text-dark">{{Port}}</span>
+        </li>
+      </ul>
+      <div class="card-body text-center">
+        <form method="POST" class="restart-form">
+          {% csrf_token %}
+          <button type="submit" name='restart' style="width: 100%" class="btn btn-outline-danger w-25">Restart Board</button>
+        </form>
+        <br>
+        <a href="{% url 'book-slots' %}" target='_blank'><input type="submit" class="button btn btn-outline-primary w-25"
+            value="Book Slot" name='book' style="width: 100%" /></a>
+      </div>
+    </div>
 
   </body>
 </html>

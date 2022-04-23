@@ -36,6 +36,7 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link active " aria-current="page">Book Slots</a>
+<<<<<<< HEAD
                     {% if user.is_authenticated %}
                         <a class="nav-link" href="{% url 'profile' %}">Profile</a>
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -43,6 +44,10 @@
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
                         <a class="nav-link" href="{% url 'register' %}">Register</a>
                     {% endif %}
+=======
+                    <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+>>>>>>> b1dda60ac4f7cc0463e86b0ba10db69a6f0bf24c
                 </div>
             </div>
         </div>
