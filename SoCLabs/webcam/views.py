@@ -148,11 +148,19 @@ def index(request,board_no,ip_addr):
     curr_time_hours,curr_time_minutes = tuple(curr_time.split(':'))
     curr_day = datetime.today().weekday()
     
-    crit = (Q(end_time_hours__gt=curr_time_hours) | (Q(end_time_hours=curr_time_hours) & Q(end_time_minutes__gte=curr_time_minutes)))
+    crit = (Q(end_time_hours__gt=curr_time_hours) | (Q(end_time_hours=curr_time_hours) & Q(end_time_minutes__gt=curr_time_minutes)))
     timeslots = TimeSlot.objects.filter(crit).all()
     timeslots = list(timeslots)
+    if len(timeslots) == 0: raise PermissionDenied
+    
     timeslots.sort(key=lambda x: x.start_time_hours+x.start_time_minutes, reverse=False)
     timeslot = timeslots[0]    #current time slot
+    
+    curr = curr_time_hours + curr_time_minutes
+    st = timeslot.start_time_hours + timeslot.start_time_minutes
+    # en = timeslot.end_time_hours + timeslot.end_time_minutes
+    if curr < st: raise PermissionDenied
+    
     print(curr_time)
     # print(timeslots)
     # print(type(timeslots))
@@ -165,12 +173,13 @@ def index(request,board_no,ip_addr):
         hw_port = connection(ip_addr)
         end_time = booked_slot.time_slot.end_time_hours+booked_slot.time_slot.end_time_minutes
         
-        if request.POST:
-            restart(ip_addr)
+        # if request.POST:
+        #     restart(ip_addr)
             
         data= {
             'u_name': booked_slot.board_user.username,
             'IP' : ip_addr,
+            'board_no': board_no,
             'Port' : hw_port,
             'end_time':end_time
         }
@@ -184,5 +193,48 @@ def fpgaview(request,ip_addr,end_time):
             return StreamingHttpResponse(camera_response(ip_addr,end_time), content_type="multipart/x-mixed-replace;boundary=frame")
         except:
             pass
+        
+def restartView(request,board_no,ip_addr):
+    # running authentication of user in current time slot
+    # getting current day and time
+    ist = pytz.timezone('Asia/Kolkata')
+    datetime_now = datetime.now(ist)
+    curr_time = datetime_now.strftime('%H:%M')
+    curr_time_hours,curr_time_minutes = tuple(curr_time.split(':'))
+    curr_day = datetime.today().weekday()
+    
+    crit = (Q(end_time_hours__gt=curr_time_hours) | (Q(end_time_hours=curr_time_hours) & Q(end_time_minutes__gt=curr_time_minutes)))
+    timeslots = TimeSlot.objects.filter(crit).all()
+    timeslots = list(timeslots)
+    # checking if the time slots are actually available
+    if len(timeslots) == 0: raise PermissionDenied
+    
+    timeslots.sort(key=lambda x: x.start_time_hours+x.start_time_minutes, reverse=False)
+    timeslot = timeslots[0]    #current time slot
+    
+    # checking whether the first time slot on the list is actually the current time slot
+    curr = curr_time_hours + curr_time_minutes
+    st = timeslot.start_time_hours + timeslot.start_time_minutes
+    # en = timeslot.end_time_hours + timeslot.end_time_minutes
+    if curr < st: raise PermissionDenied
+    
+    # print(curr_time)
+    # print(timeslots)
+    # print(type(timeslots))
+    # print(timeslot)
+    day = DAYS_OF_WEEK[curr_day]
+    # extracting the currently booked board
+    booked_slot = Board.objects.filter(day=day).filter(time_slot=timeslot).filter(board_no=int(board_no)).first()
+    # checking if the board user is the currently logged in user
+    if booked_slot.board_user is not None and booked_slot.board_user.username == request.user.username:
+        restart(ip_addr)
+        data = {
+            'ip_addr':ip_addr,
+            'board_no':board_no,
+            'u_name': booked_slot.board_user.username
+        }
+        return render(request,'webcam/restart.html',context=data)
+    
+    else: raise PermissionDenied
 
         

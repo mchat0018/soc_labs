@@ -54,7 +54,7 @@ def profile(request):
     curr_day = datetime.today().weekday()
     print(curr_time)
     # getting available time slots and days
-    crit = (Q(end_time_hours__gt=curr_time_hours) | (Q(end_time_hours=curr_time_hours) & Q(end_time_minutes__gte=curr_time_minutes)))
+    crit = (Q(end_time_hours__gt=curr_time_hours) | (Q(end_time_hours=curr_time_hours) & Q(end_time_minutes__gt=curr_time_minutes)))
     timeslots = TimeSlot.objects.filter(crit).all()
     days = DAYS_OF_WEEK[curr_day:]
     print(timeslots[:5])
