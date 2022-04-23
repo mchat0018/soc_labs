@@ -22,7 +22,6 @@
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                         <a class="nav-link" aria-current="page" href="{% url 'book-slots' %}">Book Slots</a>
-<<<<<<< HEAD
                         {% if user.is_authenticated %}
                             <a class="nav-link active" href="{% url 'profile' %}">Profile</a>
                             <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -30,10 +29,6 @@
                             <a class="nav-link" href="{% url 'login' %}">Login</a>
                             <a class="nav-link" href="{% url 'register' %}">Register</a>
                         {% endif %}
-=======
-                        <a class="nav-link">Login</a>
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
->>>>>>> b1dda60ac4f7cc0463e86b0ba10db69a6f0bf24c
                     </div>
                 </div>
             </div>
@@ -87,11 +82,7 @@
                                     <td>{{slot.time_slot}}</td>
                                     <td>{{slot.board_no}}</td>
                                     {% if slot.day == curr_day %}
-<<<<<<< HEAD
                                         {% if slot.time_slot.end_time_hours > curr_time_hours or slot.time_slot.end_time_hours == curr_time_hours and slot.time_slot.end_time_minutes > curr_time_minutes %}
-=======
-                                        {% if slot.time_slot.end_time_hours > curr_time_hours or slot.time_slot.end_time_hours == curr_time_hours and slot.time_slot.end_time_minutes >= curr_time_minutes %}
->>>>>>> b1dda60ac4f7cc0463e86b0ba10db69a6f0bf24c
                                             {% if slot.time_slot.start_time_hours < curr_time_hours or slot.time_slot.start_time_hours == curr_time_hours and slot.time_slot.start_time_minutes <= curr_time_minutes %}
                                                 <td><a href="{% url 'index' slot.board_no slot.ip_addr.ip %}">In Progress</td>
                                             {% else %}
