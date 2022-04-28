@@ -1,3 +1,4 @@
+from ipaddress import ip_address
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.base import Model
@@ -47,21 +48,29 @@ class TimeSlot(models.Model):
     def __str__(self):
         return f'{self.start_time_hours}:{self.start_time_minutes} - {self.end_time_hours}:{self.end_time_minutes}'
 
-class Board(models.Model):
-    board = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
-    day = models.CharField(max_length=10,choices=DAYS_OF_WEEK,null=True)
-    time_slot = models.ForeignKey(TimeSlot,on_delete=models.CASCADE,null=True)
-    time_config = models.ForeignKey(TimeConfig,on_delete=models.CASCADE,null=True)
-
-    def __str__(self):
-        board_no = self.id % self.time_config.no_of_boards
-        return f'Board{board_no} for {self.day},{self.time_slot.start_time_hours}:{self.time_slot.start_time_minutes} - {self.time_slot.end_time_hours}:{self.time_slot.end_time_minutes}'
-
 class TimeSchedule(models.Model):
     day = models.CharField(max_length=10,choices=DAYS_OF_WEEK)
     time_slot = models.ForeignKey(TimeSlot,on_delete=models.CASCADE)
-    boards = models.ManyToManyField(Board)
     time_config = models.ForeignKey(TimeConfig,on_delete=models.CASCADE,null=True)
 
     def __str__(self):
         return f'{self.day},{self.time_slot.start_time_hours}:{self.time_slot.start_time_minutes} - {self.time_slot.end_time_hours}:{self.time_slot.end_time_minutes}'
+
+class IPAddress(models.Model):
+    # board = models.OneToOneField(Board,on_delete=models.CASCADE,null=True)
+    board_no = models.IntegerField(default=1)
+    ip = models.GenericIPAddressField(protocol='both',null=True)
+    
+    def __str__(self):
+        return f'IPv4:{self.ip}'
+class Board(models.Model):
+    board_user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
+    day = models.CharField(max_length=10,choices=DAYS_OF_WEEK,null=True)
+    time_slot = models.ForeignKey(TimeSlot,on_delete=models.CASCADE,null=True)
+    time_sched = models.ForeignKey(TimeSchedule,on_delete=models.CASCADE,null=True)
+    board_no = models.IntegerField(default=1)
+    ip_addr = models.ForeignKey(IPAddress,on_delete=models.SET_NULL,null=True,blank=True)
+    
+    def __str__(self):
+        return f'Board{self.board_no} for {self.day},{self.time_slot.start_time_hours}:{self.time_slot.start_time_minutes} - {self.time_slot.end_time_hours}:{self.time_slot.end_time_minutes}'
+    

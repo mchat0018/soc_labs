@@ -3,46 +3,19 @@ const tableBody = document.getElementsByTagName('tbody')[0];
 const slots = document.querySelectorAll('.slot:not(.unavailable)');
 const daySelect = document.getElementById('days');
 
-fetch("{% url 'book-slots' %}",{
-    headers:{
-        'Accept':'application/json',
-        'X-Requested-With':'XMLHttpRequest'
-    },
-})
-.then(response => {
-    return response.json()
-})
-.then(data => {
-    
-    for(i=0;i<data.time_schedule.length;i++){
-        var row = document.createElement("tr")
-        
-        // inserting time header
-        var header = document.createElement('th')
-        var time_slot = data.time_schedule[i].time_slot
-        var header_text = time_slot.start_time_hours+":"+time_slot.start_time_minutes+"-"+time_slot.end_time_hours+":"+time_slot.end_time_minutes
-        header.appendChild(header_text)
-        row.appendChild(header)
-
-        // inserting board entries
-        
-
-    }
-})
-
-populateUI();
+// populateUI();
 // populating the UI when rendered/reloaded
-function populateUI(){
-    var bookedSlots = JSON.parse(localStorage.getItem('bookedSlots'));
-    if(bookedSlots!=null && bookedSlots!=undefined){
-        console.log(bookedSlots.length);
-        bookedSlots.forEach(slot => {
-            var cell = table.rows[slot[0]].cells[slot[1]]; 
-            cell.classList.add('booked');
-            cell.innerText = "zzz_rno";    
-        });
-    }
-}
+// function populateUI(){
+//     var bookedSlots = JSON.parse(localStorage.getItem('bookedSlots'));
+//     if(bookedSlots!=null && bookedSlots!=undefined){
+//         console.log(bookedSlots.length);
+//         bookedSlots.forEach(slot => {
+//             var cell = table.rows[slot[0]].cells[slot[1]]; 
+//             cell.classList.add('booked');
+//             cell.innerText = "zzz_rno";    
+//         });
+//     }
+// }
 // update Local Storage
 function updateLocalStorage(){
     var selectedSlot = document.querySelector('.slot.selected');
@@ -57,7 +30,7 @@ function updateLocalStorage(){
     localStorage.setItem('bookedSlots',JSON.stringify(bookedIndex));
 
 }
-// update local storage 
+// update timimg boxes 
 function updateTimingForm(){
     var selectedSlot = document.querySelector('.slot.selected');
     var slotRowIndex = selectedSlot.parentElement.rowIndex;
@@ -79,7 +52,7 @@ function clearSelections(){
 }
 //slot click event
 table.addEventListener('click',(e) => {
-    if(e.target.classList.contains('slot') && !e.target.classList.contains('unavailable')){
+    if(e.target.classList.contains('slot') && !e.target.classList.contains('unavailable') && !e.target.classList.contains('booked')){
         clearSelections();
         e.target.classList.toggle('selected');
         updateTimingForm();

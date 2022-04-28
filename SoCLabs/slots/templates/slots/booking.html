@@ -1,36 +1,78 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css" type="text/css">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{% static 'slots/styles.css' %}" type="text/css">
     <!-- <script src="booking.js" async></script> -->
     <title>Document</title>
 </head>
 <body>
-    <h1 class="page-header booking-header">Book Slot</h2>
+    <!--ul class="nav nav-pills">
+        <li class="nav-item">
+            <a class="nav-link active disabled" aria-current="page" href="{% url 'book-slots' %}">Book Slots</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'register' %}">Register</a>
+        </li>
+    </ul>
+    <br><br><br-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand">IIITD</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link active " aria-current="page">Book Slots</a>
+                    {% if user.is_authenticated %}
+                        <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <h1 class="page-header booking-header">Book Slot</h2><hr>
     <section class="container dropdown-option day-option">
         <form class="dropdown-form" method="POST" action="">
+            {% csrf_token %}
             <legend class="form-legend">Choose a Day</legend>
-            <select name="days" id="days">
-                <option value="Thursday">Thursday</option>
-                <option value="Friday">Friday</option>
-                <option value="Saturday">Saturday</option>
-                <option value="Sunday">Sunday</option>
-                <option value="Monday">Monday</option>
-                <option value="Tuesday">Tuesday</option>
-                <option value="Wednesday">Wednesday</option>
-            </select>
-            <button class="btn btn-primary btn-form-submit" type="submit">Search</button>
+            <div class="input-group w-25 mx-auto">
+                <select class="form-select" name="days" id="days" aria-label="Example select with button addon">
+                    {% for day in days %}
+                    {% if day == selected_day %}
+                    <option value="{{ day }}" selected>{{day}}</option>
+                    {% else %}
+                    <option value="{{ day }}">{{day}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+                <button class="btn btn-outline-primary btn-form-submit" type="submit" name="select_day">Search</button>
+            </div>
         </form>
     </section>
     <section class="container slot-booking">
         <div class="flex-container">
             <div class="table-legend">
-                <div class="legend-item"><div class="box red"></div> : Unavailable</div>
-                <div class="legend-item"><div class="box green"></div> : Available</div>
-                <div class="legend-item"><div class="box orange"></div> : Booked</div>
+                <div class="legend-item"><div class="box red"></div>|Unavailable</div>
+                <div class="legend-item"><div class="box green"></div>|Available</div>
+                <div class="legend-item"><div class="box orange"></div>|Booked</div>
             </div>
             <table class="booking-table">
                 <thead>
@@ -50,162 +92,51 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">17:00-17:30</th>
-                        <td class="slot unavailable">aaa_rno</td>
-                        <td class="slot unavailable">bbb_rno</td>
-                        <td class="slot unavailable">ccc_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">17:30-18:00</th>
-                        <td class="slot unavailable">ddd_rno</td>
-                        <td class="slot unavailable">fff_rno</td>
-                        <td class="slot unavailable">eee_rno</td>
-                        <td class="slot unavailable">aaa_rno</td>
-                        <td class="slot unavailable">ggg_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">18:00-18:30</th>
-                        <td class="slot unavailable">hhh_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot unavailable">eee_rno</td>
-                        <td class="slot unavailable">jjj_rno</td>
-                        <td class="slot unavailable">iii_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">18:30-19:00</th>
-                        <td class="slot unavailable">kkk_rno</td>
-                        <td class="slot unavailable">hhh_rno</td>
-                        <td class="slot unavailable">lll_rno</td>
-                        <td class="slot unavailable">mmm_rno</td>
-                        <td class="slot unavailable">eee_rno</td>
-                        <td class="slot unavailable">nnn_rno</td>
-                        <td class="slot unavailable">ooo_rno</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">19:00-19:30</th>
-                        <td class="slot unavailable">ppp_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot unavailable">nnn_rno</td>
-                        <td class="slot unavailable">mmm_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot unavailable">qqq_rno</td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">19:30-20:00</th>
-                        <td class="slot unavailable">lll_rno</td>
-                        <td class="slot unavailable">rrr_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot unavailable">sss_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot unavailable">qqq_rno</td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">20:00-20:30</th>
-                        <td class="slot unavailable">bbb_rno</td>
-                        <td class="slot unavailable">ttt_rno</td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot unavailable">ooo_rno</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">20:30-21:00</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">21:00-21:30</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">21:30-22:00</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22:00-22:30</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22:30-23:00</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">23:00-23:30</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">23:30-0:00</th>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                        <td class="slot"></td>
-                    </tr>
+                    {% for time_sched in time_schedules %}
+                        <tr>
+                            <th scope="row">{{time_sched.time_slot}}</th>
+                            {% for board in boards %}
+                                {% if board.time_slot == time_sched.time_slot %}
+                                    {% if board.board_user %}
+                                        {% if user.get_username == board.board_user.username %}
+                                            <td class="slot booked">Booked</td>
+                                        {% else %}
+                                            <td class="slot unavailable">Unavailable</td>
+                                        {% endif %}
+                                    {% else %}
+                                        <td class="slot"></td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>    
-        <form class="timing-form" method="POST">
-            <label for="time-slot">Time Slot:</label>
-            <input type="text" name="time-slot" id="time-slot">
-            <br>
-            <label for="board">Board No.:</label>
-            <input type="text" name='board' id="board">
-            <div class="timimg-form-submit">
-                <button class="btn btn-primary btn-timing-submit" type="submit">Submit</button>
-                <button class="btn btn-danger btn-clear" type="button">Clear</button>
+        <form class="timing-form row" method="POST">
+            {% csrf_token %}
+            <div  class="row">
+                <div class="col">
+                    <label for="time-slot">Time Slot:</label>
+                    <input type="text" class="form-control" name="time-slot" id="time-slot" readonly>
+                </div>
+                <div class="col">
+                    <label for="board">Board No.:</label>
+                    <input type="text" class="form-control" name='board' id="board" readonly>
+                </div>
+                <div class="col">
+                    <label for="selected_day">Day:</label>
+                    <input type="text" class="form-control" name='selected_day' id="board" value={{selected_day}} readonly>
+                </div>
+            </div>
+            <div class="btn-group-vertical timimg-form-submit w-25" role="group" aria-label="Basic outlined example">
+                <button class="btn btn-outline-primary btn-timing-submit" type="submit" name="select_time">Submit</button>
+                <button class="btn btn-outline-danger btn-clear" type="button">Clear</button>
             </div>
         </form>
     </section>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="booking2.js" async></script>
+    <!-- {{data|json_script:"data"}} -->
+    {% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> {% endcomment %}
+    <script src="{% static 'slots/booking2.js' %}" async></script>
 </body>
 </html>
