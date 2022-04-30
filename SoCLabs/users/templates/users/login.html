@@ -20,7 +20,7 @@
         body {
             /*padding-top: 40px;*/
             padding-bottom: 40px;
-            /*background-color: #eee;*/
+            background-color: #eee;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 14px;
             line-height: 1.428571429;
@@ -313,7 +313,7 @@
 
     <div class="container">
         <a href="http://iiitd.ac.in" target="_blank">
-            <img src="https://www.iiitd.ac.in/sites/default/files/images/logo/logo.jpg" class="logo" width="200px">
+            <img src="https://raw.githubusercontent.com/mchat0018/soc_labs/branch1/SoCLabs/iiitd.png" class="logo">
         </a>
         <h2>
             Remote SoC Labs Login
@@ -328,7 +328,9 @@
             </div>
             <input class="btn" type="submit" value="Sign in">
             <br>
-            <a class="btn" href="{% url 'register' %}">Register</a>
+            <div class="text-muted">
+                Do not have an account? <a class="btn" href="{% url 'register' %}">Register</a>
+            </div>
         </form>
     </div>
 

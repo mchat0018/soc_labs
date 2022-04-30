@@ -80,6 +80,7 @@
     <style type="text/css">
         body {
             padding-bottom: 40px;
+            background-color: #eee;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 14px;
             line-height: 1.428571429;
@@ -356,7 +357,7 @@
 
     <div class="container">
         <a href="http://iiitd.ac.in" target="_blank">
-            <img src="https://www.iiitd.ac.in/sites/default/files/images/logo/logo.jpg" class="logo" width="200px">
+            <img src="https://raw.githubusercontent.com/mchat0018/soc_labs/branch1/SoCLabs/iiitd.png" class="logo">
         </a>
         <h2>
             Remote SoC Labs SignUp
@@ -366,10 +367,10 @@
             {{form|crispy}}
             <input class="btn btn-register" type="submit" value="Register">
             <br>
+            <div class="text-muted">
+                Already have an account? <a class="btn ml-2" href="{% url 'login' %}">Sign In</a>
+            </div>
         </form>
-        <div class="text-muted">
-            Already have an account? <a class="btn ml-2" href="{% url 'login' %}">Sign In</a>
-        </div>
     </div>
 
     <footer>
