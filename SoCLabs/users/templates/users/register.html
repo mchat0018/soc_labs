@@ -362,7 +362,9 @@
         <h2>
             Remote SoC Labs SignUp
         </h2>
+        
         <form class="form-signin" method="post">
+
             {% csrf_token %}
             {{form|crispy}}
             <input class="btn btn-register" type="submit" value="Register">
