@@ -12,6 +12,15 @@ import time
 import pytz
 
 DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+day_dict={
+    'Monday':0,
+    'Tuesday':1,
+    'Wednesday':2,
+    'Thursday':3,
+    'Friday':4,
+    'Saturday':5,
+    'Sunday':6
+}
 
 def register(request):
     if request.method == 'POST':
@@ -60,7 +69,8 @@ def profile(request):
     print(timeslots[:5])
     # getting the booked slots currently still valid
     booked_slots = Board.objects.filter(board_user=request.user).filter(day__in=days).filter(time_slot__in=timeslots).all()
-    
+    booked_slots = list(booked_slots)
+    booked_slots.sort(key=lambda x: str(day_dict[x.day]+1)+x.time_slot.start_time_hours+x.time_slot.start_time_minutes, reverse=False)
     for slot in booked_slots:
         print(slot)
     
