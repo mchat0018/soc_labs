@@ -12,15 +12,16 @@ body {
     background-color: #dcf2f3;
 }
 
-.page-header {
-    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-    font-weight: bold;
-    font-size: 48px;
-    color: #ec65a4;
+/* .page-header {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
     text-align: center;
-    padding: 5px;
-    margin: 10px;
-}
+    font-size: 30px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+} */
 
 .container {
     max-width: 1000px;

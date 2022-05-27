@@ -37,12 +37,17 @@ def bookSlots(request):
             board = request.POST.get('board',None)
             selected_day = request.POST.get('selected_day',None)
             
-            if time_slot is not None and board is not None:
+            # checking in case no value was submitted
+            if time_slot == '' or board == '': messages.error(request,f'Please select a slot')           
+            
+            elif time_slot is not None and board is not None or time_slot:
                 # checking if slot limit for the day has been reached
                 slot_limit = TimeConfig.objects.filter(day=selected_day).first().slot_limit
                 slots_booked = len(Board.objects.filter(board_user=request.user).filter(day=selected_day).all())
-                
-                if(slot_limit<=slots_booked): messages.error(request,f'Failure to book slot. Slot limit for the day already been reached')
+                print(f'{slots_booked}/{slot_limit} slots_booked for {selected_day}')
+                if(slot_limit<=slots_booked): 
+                    messages.error(request,f'Failure to book slot. Slot limit for the day already been reached')
+                    print('Failure to book slot. Slot limit for the day already been reached')
                 else:
                 # retrieving the TimeSlot object
                     start_time,end_time = tuple(time_slot.replace(' ','').split('-'))
@@ -53,7 +58,9 @@ def bookSlots(request):
                     datetime_now = datetime.now(pytz.timezone('Asia/Kolkata'))
                     curr_time = datetime_now.strftime('%H:%M')
                     # if the time slot booked is a previous time slot, it shouldn't be able to book
-                    if(curr_time>=end_time): messages.error(request,f'Failure to book slot. Please book a pending slot')
+                    if(curr_time>=end_time and selected_day==today): 
+                        messages.error(request,f'Failure to book slot. Please book a pending slot')
+                        print('Failure to book slot. Please book a pending slot')
                     else:
                         # print(f'{start_time_hours}:{start_time_minutes}-{end_time_hours}:{end_time_minutes}')
                         timeSlot = TimeSlot.objects.filter(Q(start_time_hours=start_time_hours) & Q(start_time_minutes=start_time_minutes)).first()
@@ -71,6 +78,7 @@ def bookSlots(request):
             
             else:
                 messages.error(request,f'Failure to book slot. Please try again.')
+                print('Failure to book slot. Please try again.')
     
     # getting the remaining time slots for the day
     ist = pytz.timezone('Asia/Kolkata')
@@ -80,7 +88,11 @@ def bookSlots(request):
     
     crit = (Q(end_time_hours__gt=curr_time_hours) | (Q(end_time_hours=curr_time_hours) & Q(end_time_minutes__gt=curr_time_minutes)))
     timeslots = TimeSlot.objects.filter(crit).all()
-    timescheds = TimeSchedule.objects.filter(day=selected_day).filter(time_slot__in = timeslots).all()
+    
+    if selected_day==today:
+        timescheds = TimeSchedule.objects.filter(day=selected_day).filter(time_slot__in = timeslots).all()
+    else: timescheds = TimeSchedule.objects.filter(day=selected_day)
+    
     timescheds = list(timescheds)
     timescheds.sort(key=lambda x: x.time_slot.start_time_hours+x.time_slot.start_time_minutes, reverse=False)
     

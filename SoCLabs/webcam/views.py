@@ -169,7 +169,7 @@ def index(request,board_no,ip_addr):
     
     booked_slot = Board.objects.filter(day=day).filter(time_slot=timeslot).filter(board_no=int(board_no)).first()
     
-    if booked_slot.board_user is not None and booked_slot.board_user.email == request.user.email and booked_slot.board_user.username == request.user.username:
+    if booked_slot.board_user is not None and booked_slot.board_user.username == request.user.username and ip_addr == booked_slot.ip_addr.ip:
         hw_port = connection(ip_addr)
         end_time = booked_slot.time_slot.end_time_hours+booked_slot.time_slot.end_time_minutes
         
@@ -226,7 +226,7 @@ def restartView(request,board_no,ip_addr):
     # extracting the currently booked board
     booked_slot = Board.objects.filter(day=day).filter(time_slot=timeslot).filter(board_no=int(board_no)).first()
     # checking if the board user is the currently logged in user
-    if booked_slot.board_user is not None and booked_slot.board_user.username == request.user.username:
+    if booked_slot.board_user is not None and booked_slot.board_user.username == request.user.username and ip_addr == booked_slot.ip_addr.ip:
         restart(ip_addr)
         data = {
             'ip_addr':ip_addr,
