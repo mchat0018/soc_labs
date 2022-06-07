@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'courses.apps.CoursesConfig',
     'webcam.apps.WebcamConfig',
     'users.apps.UsersConfig',
     'slots.apps.SlotsConfig',

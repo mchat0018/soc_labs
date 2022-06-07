@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db.models.base import Model
 from django.db.models.fields import DateField
 from django.db.models.fields.related import ForeignKey
+from courses.models import Course
 
 DAYS_OF_WEEK = (
     ('Monday','Monday'),
@@ -36,6 +37,8 @@ class TimeConfig(models.Model):
     duration = models.IntegerField(null=True)
     no_of_boards = models.IntegerField(default=10)
     slot_limit = models.IntegerField(default=5)
+
+    # course = models.ForeignKey(Course,on_delete=models.CASCADE)
 
     def __str__(self):
         return f'{self.day};Slots from {self.start_time_hours}:{self.start_time_minutes} to {self.end_time_hours}:{self.end_time_minutes};duration:{self.duration} minutes'
