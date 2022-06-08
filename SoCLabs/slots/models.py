@@ -35,6 +35,7 @@ class TimeConfig(models.Model):
     end_time_minutes = models.CharField(max_length=2,choices=MINUTE_SLOTS,null=True)
     duration = models.IntegerField(null=True)
     no_of_boards = models.IntegerField(default=10)
+    slot_limit = models.IntegerField(default=5)
 
     def __str__(self):
         return f'{self.day};Slots from {self.start_time_hours}:{self.start_time_minutes} to {self.end_time_hours}:{self.end_time_minutes};duration:{self.duration} minutes'
