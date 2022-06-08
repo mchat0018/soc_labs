@@ -85,17 +85,9 @@
                 <thead>
                     <tr>
                         <th scope="col">Slots</th>
-                        <th scope="col">Board 1</th>
-                        <th scope="col">Board 2</th>
-                        <th scope="col">Board 3</th>
-                        <th scope="col">Board 4</th>
-                        <th scope="col">Board 5</th>
-                        <th scope="col">Board 6</th>
-                        <th scope="col">Board 7</th>
-                        <th scope="col">Board 8</th>
-                        <th scope="col">Board 9</th>
-                        <th scope="col">Board 10</th>
-
+                        {% for board in boards %}
+                            <th scope="col">{{board.board_name}}</th>
+                        {% endfor %}
                     </tr>
                 </thead>
                 <tbody>

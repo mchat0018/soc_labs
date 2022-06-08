@@ -25,6 +25,12 @@ for i in range(60):
     MINUTE_SLOTS.append((str(i).zfill(2),str(i).zfill(2)))
 MINUTE_SLOTS = tuple(MINUTE_SLOTS)
 
+BOARD_TYPES = (
+    ('Basys3','Basys3'),
+    ('Zynq','Zynq'),
+    ('Zedboard','Zedboard')
+)
+
 # class DaySchedule(models.Model):
 #     day = models.CharField(max_length=10,choices=DAYS_OF_WEEK)
 
@@ -35,13 +41,12 @@ class TimeConfig(models.Model):
     end_time_hours = models.CharField(max_length=2,choices=HOUR_SLOTS,null=True)
     end_time_minutes = models.CharField(max_length=2,choices=MINUTE_SLOTS,null=True)
     duration = models.IntegerField(null=True)
-    no_of_boards = models.IntegerField(default=10)
+    # no_of_boards = models.IntegerField(default=10)
     slot_limit = models.IntegerField(default=5)
-
-    # course = models.ForeignKey(Course,on_delete=models.CASCADE)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.day};Slots from {self.start_time_hours}:{self.start_time_minutes} to {self.end_time_hours}:{self.end_time_minutes};duration:{self.duration} minutes'
+        return f'{self.course};{self.day};Slots from {self.start_time_hours}:{self.start_time_minutes} to {self.end_time_hours}:{self.end_time_minutes};duration:{self.duration} minutes'
         
 class TimeSlot(models.Model):
     start_time_hours = models.CharField(max_length=2,choices=HOUR_SLOTS,null=True)
@@ -56,25 +61,29 @@ class TimeSchedule(models.Model):
     day = models.CharField(max_length=10,choices=DAYS_OF_WEEK)
     time_slot = models.ForeignKey(TimeSlot,on_delete=models.CASCADE)
     time_config = models.ForeignKey(TimeConfig,on_delete=models.CASCADE,null=True)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.day},{self.time_slot.start_time_hours}:{self.time_slot.start_time_minutes} - {self.time_slot.end_time_hours}:{self.time_slot.end_time_minutes}'
+        return f'{self.course};{self.day};{self.time_slot.start_time_hours}:{self.time_slot.start_time_minutes}-{self.time_slot.end_time_hours}:{self.time_slot.end_time_minutes}'
 
 class IPAddress(models.Model):
-    # board = models.OneToOneField(Board,on_delete=models.CASCADE,null=True)
-    board_no = models.IntegerField(default=1)
+    # board_no = models.IntegerField(default=1)
+    board_type = models.CharField(max_length=10,choices=BOARD_TYPES)
+    board_name = models.CharField(max_length=12)
     ip = models.GenericIPAddressField(protocol='both',null=True)
-    
+    course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True,blank=True)
+
     def __str__(self):
-        return f'IPv4:{self.ip}'
+        return f'IPv4 for {self.board_name}:{self.ip}'
 class Board(models.Model):
     board_user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
     day = models.CharField(max_length=10,choices=DAYS_OF_WEEK,null=True)
     time_slot = models.ForeignKey(TimeSlot,on_delete=models.CASCADE,null=True)
-    time_sched = models.ForeignKey(TimeSchedule,on_delete=models.CASCADE,null=True)
-    board_no = models.IntegerField(default=1)
+    # time_sched = models.ForeignKey(TimeSchedule,on_delete=models.CASCADE,null=True)
+    board_name = models.CharField(max_length=12)
     ip_addr = models.ForeignKey(IPAddress,on_delete=models.SET_NULL,null=True,blank=True)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE)
     
     def __str__(self):
-        return f'Board{self.board_no} for {self.day},{self.time_slot.start_time_hours}:{self.time_slot.start_time_minutes} - {self.time_slot.end_time_hours}:{self.time_slot.end_time_minutes}'
+        return f'{self.board_name} for {self.day},{self.time_slot.start_time_hours}:{self.time_slot.start_time_minutes} - {self.time_slot.end_time_hours}:{self.time_slot.end_time_minutes}'
     

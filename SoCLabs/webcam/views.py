@@ -139,7 +139,17 @@ def connection(ip_addr):
 
 @login_required       
 @gzip.gzip_page
-def index(request,board_no,ip_addr):
+def index(request,course_id,board_name,ip_addr):
+    
+    course = Course.objects.filter(pk=course_id)
+    # running authentication
+    if not request.user.staff_cred:
+        if request.user not in course.students.all():
+            raise PermissionDenied
+    else:
+        if request.user not in course.professors.all() and request.user not in course.staff.all():
+            raise PermissionDenied
+
     # running authentication of user in current time slot
     # getting current day and time
     ist = pytz.timezone('Asia/Kolkata')
@@ -167,7 +177,7 @@ def index(request,board_no,ip_addr):
     print(timeslot)
     day = DAYS_OF_WEEK[curr_day]
     
-    booked_slot = Board.objects.filter(day=day).filter(time_slot=timeslot).filter(board_no=int(board_no)).first()
+    booked_slot = Board.objects.filter(course=course).filter(day=day).filter(time_slot=timeslot).filter(board_name=board_name).first()
     
     if booked_slot.board_user is not None and booked_slot.board_user.username == request.user.username and ip_addr == booked_slot.ip_addr.ip:
         hw_port = connection(ip_addr)
@@ -179,7 +189,7 @@ def index(request,board_no,ip_addr):
         data= {
             'u_name': booked_slot.board_user.username,
             'IP' : ip_addr,
-            'board_no': board_no,
+            'board_name': board_name,
             'Port' : hw_port,
             'end_time':end_time
         }
@@ -194,7 +204,17 @@ def fpgaview(request,ip_addr,end_time):
         except:
             pass
         
-def restartView(request,board_no,ip_addr):
+def restartView(request,course_id,board_name,ip_addr):
+    
+    course = Course.objects.filter(pk=course_id)
+    # running authentication
+    if not request.user.staff_cred:
+        if request.user not in course.students.all():
+            raise PermissionDenied
+    else:
+        if request.user not in course.professors.all() and request.user not in course.staff.all():
+            raise PermissionDenied
+
     # running authentication of user in current time slot
     # getting current day and time
     ist = pytz.timezone('Asia/Kolkata')
@@ -224,13 +244,13 @@ def restartView(request,board_no,ip_addr):
     # print(timeslot)
     day = DAYS_OF_WEEK[curr_day]
     # extracting the currently booked board
-    booked_slot = Board.objects.filter(day=day).filter(time_slot=timeslot).filter(board_no=int(board_no)).first()
+    booked_slot = Board.objects.filter(course=course).filter(day=day).filter(time_slot=timeslot).filter(board_no=board_name).first()
     # checking if the board user is the currently logged in user
     if booked_slot.board_user is not None and booked_slot.board_user.username == request.user.username and ip_addr == booked_slot.ip_addr.ip:
         restart(ip_addr)
         data = {
             'ip_addr':ip_addr,
-            'board_no':board_no,
+            'board_name':board_name,
             'u_name': booked_slot.board_user.username
         }
         return render(request,'webcam/restart.html',context=data)
