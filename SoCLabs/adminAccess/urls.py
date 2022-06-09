@@ -3,5 +3,5 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('', index, name='TimeConfig'),
+    path('<int:pk>/', index, name='TimeConfig'),
 ]

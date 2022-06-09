@@ -7,10 +7,17 @@ days = [
     ('wed', 'Wednesday'),
 ]
 
-slots = [
-    ('1', '10:00-10:30'),
-    ('2', '10:30-11:00'),
-    ('3', '11:00-11:30'),
+hrs = [
+    ('1', '10'),
+    ('2', '11'),
+    ('3', '12'),
+]
+
+mins = [
+    ('1', '00'),
+    ('2', '15'),
+    ('3', '30'),
+    ('4', '45'),
 ]
 
 class TimeConfigFrm(forms.ModelForm):
@@ -27,12 +34,58 @@ class TimeConfigFrm(forms.ModelForm):
             choices=days
         ),
     )
-
-    timeSlot = forms.CharField(
-        widget=forms.SelectMultiple(
+    start_time_hours = forms.CharField(
+        widget=forms.Select(
             attrs={
                 "class": "form-control form-select",
+                "placeholder": "Select Day...",
             },
-            choices=slots
+            choices=hrs
+        ),
+    )
+
+    start_time_minutes = forms.CharField(
+        widget=forms.Select(
+            attrs={
+                "class": "form-control form-select",
+                "placeholder": "Select Day...",
+            },
+            choices=mins
+        ),
+    )
+
+    end_time_hours = forms.CharField(
+        widget=forms.Select(
+            attrs={
+                "class": "form-control form-select",
+                "placeholder": "Select Day...",
+            },
+            choices=hrs
+        ),
+    )
+
+    end_time_minutes = forms.CharField(
+        widget=forms.Select(
+            attrs={
+                "class": "form-control form-select",
+                "placeholder": "Select Day...",
+            },
+            choices=mins
+        ),
+    )
+
+    duration = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+            }
+        ),
+    )
+
+    no_of_boards = forms.CharField(
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+            }
         ),
     )

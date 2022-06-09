@@ -12,17 +12,42 @@
 </head>
 
 <body>
-    {% csrf_token %}
-    <div class="position-absolute top-0 start-50 translate-middle-x row" style="margin-top:100px;width: 500px;">
-        <div class="col">
-            {{form.day|as_crispy_field}}
+    <form method="POST">
+        {% csrf_token %}
+        {{formset.management_form}}
+        <div class="position-absolute top-0 start-50 translate-middle-x" style="margin-top:100px;width: 1500px;">
+            {% for form in formset%}
+            <div class="row">
+                <div class="col">
+                    {{form.day|as_crispy_field}}
+                </div>
+                <div class="col">
+                    {{form.start_time_hours|as_crispy_field}}
+                </div>
+                <div class="col">
+                    {{form.start_time_minutes|as_crispy_field}}
+                </div>
+                <div class="col">
+                    {{form.end_time_hours|as_crispy_field}}
+                </div>
+                <div class="col">
+                    {{form.end_time_minutes|as_crispy_field}}
+                </div>
+                <div class="col">
+                    {{form.duration|as_crispy_field}}
+                </div>
+                <div class="col">
+                    {{form.no_of_boards|as_crispy_field}}
+                </div>
+            </div>
+            <br>
+            {% endfor %}
+            <hr>
+            <div class="d-grid gap-2 col-2 mx-auto">
+                <input class="btn btn-primary" type="submit" value="Add Configurations">
+            </div>
         </div>
-        <div class="col">
-            {{form.timeSlot|as_crispy_field}}
-        </div>
-        <hr>
-        <input class="btn btn-primary" type="submit" value="Add Configurations">
-    </div>
+    </form>
 </body>
 
 </html>
