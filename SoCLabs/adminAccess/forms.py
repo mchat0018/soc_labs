@@ -21,7 +21,7 @@ class TimeConfigFrm(forms.ModelForm):
     day = forms.CharField(
         widget=forms.Select(
             attrs={
-                "class": "form-select",
+                "class": "form-control form-select",
                 "placeholder": "Select Day...",
             },
             choices=days
@@ -31,7 +31,7 @@ class TimeConfigFrm(forms.ModelForm):
     timeSlot = forms.CharField(
         widget=forms.SelectMultiple(
             attrs={
-                "class": "form-select",
+                "class": "form-control form-select",
             },
             choices=slots
         ),
