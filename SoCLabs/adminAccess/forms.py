@@ -2,22 +2,22 @@ from django import forms
 from slots.models import TimeConfig
 
 days = [
-    ('mon', 'Monday'),
-    ('tue', 'Tuesday'),
-    ('wed', 'Wednesday'),
+    ('Monday', 'Monday'),
+    ('Tuesday', 'Tuesday'),
+    ('Wednesday', 'Wednesday'),
 ]
 
 hrs = [
-    ('1', '10'),
-    ('2', '11'),
-    ('3', '12'),
+    ('10', '10'),
+    ('11', '11'),
+    ('12', '12'),
 ]
 
 mins = [
-    ('1', '00'),
-    ('2', '15'),
-    ('3', '30'),
-    ('4', '45'),
+    ('00', '00'),
+    ('15', '15'),
+    ('30', '30'),
+    ('45', '45'),
 ]
 
 class TimeConfigFrm(forms.ModelForm):

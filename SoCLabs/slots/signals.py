@@ -5,7 +5,7 @@ from .models import *
 
 @receiver(post_save,sender=TimeConfig)
 def create_TimeSlots(sender,instance,created,**kwargs):
-    if created:
+    if False: #created:
         start_time_hours = int(instance.start_time_hours)
         start_time_minutes = int(instance.start_time_minutes)
         end_time_hours = int(instance.end_time_hours)

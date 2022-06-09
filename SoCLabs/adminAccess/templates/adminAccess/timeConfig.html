@@ -15,7 +15,7 @@
     <form method="POST">
         {% csrf_token %}
         {{formset.management_form}}
-        <div class="position-absolute top-0 start-50 translate-middle-x" style="margin-top:100px;width: 1500px;">
+        <div class="position-absolute top-0 start-50 translate-middle-x" style="margin-top:100px;width: 1200px;">
             {% for form in formset%}
             <div class="row">
                 <div class="col">
@@ -33,6 +33,8 @@
                 <div class="col">
                     {{form.end_time_minutes|as_crispy_field}}
                 </div>
+                {% comment %}
+                {% endcomment %}
                 <div class="col">
                     {{form.duration|as_crispy_field}}
                 </div>

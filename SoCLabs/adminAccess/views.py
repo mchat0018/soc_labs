@@ -4,8 +4,15 @@ from .forms import TimeConfigFrm
 from slots.models import TimeConfig
 
 # Create your views here.
+def timeDiff(sh,sm,eh,em):
+    if sm>em:
+        eh -= 1
+        em += 60
+    return (eh-sh)*60+(em-sm)
+
+
 def index(request,pk):
-    form = formset_factory(TimeConfigFrm,extra=pk)
+    form = formset_factory(TimeConfigFrm,extra=int(pk))
     formset = form()
     if request.method == "POST":
         formset = form(request.POST)
@@ -16,11 +23,9 @@ def index(request,pk):
                 start_time_minutes = data.cleaned_data.get('start_time_minutes')
                 end_time_hours = data.cleaned_data.get('end_time_hours')
                 end_time_minutes = data.cleaned_data.get('end_time_minutes')
-                duration = data.cleaned_data.get('duration')
+                duration = data.cleaned_data.get('duration') # timeDiff(start_time_hours,start_time_minutes,end_time_hours,end_time_minutes)
                 no_of_boards = data.cleaned_data.get('no_of_boards')
-                if day:
-                    TimeConfig(day=day, start_time_hours=start_time_hours,
-                                start_time_minutes=start_time_minutes, end_time_hours=end_time_hours, end_time_minutes=end_time_minutes, duration=duration, no_of_boards=no_of_boards).save()
-            return redirect("index")
-    fields = TimeConfig.objects.all()
+                TimeConfig(day=day, start_time_hours=start_time_hours,
+                           start_time_minutes=start_time_minutes, end_time_hours=end_time_hours, end_time_minutes=end_time_minutes, duration=duration, no_of_boards=no_of_boards).save()
+            return redirect(index,pk=pk)
     return render(request, "adminAccess/timeConfig.html", {'formset':formset})
