@@ -13,8 +13,22 @@
         <link rel="stylesheet" href="{% static 'users/styles.css' %}" type="text/css">
         <title>Logout</title>
     </head>
-    <body onload="window.location.replace({% url 'login' %});">
-        Logged out...redirecting to login page
+    <body>
+        <div class="card text-center" style="width: 30rem;">
+            <div class="card-header">
+                <h1 class="page-header logout-header">Log Out</h1>
+            </div>
+            <div class="card-body">
+                <section class="content login">
+                    <h4>You have been logged out</h4>
+                </section>
+            </div>
+            <div class="card-footer text-muted">
+                <div>
+                    <a href="{% url 'login' %}">Log In Again</a>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
     
