@@ -139,7 +139,7 @@ def connection(ip_addr):
 
 @login_required       
 @gzip.gzip_page
-def index(request,course_id,board_name,ip_addr):
+def index(request,course_id,board_serial):
     
     course = Course.objects.filter(pk=course_id)
     # running authentication
@@ -177,10 +177,13 @@ def index(request,course_id,board_name,ip_addr):
     print(timeslot)
     day = DAYS_OF_WEEK[curr_day]
     
-    booked_slot = Board.objects.filter(course=course).filter(day=day).filter(time_slot=timeslot).filter(board_name=board_name).first()
+    ip_addr = IPAddress.objects.get(board_serial=board_serial)
+    if ip_addr is None: raise PermissionDenied
+
+    booked_slot = Board.objects.filter(course=course).filter(day=day).filter(time_slot=timeslot).filter(ip_addr=ip_addr).first()
     
-    if booked_slot.board_user is not None and booked_slot.board_user.username == request.user.username and ip_addr == booked_slot.ip_addr.ip:
-        hw_port = connection(ip_addr)
+    if booked_slot is not None and booked_slot.board_user is not None and booked_slot.board_user.username == request.user.username:
+        hw_port = connection(ip_addr.ip)
         end_time = booked_slot.time_slot.end_time_hours+booked_slot.time_slot.end_time_minutes
         
         # if request.POST:
@@ -188,8 +191,8 @@ def index(request,course_id,board_name,ip_addr):
             
         data= {
             'u_name': booked_slot.board_user.username,
-            'IP' : ip_addr,
-            'board_name': board_name,
+            'IP' : ip_addr.ip,
+            'board_serial': board_serial,
             'Port' : hw_port,
             'end_time':end_time
         }
@@ -204,7 +207,7 @@ def fpgaview(request,ip_addr,end_time):
         except:
             pass
         
-def restartView(request,course_id,board_name,ip_addr):
+def restartView(request,course_id,board_serial):
     
     course = Course.objects.filter(pk=course_id)
     # running authentication
@@ -244,13 +247,15 @@ def restartView(request,course_id,board_name,ip_addr):
     # print(timeslot)
     day = DAYS_OF_WEEK[curr_day]
     # extracting the currently booked board
-    booked_slot = Board.objects.filter(course=course).filter(day=day).filter(time_slot=timeslot).filter(board_no=board_name).first()
+    ip_addr = IPAddress.objects.get(board_serial=board_serial)
+    if ip_addr is None: raise PermissionDenied
+
+    booked_slot = Board.objects.filter(course=course).filter(day=day).filter(time_slot=timeslot).filter(ip_addr=ip_addr).first()
     # checking if the board user is the currently logged in user
-    if booked_slot.board_user is not None and booked_slot.board_user.username == request.user.username and ip_addr == booked_slot.ip_addr.ip:
-        restart(ip_addr)
+    if booked_slot is not None and booked_slot.board_user is not None and booked_slot.board_user.username == request.user.username:
+        restart(ip_addr.ip)
         data = {
-            'ip_addr':ip_addr,
-            'board_name':board_name,
+            'ip_addr':ip_addr.ip,
             'u_name': booked_slot.board_user.username
         }
         return render(request,'webcam/restart.html',context=data)

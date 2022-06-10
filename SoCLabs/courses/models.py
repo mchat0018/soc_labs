@@ -8,7 +8,7 @@ class Course(models.Model):
     professors = models.ManyToManyField(User,related_name='professors')
     staff = models.ManyToManyField(User,related_name='staff')
     students = models.ManyToManyField(User,related_name='students')
-    description = models.TextField()
+    description = models.TextField(null=True)
     
     def __str__(self):
         return self.name

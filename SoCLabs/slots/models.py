@@ -43,7 +43,7 @@ class TimeConfig(models.Model):
     duration = models.IntegerField(null=True)
     # no_of_boards = models.IntegerField(default=10)
     slot_limit = models.IntegerField(default=5)
-    course = models.ForeignKey(Course,on_delete=models.CASCADE)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
 
     def __str__(self):
         return f'{self.course};{self.day};Slots from {self.start_time_hours}:{self.start_time_minutes} to {self.end_time_hours}:{self.end_time_minutes};duration:{self.duration} minutes'
@@ -61,15 +61,16 @@ class TimeSchedule(models.Model):
     day = models.CharField(max_length=10,choices=DAYS_OF_WEEK)
     time_slot = models.ForeignKey(TimeSlot,on_delete=models.CASCADE)
     time_config = models.ForeignKey(TimeConfig,on_delete=models.CASCADE,null=True)
-    course = models.ForeignKey(Course,on_delete=models.CASCADE)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
 
     def __str__(self):
         return f'{self.course};{self.day};{self.time_slot.start_time_hours}:{self.time_slot.start_time_minutes}-{self.time_slot.end_time_hours}:{self.time_slot.end_time_minutes}'
 
 class IPAddress(models.Model):
     # board_no = models.IntegerField(default=1)
-    board_type = models.CharField(max_length=10,choices=BOARD_TYPES)
-    board_name = models.CharField(max_length=12)
+    board_serial = models.CharField(max_length=60,null=True)
+    board_type = models.CharField(max_length=10,choices=BOARD_TYPES,null=True)
+    board_name = models.CharField(max_length=12,null=True)
     ip = models.GenericIPAddressField(protocol='both',null=True)
     course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True,blank=True)
 
@@ -80,9 +81,9 @@ class Board(models.Model):
     day = models.CharField(max_length=10,choices=DAYS_OF_WEEK,null=True)
     time_slot = models.ForeignKey(TimeSlot,on_delete=models.CASCADE,null=True)
     # time_sched = models.ForeignKey(TimeSchedule,on_delete=models.CASCADE,null=True)
-    board_name = models.CharField(max_length=12)
-    ip_addr = models.ForeignKey(IPAddress,on_delete=models.SET_NULL,null=True,blank=True)
-    course = models.ForeignKey(Course,on_delete=models.CASCADE)
+    board_name = models.CharField(max_length=12,null=True)
+    ip_addr = models.ForeignKey(IPAddress,on_delete=models.SET_NULL,null=True)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
     
     def __str__(self):
         return f'{self.board_name} for {self.day},{self.time_slot.start_time_hours}:{self.time_slot.start_time_minutes} - {self.time_slot.end_time_hours}:{self.time_slot.end_time_minutes}'
