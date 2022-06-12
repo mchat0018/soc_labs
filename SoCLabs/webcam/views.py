@@ -141,9 +141,9 @@ def connection(ip_addr):
 @gzip.gzip_page
 def index(request,course_id,board_serial):
     
-    course = Course.objects.filter(pk=course_id)
+    course = Course.objects.get(pk=course_id)
     # running authentication
-    if not request.user.staff_cred:
+    if not request.user.profile.staff_cred:
         if request.user not in course.students.all():
             raise PermissionDenied
     else:
@@ -209,9 +209,9 @@ def fpgaview(request,ip_addr,end_time):
         
 def restartView(request,course_id,board_serial):
     
-    course = Course.objects.filter(pk=course_id)
+    course = Course.objects.get(pk=course_id)
     # running authentication
-    if not request.user.staff_cred:
+    if not request.user.profile.staff_cred:
         if request.user not in course.students.all():
             raise PermissionDenied
     else:

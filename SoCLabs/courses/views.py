@@ -23,9 +23,11 @@ day_dict={
 
 @login_required
 def course_page(request,course_id):
-    course = Course.objects.filter(pk=course_id)
+    for c in Course.objects.all(): print(str(c.id))
+    course = Course.objects.get(id=course_id)
+    print(course)
     # running authentication
-    if not request.user.staff_cred:
+    if not request.user.profile.staff_cred:
         if request.user not in course.students.all():
             raise PermissionDenied
     else:
@@ -67,10 +69,10 @@ def course_page(request,course_id):
     return render(request,'courses/course_page.html',context=data)
 
 def lab_page(request,course_id,lab_no):
-    course = Course.objects.filter(pk=course_id)
+    course = Course.objects.get(pk=course_id)
     lab = Lab.objects.get(course=course,lab_no=lab_no)
     # running authentication
-    if not request.user.staff_cred:
+    if not request.user.profile.staff_cred:
         if request.user not in course.students.all():
             raise PermissionDenied
     else:

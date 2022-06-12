@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from django.db.models import Q
-from .models import TimeConfig, TimeSchedule,Board,TimeSlot
+from .models import IPAddress, TimeConfig, TimeSchedule,Board,TimeSlot
 from courses.models import Course
 from django.utils import timezone
 from datetime import date, timedelta, datetime
@@ -15,9 +15,9 @@ DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','S
 
 @login_required
 def bookSlots(request,course_id):
-    course = Course.objects.filter(pk=course_id)
+    course = Course.objects.get(id=course_id)
     # check if user is registered in the course
-    if not request.user.staff_cred:
+    if not request.user.profile.staff_cred:
         if request.user not in course.students.all():
             raise PermissionDenied
     else:
@@ -112,6 +112,7 @@ def bookSlots(request,course_id):
         'selected_day' : selected_day,
         'days': days,
         'time_schedules': timescheds,
-        'boards': Board.objects.filter(course=course).filter(day=selected_day).all() 
+        'boards': Board.objects.filter(course=course).filter(day=selected_day).all(),
+        'IPs': IPAddress.objects.filter(course=course).all()
     }    
     return render(request,'slots/booking.html',context = data)

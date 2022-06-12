@@ -14,18 +14,7 @@
     <title>Document</title>
 </head>
 <body>
-    <!--ul class="nav nav-pills">
-        <li class="nav-item">
-            <a class="nav-link active disabled" aria-current="page" href="{% url 'book-slots' %}">Book Slots</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'login' %}">Login</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{% url 'register' %}">Register</a>
-        </li>
-    </ul>
-    <br><br><br-->
+    
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3fadab; font-size:x-large;">
         <div class="container-fluid">
             <a class="navbar-brand"><img src="https://www.iiitd.ac.in/sites/default/files/images/logo/style1invertedgreyscalelarge.png" class="logo" width="80"></a>
@@ -85,8 +74,8 @@
                 <thead>
                     <tr>
                         <th scope="col">Slots</th>
-                        {% for board in boards %}
-                            <th scope="col">{{board.board_name}}</th>
+                        {% for ip in IPs %}
+                            <th scope="col">{{ip.board_name}}</th>
                         {% endfor %}
                     </tr>
                 </thead>
@@ -120,7 +109,7 @@
                     <input type="text" class="form-control" name="time-slot" id="time-slot" readonly>
                 </div>
                 <div class="col">
-                    <label for="board">Board No.:</label>
+                    <label for="board">Board Name.:</label>
                     <input type="text" class="form-control" name='board' id="board" readonly>
                 </div>
                 <div class="col">
