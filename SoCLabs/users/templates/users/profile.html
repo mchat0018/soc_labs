@@ -12,16 +12,15 @@
         <title>Profile</title>
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3fadab; font-size:x-large;">
             <div class="container-fluid">
-                <a class="navbar-brand">IIITD</a>
+                <a class="navbar-brand"><img src="https://www.iiitd.ac.in/sites/default/files/images/logo/style1invertedgreyscalelarge.png" class="logo" width="80"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                     aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
-                        <a class="nav-link" aria-current="page" href="{% url 'book-slots' %}">Book Slots</a>
                         {% if user.is_authenticated %}
                             <a class="nav-link active" href="{% url 'profile' %}">Profile</a>
                             <a class="nav-link" href="{% url 'logout' %}">Logout</a>
@@ -33,7 +32,7 @@
                 </div>
             </div>
         </nav>
-        <div class="card text-center" style="width: 30rem;">
+        <div class="card text-center mx-auto" style="width: 40rem;">
             <div class="card-header">
                 <h1 class="page-header profile-header">User Profile</h1>
             </div>
@@ -41,7 +40,7 @@
                 <section class="content profile-info">
                     <div class="card-title content-section">
                         <div class="media">
-                            <img class="rounded-circle account-img" src="{{user.profile.image.url}}" style="float: left; margin-right: 15px;">
+                            <img class="rounded-circle account-img" src="https://www.focusedu.org/wp-content/uploads/2018/12/circled-user-male-skin-type-1-2.png" style=" margin-right: 15px; width : 100px;">
                             <h2 class="account-heading">{{user.username}}</h2>
                             <p class="text-secondary">{{user.email}}</p>
                         </div>
@@ -71,7 +70,7 @@
                             <tr>
                                 <th>Day</th>
                                 <th>Time Slot</th>
-                                <th>Board No.</th>
+                                <th>Board Name.</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
@@ -80,11 +79,11 @@
                                 <tr>
                                     <td>{{slot.day}}</td>
                                     <td>{{slot.time_slot}}</td>
-                                    <td>{{slot.board_no}}</td>
+                                    <td>{{slot.board_name}}</td>
                                     {% if slot.day == curr_day %}
                                         {% if slot.time_slot.end_time_hours > curr_time_hours or slot.time_slot.end_time_hours == curr_time_hours and slot.time_slot.end_time_minutes > curr_time_minutes %}
                                             {% if slot.time_slot.start_time_hours < curr_time_hours or slot.time_slot.start_time_hours == curr_time_hours and slot.time_slot.start_time_minutes <= curr_time_minutes %}
-                                                <td><a href="{% url 'index' slot.board_no slot.ip_addr.ip %}">In Progress</td>
+                                                <td><a href="{% url 'index' slot.course.pk slot.ip_addr.board_serial %}">In Progress</td>
                                             {% else %}
                                                 <td>Pending</td>
                                             {% endif %}

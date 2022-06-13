@@ -1,0 +1,30 @@
+Staff (Admin Access):
+1. User Profile
+2. Courses 
+
+Student: 
+1. User Profile
+2. Courses 
+
+Course:
+1. Teaching staff and professor with access to the admin page
+2. Students enrolled in that course
+3. TimeConfig
+4. TimeSchedules
+5. Boards
+6. TimeSlots
+7. IP Addresses
+
+Students: Login -> Course Page -> Watch tutorials/handouts posted -> book slot -> gain access to board
+Teaching staff: Login to course -> go to admin page -> modify content
+
+Admin Page:
+1. Course details - Students enrolled, TAs
+2. Enable posting lab material
+3. Setting default parameters, IP Addresses
+4. Reset button - clears all the boards
+5. Access statistics
+
+Default Parameters:
+
+Monday          Add TimeConfig object (minus day)

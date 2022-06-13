@@ -32,10 +32,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'courses.apps.CoursesConfig',
     'webcam.apps.WebcamConfig',
     'users.apps.UsersConfig',
     'slots.apps.SlotsConfig',
-    'adminAccess.apps.AdminaccessConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

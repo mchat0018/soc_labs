@@ -12,6 +12,15 @@ import time
 import pytz
 
 DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+day_dict={
+    'Monday':0,
+    'Tuesday':1,
+    'Wednesday':2,
+    'Thursday':3,
+    'Friday':4,
+    'Saturday':5,
+    'Sunday':6
+}
 
 def register(request):
     if request.method == 'POST':
@@ -52,14 +61,20 @@ def profile(request):
     curr_time = datetime_now.strftime('%H:%M')
     curr_time_hours,curr_time_minutes = tuple(curr_time.split(':'))
     curr_day = datetime.today().weekday()
+    today = DAYS_OF_WEEK[curr_day]
     print(curr_time)
     # getting available time slots and days
     crit = (Q(end_time_hours__gt=curr_time_hours) | (Q(end_time_hours=curr_time_hours) & Q(end_time_minutes__gt=curr_time_minutes)))
     timeslots = TimeSlot.objects.filter(crit).all()
-    days = DAYS_OF_WEEK[curr_day:]
-    print(timeslots[:5])
-    # getting the booked slots currently still valid
-    booked_slots = Board.objects.filter(board_user=request.user).filter(day__in=days).filter(time_slot__in=timeslots).all()
+    # getting the remaining booked slots for today
+    booked_slots = Board.objects.filter(board_user=request.user).filter(day=today).filter(time_slot__in=timeslots).all()
+    booked_slots = list(booked_slots)
+    # getting the booked time slots for the remaining days of the lab week
+    if curr_day != 6:
+        days = DAYS_OF_WEEK[curr_day+1:]
+        booked_slots += list(Board.objects.filter(board_user=request.user).filter(day__in=days).all())
+    # sorting the booked slots
+    booked_slots.sort(key=lambda x: str(day_dict[x.day]+1)+x.time_slot.start_time_hours+x.time_slot.start_time_minutes, reverse=False)
     
     for slot in booked_slots:
         print(slot)

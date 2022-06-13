@@ -19,7 +19,7 @@ from django.urls import path,include
 from webcam import views
 
 urlpatterns = [
-    path('board_display/<board_no>/<ip_addr>', views.index, name='index'),
-    path('fpgaview/<ip_addr>/<end_time>', views.fpgaview, name='fpgaview'),
-    path('restart_board/<board_no>/<ip_addr>',views.restartView, name='restart')
+    path('board_display/<board_serial>/', views.index, name='index'),
+    path('fpgaview/<ip_addr>/<end_time>/', views.fpgaview, name='fpgaview'),
+    path('restart_board/<board_serial>/',views.restartView, name='restart')
 ]

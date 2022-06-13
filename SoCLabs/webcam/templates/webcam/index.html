@@ -11,12 +11,36 @@
       <title>Video Live Stream</title>
     </head>
     <body>
-      <div class="card" style="width: 40rem;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3fadab; font-size:x-large;">
+          <div class="container-fluid">
+              <a class="navbar-brand"><img src="https://www.iiitd.ac.in/sites/default/files/images/logo/style1invertedgreyscalelarge.png" class="logo" width="80"></a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                  aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                  <div class="navbar-nav">
+                      <a class="nav-link" aria-current="page" href="{% url 'book-slots' %}">Book Slots</a>
+                      {% if user.is_authenticated %}
+                          <a class="nav-link" href="{% url 'profile' %}">Profile</a>
+                          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                      {% else %}
+                          <a class="nav-link" href="{% url 'login' %}">Login</a>
+                          <a class="nav-link" href="{% url 'register' %}">Register</a>
+                      {% endif %}
+                  </div>
+              </div>
+          </div>
+        </nav>
+      <div class="card text-center mx-auto" style="width: 40rem;">
+        <div class="card-header">
+          <h1 class="page-header profile-header">Video Live Stream</h1>
+        </div>
         <img src="{% url 'fpgaview' IP end_time %}" width="500" class="vdo figure-img img-fluid rounded mx-auto">
+        <h3>Board Access Credentials</h3>
         <div class="card-body">
-          <h1>Video Live Stream</h1>
           <p class="card-text">
-            {{u_name}}
+            Username: <span class="badge rounded-pill bg-info text-dark">{{u_name}}</span>
           </p>
         </div>
         <ul class="list-group list-group-flush">
@@ -35,7 +59,7 @@
           <br> {% endcomment %}
           <a href="{% url 'book-slots' %}" target='_blank'><input type="submit" class="button btn btn-outline-primary w-25"
             value="Book Another Slot" name='book' style="width: 100%" /></a>
-          <a href="{% url 'restart' board_no IP %}" target='_blank'><input type="submit" class="button btn btn-outline-danger w-25"
+          <a href="{% url 'restart' board_serial %}" target='_blank'><input type="submit" class="button btn btn-outline-danger w-25"
             value="Restart Board" name='restart_board' style="width: 100%" /></a>
         </div>
       </div>

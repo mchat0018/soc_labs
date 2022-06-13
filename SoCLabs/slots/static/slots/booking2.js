@@ -35,7 +35,7 @@ function updateTimingForm(){
     var selectedSlot = document.querySelector('.slot.selected');
     var slotRowIndex = selectedSlot.parentElement.rowIndex;
     var slotCellIndex = selectedSlot.cellIndex;
-    var board = document.getElementsByTagName('tr')[0].cells[slotCellIndex].innerText[6];
+    var board = document.getElementsByTagName('tr')[0].cells[slotCellIndex].innerText;
     var time = selectedSlot.parentElement.cells[0].innerText;
 
     console.log("Board:"+board+", Time:"+time);

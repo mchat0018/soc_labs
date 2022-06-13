@@ -11,7 +11,7 @@
         <link rel="stylesheet" href="{% static 'webcam/styles.css' %}" type="text/css">
         <title>Restart Board</title>
     </head>
-    <body>
-        Board {{board_no}} at IP Address {{ip_addr}} restarted by {{u_name}}
+    <body onload="window.close()">
+        Board at IP Address {{ip_addr}} restarted by {{u_name}}
     </body>
 </html>

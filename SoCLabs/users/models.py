@@ -1,12 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import User
+from courses.models import Course
 from PIL import Image
 
 class Profile(models.Model):
     user = models.OneToOneField(User,on_delete=models.CASCADE)
     image = models.ImageField(default="default.png",upload_to='profile_pics')
-    
+    courses = models.ManyToManyField(Course,blank=True)
+    staff_cred = models.BooleanField(default=False)
+
     def __str__(self):
+        if(self.staff_cred): return f'{self.user.username} Profile (Staff)'
         return f'{self.user.username} Profile'
 
     def save(self,*args,**kwargs):
@@ -16,3 +20,11 @@ class Profile(models.Model):
             output_size=(300,300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+# class Staff(models.Model):
+#     profile = models.OneToOneField(Profile,on_delete=models.CASCADE)
+#     courses = models.ManyToManyField(Course)
+    
+# class SlotLimit(models.Model):
+#     user = models.OneToOneField(User,on_delete=models.CASCADE)
+#     slots_booked = models.IntegerField(default=0)
