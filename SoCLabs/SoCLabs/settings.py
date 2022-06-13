@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'webcam.apps.WebcamConfig',
     'users.apps.UsersConfig',
     'slots.apps.SlotsConfig',
+    'adminAccess.apps.AdminaccessConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',
