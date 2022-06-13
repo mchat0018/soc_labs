@@ -50,7 +50,9 @@ def bookSlots(request,course_id):
             selected_day = request.POST.get('selected_day',None)
             
             # checking in case no value was submitted
-            if time_slot == '' or board == '': messages.error(request,f'Please select a slot')           
+            if time_slot == '' or board == '': 
+                messages.error(request,f'Please select a slot')
+                print('No slot selected')           
             
             elif time_slot is not None and board is not None or time_slot:
                 # checking if slot limit for the day has been reached
