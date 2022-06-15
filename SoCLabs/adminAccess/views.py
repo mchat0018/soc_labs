@@ -32,7 +32,7 @@ def index(request,pk):
                 TimeConfig(day=day, start_time_hours=start_time_hours,
                            start_time_minutes=start_time_minutes, end_time_hours=end_time_hours, end_time_minutes=end_time_minutes, duration=duration, no_of_boards=no_of_boards).save()
             return redirect(index,pk=pk)
-    return render(request, "adminAccess/timeConfig.html", {'formset':formset, 'TodayDay':datetime.today().strftime('%A')})
+    return render(request, "adminAccess/timeConfig.html", {'formset':formset})
 
 def timeConfigFunc(request):
     boardsNames = Board.objects.values_list('board_name', flat=True)

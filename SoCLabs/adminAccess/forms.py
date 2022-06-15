@@ -1,17 +1,15 @@
 from django import forms
 from slots.models import TimeConfig, Board
+from datetime import datetime
 
-days = [
-    ('Monday', 'Monday'),
-    ('Tuesday', 'Tuesday'),
-    ('Wednesday', 'Wednesday'),
-]
+daysList = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+days = []
+for i in range(datetime.today().weekday(),7):
+    days.append((daysList[i],daysList[i]))
+for i in range(0,datetime.today().weekday()):
+    days.append((daysList[i],daysList[i]))
 
-hrs = [
-    ('10', '10'),
-    ('11', '11'),
-    ('12', '12'),
-]
+hrs = [(str(i), str(i)) for i in range(10,19)]
 
 mins = [
     ('00', '00'),
@@ -39,6 +37,7 @@ class TimeConfigFrm(forms.ModelForm):
             attrs={
                 "class": "form-control form-select",
                 "placeholder": "Select Day...",
+                "size": 4,
             },
             choices=hrs
         ),
@@ -49,6 +48,7 @@ class TimeConfigFrm(forms.ModelForm):
             attrs={
                 "class": "form-control form-select",
                 "placeholder": "Select Day...",
+                "size": 4,
             },
             choices=mins
         ),
@@ -59,6 +59,7 @@ class TimeConfigFrm(forms.ModelForm):
             attrs={
                 "class": "form-control form-select",
                 "placeholder": "Select Day...",
+                "size": 4,
             },
             choices=hrs
         ),
@@ -69,6 +70,7 @@ class TimeConfigFrm(forms.ModelForm):
             attrs={
                 "class": "form-control form-select",
                 "placeholder": "Select Day...",
+                "size": 4,
             },
             choices=mins
         ),
