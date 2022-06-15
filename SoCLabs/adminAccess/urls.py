@@ -3,6 +3,6 @@ from django.urls import path, re_path
 from .views import *
 
 urlpatterns = [
-    # path('<int:pk>/', index, name='TimeConfig'),
+    # path('test', timeConfigFunc, name='TimeConfig'),
     re_path(r'(?P<pk>\d+)/$', index, name='TimeConfig'),
 ]

@@ -1,5 +1,5 @@
 from django import forms
-from slots.models import TimeConfig
+from slots.models import TimeConfig, Board
 
 days = [
     ('Monday', 'Monday'),
@@ -82,10 +82,23 @@ class TimeConfigFrm(forms.ModelForm):
         ),
     )
 
-    no_of_boards = forms.CharField(
-        widget=forms.TextInput(
+    # no_of_boards = forms.CharField(
+    #     widget=forms.TextInput(
+    #         attrs={
+    #             "class": "form-control",
+    #         }
+    #     ),
+    # )
+
+    no_of_boards = forms.MultipleChoiceField(
+        widget=forms.SelectMultiple(
             attrs={
-                "class": "form-control",
-            }
+                "class": "form-control form-select",
+            },choices=[]
         ),
     )
+
+    def __init__(self, boardnames=None, *args, **kwargs):
+        super(TimeConfigFrm, self).__init__(*args, **kwargs)
+        if boardnames:
+            self.fields['no_of_boards'].choices = boardnames
