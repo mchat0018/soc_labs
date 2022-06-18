@@ -1,0 +1,59 @@
+.styling{
+    text-align: center;
+}
+body{
+    font-family: 'Open Sans', sans-serif;
+    margin: 10px;
+    
+    
+    
+}
+.styling{
+    padding: 40px;
+}
+
+.styling h1{
+    
+    font-family: 'Open Sans', sans-serif;
+    font-size: 40px;
+    border: 0px solid black;
+    margin-bottom: 50px;
+    border-radius: 4px;   
+    display: inline-block;
+    padding: 5px 20px 5px 20px;
+    background-color: #DFF6FF;
+
+  
+
+    
+}
+
+.onlabs{
+    
+    overflow: scroll;
+    height: 320px;
+}
+
+a {
+    color: white;
+}
+
+.description{
+    
+    font-family: 'Open Sans', sans-serif;
+    font-size: 25px;
+    
+    border: 0px solid black;
+    border-radius: 5px;   
+    margin: 5px 10px 25px 10px;
+    padding: 20px;
+   background-color: #DFF6FF;
+
+ 
+
+    
+}
+.styling h3{
+    margin: 15px;
+}
+

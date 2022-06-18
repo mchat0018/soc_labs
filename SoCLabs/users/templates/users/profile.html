@@ -10,6 +10,12 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" href="{% static 'users/styles.css' %}" type="text/css">
         <title>Profile</title>
+        <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
+        <style>
+        body {
+            font-family: 'Open Sans';
+        }
+        </style>
     </head>
     <body>
         <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3fadab; font-size:x-large;">
@@ -43,6 +49,11 @@
                             <img class="rounded-circle account-img" src="https://www.focusedu.org/wp-content/uploads/2018/12/circled-user-male-skin-type-1-2.png" style=" margin-right: 15px; width : 100px;">
                             <h2 class="account-heading">{{user.username}}</h2>
                             <p class="text-secondary">{{user.email}}</p>
+                            {% if user.profile.is_staff == True %}
+                                <p class="text-secondary">Staff</p>
+                            {% else %}
+                                <p class="text-secondary">Student</p>
+                            {% endif%}
                         </div>
                         <!-- FORM HERE -->
                     </div>
@@ -64,40 +75,23 @@
                 </section>
             </div>
             <div class="card-footer">
-                <section class="content profile-slots">
-                    <table class="slot-table">
-                        <thead>
-                            <tr>
-                                <th>Day</th>
-                                <th>Time Slot</th>
-                                <th>Board Name.</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for slot in booked_slots %}
-                                <tr>
-                                    <td>{{slot.day}}</td>
-                                    <td>{{slot.time_slot}}</td>
-                                    <td>{{slot.board_name}}</td>
-                                    {% if slot.day == curr_day %}
-                                        {% if slot.time_slot.end_time_hours > curr_time_hours or slot.time_slot.end_time_hours == curr_time_hours and slot.time_slot.end_time_minutes > curr_time_minutes %}
-                                            {% if slot.time_slot.start_time_hours < curr_time_hours or slot.time_slot.start_time_hours == curr_time_hours and slot.time_slot.start_time_minutes <= curr_time_minutes %}
-                                                <td><a href="{% url 'index' slot.course.pk slot.ip_addr.board_serial %}">In Progress</td>
-                                            {% else %}
-                                                <td>Pending</td>
-                                            {% endif %}
-                                        {% else %}
-                                            <td>Pending</td>
-                                        {% endif %}
-                                    {% else %}
-                                        <td>Pending</td>
-                                    {% endif %}
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </section>
+                <h4>Registered Courses</h2>
+                <div class="courses">
+                    {% for course in reg_courses %}
+                        <p>
+                            <button style="width:100%  ; color: white; font-size: 20px;" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample1" aria-expanded="false" aria-controls="collapseExample">
+                            {{course.name}}
+                            </button>
+                        </p>
+                        <div class="collapse" id="collapseExample1">
+                            <div class="card card-body" style="margin: 10px ;font-size: 15px;">
+                                {{course.description}}
+                                <a class="btn btn-primary" href="{% url 'course-page' course.pk %}" style="width:100px; text-align: center; font-size: 12px;">Course page</a>
+                            </div>
+                            
+                        </div>
+                    {% endfor %}
+                  </div>
             </div>
         </div>
 

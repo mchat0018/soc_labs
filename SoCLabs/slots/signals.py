@@ -34,11 +34,10 @@ def create_TimeSlots(sender,instance,created,**kwargs):
             day = instance.day
             time_schedule = TimeSchedule.objects.create(day=day,time_slot=time_slot,time_config=instance,course=instance.course)
             
-            # for i in range(instance.no_of_boards):
-            #     ip_addr = IPAddress.objects.filter(board_no=i+1).first()
-            #     board = Board.objects.create(day = day,time_slot=time_slot,time_sched=time_schedule,board_no=i+1,ip_addr=ip_addr)
-                # time_schedule.boards.add(board)
-
+            boards = IPAddress.objects.filter(course=instance.course).all()
+            for board in boards:
+                slot = Board.objects.create(day = day,time_slot=time_slot,board_name=board.board_name,ip_addr=board,course=instance.course)
+          
             st_h = ed_h
             st_m = ed_m
             start = int(st_h)*60 + int(st_m)

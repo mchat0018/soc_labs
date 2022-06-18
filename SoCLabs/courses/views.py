@@ -56,12 +56,14 @@ def course_page(request,course_id):
         booked_slots += list(Board.objects.filter(board_user=request.user).filter(course=course).filter(day__in=days).all())
     # sorting the booked slots
     booked_slots.sort(key=lambda x: str(day_dict[x.day]+1)+x.time_slot.start_time_hours+x.time_slot.start_time_minutes, reverse=False)
-    
+
+
     data = {
         'id':course_id,
         'name':course.name,
         'professors':course.professors.all(),
         'staff':course.staff.all(),
+        'description':course.description,
         'labs':Lab.objects.filter(course=course).all(),
         'pending_slots':booked_slots
     }
@@ -84,7 +86,7 @@ def lab_page(request,course_id,lab_no):
         'lab_name':lab.lab_name,
         'date_created':lab.date_created,
         'date_due':lab.date_due,
-        'description':lab.desciption,
+        'description':lab.description,
         'tutorials':lab.tutorials,
         'course':course
     }
