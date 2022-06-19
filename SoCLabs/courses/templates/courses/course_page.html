@@ -66,8 +66,8 @@
           </button>
           <div style="font-size: 20px;" class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-link active" aria-current="page" href="profile">Profile</a>
-              <a class="nav-link" href="logout">Logout</a>
+              <a class="nav-link active" aria-current="page" href="{% url 'profile' %}">Profile</a>
+              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
               <a class="nav-link" href="{% url 'book-slots' id %}">Book Slots</a>
               
             </div>

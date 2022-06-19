@@ -45,19 +45,13 @@ def create_TimeSlots(sender,instance,created,**kwargs):
 @receiver(post_save,sender=IPAddress)
 def create_boards(sender,instance,created,**kwargs):
     course = instance.course
-    if course is not None:
-        # # deleting all the previous boards assigned to the course
-        # Board.objects.filter(course=course).delete()
-        # # Setting the course variable of IPAddress objects belonging to the course to NULL
-        # ips = IPAddress.objects.filter(course=course).all()
-        # for ip in ips.all():
-        #     ip.course=None
-        #     ip.save()
-        if not created:
-            # if the IPAddress object was updated, delete the earlier boards referencing the same object
-            Board.objects.filter(board_name=instance.board_name).delete()
+    
+    if not created:
+        # if the IPAddress object was updated, delete the earlier slots referencing the same object
+        Board.objects.filter(board_name=instance.board_name).delete()
 
-        # creating new boards
+    if course is not None:
+        # creating new slots from the created/updated board
         time_configs = TimeConfig.objects.filter(course=course).all()
         for time_config in time_configs.all():
             time_scheds = TimeSchedule.objects.filter(time_config=time_config).all()

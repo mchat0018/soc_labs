@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -26,27 +27,28 @@ def admin_page(request,course_id):
     if request.method=='POST':
         # getting the checked board objects from the submitted form
         checked_board_names = request.POST.getlist('board_name')
+        print(checked_board_names)
         # if no boxes were checked
-        if len(checked_board_names) == 0: messages.error('Please select at least one board to be used')
+        if len(checked_board_names) == 0: messages.error(request,'Please select at least one board to be used')
         else:
             checked_boards = IPAddress.objects.filter(board_name__in=checked_board_names).all()
+            print(checked_boards)
             # getting the board objects previously assigned to the course
             previous_boards = IPAddress.objects.filter(course=course).all()
 
-            # deleting all the slots associated with the previouly assigned boards
-            Board.objects.filter(ip_addr__in=previous_boards).delete()
+            if previous_boards is not None and len(previous_boards) > 0:
+                print(previous_boards)
+                # setting the course field of the previously assigned boards to null
+                for board in previous_boards: 
+                    board.course = None
+                    board.save()
 
-            # creating fresh slots from the TimeConfigs defined for the course
-            time_configs = TimeConfig.objects.filter(course=course).all()
+            # setting the course attribute for the checked boards
+            for board in checked_boards:
+                board.course = course
+                board.save()
 
-            for time_config in time_configs.all():
-                time_scheds = TimeSchedule.objects.filter(time_config=time_config).all()
-                for time_sched in time_scheds.all():
-                    for board in checked_boards:
-                        Board.objects.create(day=time_sched.day,time_slot=time_config.time_slot,
-                                        board_name=board.board_name,ip_addr=board,course=course)
-            
-            messages.success('Boards selected...Slots created successfully')
+            messages.success(request,'Boards selected...Slots created successfully')
 
             # return redirect('admin-page')
 
