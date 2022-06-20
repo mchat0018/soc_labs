@@ -50,7 +50,9 @@ def bookSlots(request,course_id):
             selected_day = request.POST.get('selected_day',None)
             
             # checking in case no value was submitted
-            if time_slot == '' or board == '': messages.error(request,f'Please select a slot')           
+            if time_slot == '' or board == '': 
+                messages.error(request,f'Please select a slot')
+                print('No slot selected')           
             
             elif time_slot is not None and board is not None or time_slot:
                 # checking if slot limit for the day has been reached
@@ -75,7 +77,7 @@ def bookSlots(request,course_id):
                         print('Failure to book slot. Please book a pending slot')
                     else:
                         # print(f'{start_time_hours}:{start_time_minutes}-{end_time_hours}:{end_time_minutes}')
-                        timeSlot = TimeSlot.objects.filter(Q(start_time_hours=start_time_hours) & Q(start_time_minutes=start_time_minutes)).first()
+                        timeSlot = TimeSlot.objects.filter(Q(start_time_hours=start_time_hours) & Q(start_time_minutes=start_time_minutes) & Q(end_time_hours=end_time_hours) & Q(end_time_minutes=end_time_minutes)).first()
                         print(timeSlot)
                         # making the Board object
                         board_user = request.user
@@ -86,7 +88,7 @@ def bookSlots(request,course_id):
                         boardObj.board_user = board_user
                         boardObj.save()
                         messages.success(request,f'Slot booked for {request.user.username} for {selected_day} at {start_time_hours}:{start_time_minutes}-{end_time_hours}:{end_time_minutes}')
-                        return redirect('profile')
+                        return redirect('course-page',course_id=course_id)
             
             else:
                 messages.error(request,f'Failure to book slot. Please try again.')

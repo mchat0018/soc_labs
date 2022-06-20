@@ -298,7 +298,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link" aria-current="page" href="{% url 'book-slots' %}">Book Slots</a>
                     {% if user.is_authenticated %}
                         <a class="nav-link" href="{% url 'profile' %}">Profile</a>
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>

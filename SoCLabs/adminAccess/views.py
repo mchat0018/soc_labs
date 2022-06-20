@@ -1,39 +1,64 @@
-from django.forms import formset_factory
-from django.shortcuts import redirect, render
-from .forms import TimeConfigFrm
-from slots.models import TimeConfig, IPAddress
-from datetime import datetime
+from asyncio.windows_events import NULL
+from django.shortcuts import render,redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.models import User
+from django.db.models import Q
+from courses.models import Course,Lab
+from slots.models import IPAddress,Board,TimeConfig,TimeSchedule,TimeSlot
 
-# Create your views here.
-def timeDiff(sh,sm,eh,em):
-    if sm>em:
-        eh -= 1
-        em += 60
-    return (eh-sh)*60+(em-sm)
+def run_authentication(user,course):
+    pass
+
+@login_required
+def admin_page(request,course_id):
+    course = Course.objects.get(id=course_id)
+
+    # running authentication for user
+    # if logged-in user doesn't have staff credentials
+    if not request.user.profile.staff_cred:
+        raise PermissionDenied
+    # if logged in user isn't a part of the course
+    if request.user not in course.professors.all() and request.user not in course.staff.all():
+        raise PermissionDenied
+    
+    # if form data was submitted
+    if request.method=='POST':
+        # getting the checked board objects from the submitted form
+        checked_board_names = request.POST.getlist('board_name')
+        print(checked_board_names)
+        # if no boxes were checked
+        if len(checked_board_names) == 0: messages.error(request,'Please select at least one board to be used')
+        else:
+            checked_boards = IPAddress.objects.filter(board_name__in=checked_board_names).all()
+            print(checked_boards)
+            # getting the board objects previously assigned to the course
+            previous_boards = IPAddress.objects.filter(course=course).all()
+
+            if previous_boards is not None and len(previous_boards) > 0:
+                print(previous_boards)
+                # setting the course field of the previously assigned boards to null
+                for board in previous_boards: 
+                    board.course = None
+                    board.save()
+
+            # setting the course attribute for the checked boards
+            for board in checked_boards:
+                board.course = course
+                board.save()
+
+            messages.success(request,'Boards selected...Slots created successfully')
+
+            # return redirect('admin-page')
 
 
-def index(request,pk):
-    boardnames = IPAddress.objects.values_list('board_name', flat=True)
-    boardnames = list(sorted(set(boardnames)))
-    boardnames = [(str(i),str(i)) for i in boardnames]
-    form = formset_factory(TimeConfigFrm, extra=int(pk))
-    formset = form(form_kwargs={'boardnames': boardnames})
-    if request.method == "POST":
-        formset = form(request.POST)
-        if formset.is_valid():
-            for data in formset:
-                day = data.cleaned_data.get('day')
-                start_time_hours = data.cleaned_data.get('start_time_hours')
-                start_time_minutes = data.cleaned_data.get('start_time_minutes')
-                end_time_hours = data.cleaned_data.get('end_time_hours')
-                end_time_minutes = data.cleaned_data.get('end_time_minutes')
-                duration = data.cleaned_data.get('duration') # timeDiff(start_time_hours,start_time_minutes,end_time_hours,end_time_minutes)
-                no_of_boards = data.cleaned_data.get('no_of_boards')
-                TimeConfig(day=day, start_time_hours=start_time_hours,
-                           start_time_minutes=start_time_minutes, end_time_hours=end_time_hours, end_time_minutes=end_time_minutes, duration=duration, no_of_boards=no_of_boards).save()
-            return redirect(index,pk=pk)
-    return render(request, "adminAccess/timeConfig.html", {'formset':formset})
+    # getting all available boards and the ones already included in the course
+    available_boards = IPAddress.objects.filter(Q(course__isnull=True) | Q(course=course)).all()
 
-def timeConfigFunc(request):
-    boardsNames = IPAddress.objects.values_list('board_name', flat=True)
-    return render(request, "adminAccess/newTConfig.html", {'boardsNames':sorted(set(boardsNames)), 'TodayDay':datetime.today().strftime('%A')})
+    context = {
+        'boards':available_boards,
+        'course':course
+    }
+
+    return render(request,'adminAccess/config.html',context=context)

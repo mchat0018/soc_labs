@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <title>Course-Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'courses/style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */ 
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+    
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 88vh}
+    
+    /* Set gray background color and 100% height */
+    .sidenav {
+        font-size: 15px;
+      padding-top: 178px;
+      padding-left:20px ;
+      padding-right: 20px;
+      background-color: #fdbf2a;
+      height: 100%;
+      border-radius: 10px;
+      background-image: url('https://img.freepik.com/free-vector/concept-lamp-that-emits-white-light-modern-yellow-background-add-your-message_68708-433.jpg?w=2000');
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+    
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+    
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height:auto;} 
+    }
+  </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-light" style="background-color: #3fadab; font-size:x-large;">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAT4AAACfCAMAAABX0UX9AAAAhFBMVEX///9YWFo5rqiTlZiBgoVtbnF7fH+PkZRoaWzAwsTGx8js7O3y8vKfn6G7u7xOTlBcXF3e3t+np6exsrPi8/LS0tNVuLSk2NVzxcD1+/vD5uQrqqQ8sKpfvbiY09Dw+fnb8O+GzMhHR0nH5+a039x8yMSe1dKNz8tqwLzT7eyu3dpNtbBvSuWLAAAFf0lEQVR4nO3dbXuiOBiG4Q67M9N2O7adsrwFBEYQJP///63aqhCeyB30y+p9fe+0xznh1Zg8PAM9vT8YvS+QXoyfell8AD2Pftmv39fo4x/zH75CP5GezJ96/oFk/r0vPx6Bfpm/bPHn9Rq9jQZBfDnfX0AS399AY77v0wl8r9+u0aPJ50dRuPIvM7xnPq2U0tEyKeYT3jNf4G1TXhqUnU++eXx7QqXacNYYJN8hXSc5+WbzbQuWrlcS8vVTulw5AZLPSJcb8s3n215HInwEkk8obQryzefbHsJL7CpMPjmVVeSbz7c7goFHEfLZB6CeHoDkOzcAJ8+A5DtbNnETSL6LDmDyTR3Aa/JdwOep8swVmHzTRXY/8gHjry3IN59v+whiuwCTDyoryHcBnwrk8Uc+dPyJDyDkQ8efeP0lH1wtjD/y4S3Jdwmf15HvEj69It8FfF5gnv5uhu9tqu9X4FOl8RHmrfC9Lf6dypzs6gfK2S81Xv/dDN9o7uh0xTJLXf10Qb5jfuc6AlVNvl55lTmOv8Hhe+982xG41k4jMOs/vJFvew5snYZfQ75hcadd/Hrvrsi3b5XhB3D/5o98n/klPvrShHxmsYNffRx+5DuUL/Hhd3x1QL5TsJ+KyDcubuDhd7j4kq/vV6LX3yYm37gcvX8JCvIJbdD755B8UhXIF5BPrMYOX7UhnxQ6668hn1iHHb2tTz6pPIIO388nD/KNWmHDb0k+sbiFhl8bk08sgT5/SwvyieURwqcq8slBF9/9R5bkE8qhR7fdhBfySUFvXvSGfHLYxaMin5wPTT1Yk08O+9yojsknB723ynLyyUGvTQOffHI5cvJLV+SzBL01rchnaQ3wqY58lhKEb0k+SwVy8Nbks+Qjzx0t+SzlyCdGGfksxcidiyafLeQDo5R8tpAbP/JZQ175ke8iPo985CPf/5OP5z5rvPJeFHLfx9tmWzHyNcGAfJag1818ZWDlQz7siMhnyQf0VEk+SxvkbfOafJY6hI8fFdlqkNu+hHxy0H2L3pBProDe1XOWgSVohlrLOS6WoG9GN5xhJZdDK7uEnN8nB02w2i2oQT4pZIaLp33yyUFzc7MH8olB32rbfyWVfONi5JHDUwn5xKB75v2pj3xC2OCr+Y1KMWhu2tdaGuQbBQ2+/VeyyDduBX0fUEU5+YTiGjp01ec6OOQzCsFlmHzyCRXYKkyHJejIN8gHF9E9LL5OvkHoCpyHxZvJ1w9cQei4gBr5+lXoDgD6sHI4+U4l6OJ96rhwOPlOevDuE6ddJ8h3yGHh9dOq9eT7LA5hvK/HXfKd8sFFI3ep8PRz5Nu1cdnzRPe2yyLfw0PeOG1Z1N/sjnxxha3Xdyjq79V293ybyG23rHSwU+B98+WryHPcKmu4z+c98+VdlLrudJcNd+m9V77YT2pnu/Emn/fIF/ursA5cj9pd/Vu+e+OL4zz3i1XXtIHz3opfepGxw+ft8uVlNKxts0ynats8O2904rtlPj9Qw2ajHUtHuxvfMJ/r3pPTepX5l5HPoaV54iMfnmoEPfKh1ZIe+bBUNLrokg9v8JqFfG7Zxh75IL3aMvbIhyRec8kHJt3vkQ9MC88a5ANT2fg5l3xw1ksu+abT3ZnTHvnON3Xgku9caTg19MhnH3rR9NAjn61g8qxHPmt6PXHBJZ815ZUb808gHzzymgLGI58x8nSDjzzyDUuzED3nkc8Yd15QJtjVlnymnfLa0HfHI9922KVB2VlfJ5Pv3KhTul0mric88m1LdVCHq1mH7KmfSAIf0pjvEWjM9+d1um+TU4QOM4VSrbO2XlZJcZncJwTQ02ju3PsC6cXkW3wAPY9+2a/fQOb/VdyF47quqpJNkedXkNv1Hwg4JltyMx7+AAAAAElFTkSuQmCC" alt="" width="59" height="33"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div style="font-size: 20px;" class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <a class="nav-link active" aria-current="page" href="{% url 'profile' %}">Profile</a>
+              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+              <a class="nav-link" href="{% url 'book-slots' id %}">Book Slots</a>
+              
+            </div>
+          </div>
+        </div>
+    </nav>
+
+
+  
+<div class="container-fluid text-center">    
+  <div class="row content">
+    <div class="col-sm-2 sidenav">
+        <div class="list-group">
+            <button type="button" class="list-group-item list-group-item-action active" aria-current="true" style="text-align: center;">
+              Instructors
+            </button>
+            {% for professor in professors %}
+                <button type="button" class="list-group-item list-group-item-action">{{professor}}</button>
+            {% endfor %}
+          </div>
+    </div>
+    <div class="col-sm-8 text-left styling"> 
+      <h1>{{name}}</h1>
+      <br>
+      <h4 style="font-size:23px;">Course Description</h4>
+      <p class="description" style="font-size:1.5em;">{{description}}</p>
+      <hr>
+      <h2 style="font-size:23px;">Labs</h3>
+      <div class="onlabs">
+        {% for lab in labs %}
+            <p>
+                <button style="width:100%  ; color: white; font-size: 20px;font-family: 'Gloria Hallelujah', cursive;" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample1" aria-expanded="false" aria-controls="collapseExample">
+                {{lab.lab_name}}
+                </button>
+            </p>
+            <div class="collapse" id="collapseExample1">
+                <div class="card card-body" style="margin: 10px ;font-size: 15px;">
+                    {{lab.description}}
+                    <a class="btn btn-primary" href="{% url 'lab-page' id lab.lab_no %}" style="width:100px; text-align: center;">Go to lab page</a>
+                </div>
+                
+            </div>
+        {% endfor %}
+      </div>
+      <hr>
+        <div>
+                <h2 style="font-size:23px;">Your Pending Slots</h3>
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Day</th>
+                            <th>Time Slot</th>
+                            <th>Board Name.</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for slot in pending_slots %}
+                            <tr>
+                                <td>{{slot.day}}</td>
+                                <td>{{slot.time_slot}}</td>
+                                <td>{{slot.board_name}}</td>
+                                {% if slot.day == curr_day %}
+                                    {% if slot.time_slot.end_time_hours > curr_time_hours or slot.time_slot.end_time_hours == curr_time_hours and slot.time_slot.end_time_minutes > curr_time_minutes %}
+                                        {% if slot.time_slot.start_time_hours < curr_time_hours or slot.time_slot.start_time_hours == curr_time_hours and slot.time_slot.start_time_minutes <= curr_time_minutes %}
+                                            <td><a href="{% url 'index' slot.course.pk slot.ip_addr.board_serial %}">In Progress</td>
+                                        {% else %}
+                                            <td>Pending</td>
+                                        {% endif %}
+                                    {% else %}
+                                        <td>Pending</td>
+                                    {% endif %}
+                                {% else %}
+                                    <td>Pending</td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+        </div>
+
+    </div>
+      
+    
+
+    <div class="col-sm-2 sidenav">
+        <div class="list-group">
+            <button type="button" class="list-group-item list-group-item-action active" aria-current="true" style="text-align: center;">
+              Teaching Assistant's
+            </button>
+            {% for ta in staff %}
+                <button type="button" class="list-group-item list-group-item-action">{{ta.username}}</button>
+            {% endfor %}
+          </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>

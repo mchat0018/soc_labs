@@ -6,4 +6,5 @@ urlpatterns = [
     path('lab/<lab_no>/',lab_page,name='lab-page'),
     path('bookslots/',include('slots.urls')),
     path('camview/',include('webcam.urls')),
+    path('adminPage/',include('adminAccess.urls'))
 ]
