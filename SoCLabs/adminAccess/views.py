@@ -1,7 +1,7 @@
 from django.forms import formset_factory
 from django.shortcuts import redirect, render
 from .forms import TimeConfigFrm
-from slots.models import TimeConfig, Board
+from slots.models import TimeConfig, IPAddress
 from datetime import datetime
 
 # Create your views here.
@@ -13,7 +13,7 @@ def timeDiff(sh,sm,eh,em):
 
 
 def index(request,pk):
-    boardnames = Board.objects.values_list('board_name', flat=True)
+    boardnames = IPAddress.objects.values_list('board_name', flat=True)
     boardnames = list(sorted(set(boardnames)))
     boardnames = [(str(i),str(i)) for i in boardnames]
     form = formset_factory(TimeConfigFrm, extra=int(pk))
@@ -35,5 +35,5 @@ def index(request,pk):
     return render(request, "adminAccess/timeConfig.html", {'formset':formset})
 
 def timeConfigFunc(request):
-    boardsNames = Board.objects.values_list('board_name', flat=True)
+    boardsNames = IPAddress.objects.values_list('board_name', flat=True)
     return render(request, "adminAccess/newTConfig.html", {'boardsNames':sorted(set(boardsNames)), 'TodayDay':datetime.today().strftime('%A')})

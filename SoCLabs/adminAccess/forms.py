@@ -1,5 +1,5 @@
 from django import forms
-from slots.models import TimeConfig, Board
+from slots.models import TimeConfig
 from datetime import datetime
 
 daysList = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
