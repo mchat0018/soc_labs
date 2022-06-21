@@ -38,7 +38,6 @@ class ConfigsCRUD(forms.ModelForm):
         widget=forms.Select(
             attrs={
                 "class": "form-control form-select",
-                "placeholder": "Select Day...",
             },
             choices=days
         ),

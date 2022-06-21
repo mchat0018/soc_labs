@@ -19,9 +19,7 @@ def crud(request):
 
     if request.method == "POST":
         form = ConfigsCRUD(request.POST)
-        print('ok1')
         if form.is_valid():
-            print('ok')
             form.save()
         return redirect("crud")
 

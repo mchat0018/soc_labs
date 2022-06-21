@@ -13,7 +13,7 @@
 
 <body>
 <div class="mx-auto">
-    <table class="mx-auto table table-striped table-bordered" style="width:80%;margin-top:50px";>
+    <table class="mx-auto table table-striped table-bordered" style="width:60%;margin-top:50px";>
         <thead class="table-success">
             <tr>
                 <th scope="col">Day</th>
@@ -21,7 +21,6 @@
                 <th scope="col">End Time</th>
                 <th scope="col">Duration</th>
                 <th scope="col">Slot Limit</th>
-                <th scope="col">Course</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -34,7 +33,6 @@
                     <td>{{form.end_time_hours}}:{{form.end_time_minutes}}</td>
                     <td>{{form.duration}}</td>
                     <td>{{form.slot_limit}}</td>
-                    <td>{{form.course}}</td>
                     <td><button type="submit" class="btn btn-outline-success btn">Add</button></td>
                 </form>
             </tr>
@@ -45,7 +43,6 @@
                     <td>{{config.end_time_hours}}:{{config.end_time_minutes}}</td>
                     <td>{{config.duration}}</td>
                     <td>{{config.slot_limit}}</td>
-                    <td>{{config.course}}</td>
                     <td><a href="{% url 'delete_config' config.id %}" class="btn btn-sm btn-outline-danger">Delete</a></td>
                 </tr>
             {% endfor %}
