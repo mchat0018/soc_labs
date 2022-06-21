@@ -13,7 +13,7 @@
 
 <body>
 <div class="mx-auto">
-    <table class="mx-auto table table-striped table-bordered" style="width:80%">
+    <table class="mx-auto table table-striped table-bordered" style="width:80%;margin-top:50px";>
         <thead class="table-success">
             <tr>
                 <th scope="col">Day</th>
@@ -26,6 +26,18 @@
             </tr>
         </thead>
         <tbody class="table-group-divider">
+            <tr>
+                <form method="post">
+                    {% csrf_token %}
+                    <td>{{form.day}}</td>
+                    <td>{{form.start_time_hours}}:{{form.start_time_minutes}}</td>
+                    <td>{{form.end_time_hours}}:{{form.end_time_minutes}}</td>
+                    <td>{{form.duration}}</td>
+                    <td>{{form.slot_limit}}</td>
+                    <td>{{form.course}}</td>
+                    <td><button type="submit" class="btn btn-outline-success btn">Add</button></td>
+                </form>
+            </tr>
             {% for config in configs %}
                 <tr>
                     <td>{{config.day}}</td>

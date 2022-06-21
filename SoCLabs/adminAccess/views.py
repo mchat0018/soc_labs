@@ -11,8 +11,22 @@ from .forms import *
 
 
 def crud(request):
+    coursenames = Course.objects.values_list('name', flat=True)
+    coursenames = list(sorted(set(coursenames)))
+    coursenames = [(str(i), str(i)) for i in coursenames]
+    coursenames.insert(0, ('Select Course', 'Select Course'))
+    form = ConfigsCRUD(coursenames=coursenames)
+
+    if request.method == "POST":
+        form = ConfigsCRUD(request.POST)
+        print('ok1')
+        if form.is_valid():
+            print('ok')
+            form.save()
+        return redirect("crud")
+
     configs = TimeConfig.objects.all()
-    return render(request, "adminAccess/crud.html", {"configs": configs})
+    return render(request, "adminAccess/crud.html", {'form': form, "configs": configs})
 
 
 def delete_config(request, pk):
