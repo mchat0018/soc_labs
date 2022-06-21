@@ -1,0 +1,45 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Time Configurations</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+
+<body>
+<div class="mx-auto">
+    <table class="mx-auto table table-striped table-bordered" style="width:80%">
+        <thead class="table-success">
+            <tr>
+                <th scope="col">Day</th>
+                <th scope="col">Start Time</th>
+                <th scope="col">End Time</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Slot Limit</th>
+                <th scope="col">Course</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for config in configs %}
+                <tr>
+                    <td>{{config.day}}</td>
+                    <td>{{config.start_time_hours}}:{{config.start_time_minutes}}</td>
+                    <td>{{config.end_time_hours}}:{{config.end_time_minutes}}</td>
+                    <td>{{config.duration}}</td>
+                    <td>{{config.slot_limit}}</td>
+                    <td>{{config.course}}</td>
+                    <td><a href="{% url 'delete_config' config.id %}" class="btn btn-sm btn-outline-danger">Delete</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+
+</html>

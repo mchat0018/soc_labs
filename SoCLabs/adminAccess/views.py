@@ -7,6 +7,19 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from courses.models import Course,Lab
 from slots.models import IPAddress,Board,TimeConfig,TimeSchedule,TimeSlot
+from .forms import *
+
+
+def crud(request):
+    configs = TimeConfig.objects.all()
+    return render(request, "adminAccess/crud.html", {"configs": configs})
+
+
+def delete_config(request, pk):
+    config = TimeConfig.objects.get(id=pk)
+    config.delete()
+    return redirect("crud")
+
 
 def run_authentication(user,course):
     pass
