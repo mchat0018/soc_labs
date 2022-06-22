@@ -21,7 +21,6 @@
                 <th scope="col">End Time</th>
                 <th scope="col">Duration</th>
                 <th scope="col">Slot Limit</th>
-                <th scope="col"></th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -43,7 +42,7 @@
                     <td>{{config.end_time_hours}}:{{config.end_time_minutes}}</td>
                     <td>{{config.duration}}</td>
                     <td>{{config.slot_limit}}</td>
-                    <td><a href="{% url 'delete_config' config.id %}" class="btn btn-sm btn-outline-danger">Delete</a></td>
+                    <td><a href="{% url 'delete_config' course.id config.id %}" class="btn btn-sm btn-outline-danger">Delete</a></td>
                 </tr>
             {% endfor %}
         </tbody>

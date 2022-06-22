@@ -54,6 +54,8 @@ class TimeSlot(models.Model):
     end_time_hours = models.CharField(max_length=2,choices=HOUR_SLOTS,null=True)
     end_time_minutes = models.CharField(max_length=2,choices=MINUTE_SLOTS,null=True)
 
+    time_config = models.ForeignKey(TimeConfig,on_delete=models.CASCADE,null=True)
+
     def __str__(self):
         return f'{self.start_time_hours}:{self.start_time_minutes} - {self.end_time_hours}:{self.end_time_minutes}'
 
