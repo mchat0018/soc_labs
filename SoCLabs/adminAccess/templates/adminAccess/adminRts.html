@@ -1,0 +1,81 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{course.name}} Admin Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container-fluid text-center" style="margin-top: 50px;">
+        <form action="" method="post" class="board_form">
+            {% csrf_token %}
+    
+            {% for board in boards %}
+            {% if board.course.id == course.id %}
+            <input type="checkbox" name="board_name" id="{{board.board_name}}" value="{{board.board_name}}" checked>
+            <label for="{{board.board_name}}">{{board.board_name}}</label>
+            {% else %}
+            <input type="checkbox" name="board_name" id="{{board.board_name}}" value="{{board.board_name}}">
+            <label for="{{board.board_name}}">{{board.board_name}}</label>
+            {% endif %}
+            {% endfor %}
+    
+            <div style="margin-top: 10px;">
+                <button type="submit" class="btn btn-outline-primary" name="board-submit">Submit</button>
+            </div>
+    
+        </form>
+    </div>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <hr>
+
+    <div class="mx-auto">
+        <table class="mx-auto table table-striped table-bordered" style="width:60%;margin-top:50px" ;>
+            <thead class="table-success">
+                <tr>
+                    <th scope="col">Day</th>
+                    <th scope="col">Start Time</th>
+                    <th scope="col">End Time</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Slot Limit</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <tr>
+                    <form method="post">
+                        {% csrf_token %}
+                        <td>{{form.day}}</td>
+                        <td>{{form.start_time_hours}}:{{form.start_time_minutes}}</td>
+                        <td>{{form.end_time_hours}}:{{form.end_time_minutes}}</td>
+                        <td>{{form.duration}}</td>
+                        <td>{{form.slot_limit}}</td>
+                        <td><button type="submit" class="btn btn-outline-success btn">Add</button></td>
+                    </form>
+                </tr>
+                {% for config in configs %}
+                <tr>
+                    <td>{{config.day}}</td>
+                    <td>{{config.start_time_hours}}:{{config.start_time_minutes}}</td>
+                    <td>{{config.end_time_hours}}:{{config.end_time_minutes}}</td>
+                    <td>{{config.duration}}</td>
+                    <td>{{config.slot_limit}}</td>
+                    <td><a href="{% url 'delete_config2' course.id config.id %}"
+                            class="btn btn-sm btn-outline-danger">Delete</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

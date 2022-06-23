@@ -13,7 +13,7 @@ for i in range(datetime.today().weekday(), 7):
 for i in range(0, datetime.today().weekday()):
     days.append((daysList[i], daysList[i]))
 
-hrs = [(str(i).zfill(2), str(i).zfill(2)) for i in range(0, 23)]
+hrs = [(str(i).zfill(2), str(i).zfill(2)) for i in range(0, 24)]
 
 mins = [
     ('00', '00'),
