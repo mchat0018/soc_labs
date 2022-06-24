@@ -9,6 +9,7 @@ class Course(models.Model):
     staff = models.ManyToManyField(User,related_name='staff')
     students = models.ManyToManyField(User,related_name='students')
     description = models.TextField(null=True)
+    course_code = models.CharField(max_length=5)
     
     def __str__(self):
         return self.name
