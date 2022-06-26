@@ -38,6 +38,15 @@
 
     <hr>
 
+    <form method="post" action="{% url 'reset' course.id %}">
+        {% csrf_token %}
+        <div class="text-center" style="margin: 30px;">
+            <button class="btn btn-lg btn-outline-danger" type="submit">Reset Boards</button>
+        </div>
+    </form>
+
+    <hr>
+
     <div class="mx-auto">
         <table class="mx-auto table table-striped table-bordered" style="width:60%;margin-top:50px" ;>
             <thead class="table-success">
