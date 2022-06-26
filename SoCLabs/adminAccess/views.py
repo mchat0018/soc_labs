@@ -266,8 +266,6 @@ def reset(request, course_id):
     if request.method == "POST":
         course = Course.objects.get(id=course_id)
         boards = Board.objects.filter(course=course)
-        print([i.board_user for i in boards])
-        print('ok')
         boards.update(board_user = None)
         return redirect("adminRts", course_id=course_id)
     return render(request,"adminAccess/adminRts.html")
