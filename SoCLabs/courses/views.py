@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
@@ -142,3 +142,20 @@ def courseInfo(request,course_id):
     }
 
     return render(request, 'courses/courseInfo.html', context=data)
+
+
+@login_required
+def deleteLab(request, lab_id, course_id):
+    print('ok')
+    # fetching and deleting the object
+    lab = Lab.objects.get(id=lab_id)
+    lab.delete()
+    return redirect("courseInfo", course_id=course_id)
+
+
+@login_required
+def updateCourseDes(request, course_id):
+    if request.method == 'POST':
+        frmCourseDes = request.POST.get('courseDes')
+        Course.objects.filter(id=course_id).update(description=frmCourseDes)
+    return redirect("courseInfo", course_id=course_id)
