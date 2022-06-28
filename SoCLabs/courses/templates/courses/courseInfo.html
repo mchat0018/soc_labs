@@ -68,7 +68,7 @@
                     </div>
                     <div class="flip-card-back">
                         <div class="btn-group vertical-center" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-primary">Update</button>
+                            <a href="{% url 'updateLabDes' id lab.id %}" class="btn btn-primary">Update</a>
                             <form method="post" action="{% url 'deleteLab' id lab.id %}">
                                 {% csrf_token %}
                                 <button type="submit" class="btn  btn-danger">Delete</button>
@@ -85,7 +85,7 @@
 
         <div class="Add-Course">
 
-            <a href="" class="vertical-center"><img
+            <a href="{% url 'createLab' id %}" class="vertical-center"><img
                     src="https://icon-library.com/images/add-icon-transparent/add-icon-transparent-19.jpg" /></a>
 
         </div>

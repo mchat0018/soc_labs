@@ -159,3 +159,43 @@ def updateCourseDes(request, course_id):
         frmCourseDes = request.POST.get('courseDes')
         Course.objects.filter(id=course_id).update(description=frmCourseDes)
     return redirect("courseInfo", course_id=course_id)
+
+
+@login_required
+def updateLabDes(request, course_id, lab_id):
+    lab = Lab.objects.get(id=lab_id)
+    if request.method == 'POST':
+        frmLabName = request.POST.get('labName')
+        frmLabDes = request.POST.get('labDes')
+        Lab.objects.filter(id=lab_id).update(
+            lab_name=frmLabName, description=frmLabDes)
+        return redirect("courseInfo", course_id=course_id)
+    context = {
+        'name': lab.lab_name,
+        'description': lab.description,
+        'courseID': course_id,
+        'labID': lab_id
+    }
+    return render(request, 'courses/updateLab.html',context=context)
+
+@login_required
+def createLab(request, course_id):
+    course = Course.objects.get(id=course_id)
+    if request.method=='POST':
+        lab = Lab(
+            lab_no=request.POST.get('labNo'),
+            lab_name=request.POST.get('labName'),
+            date_due=request.POST.get('labDueDate') +
+            ' ' + request.POST.get('labDueTime'),
+            description=request.POST.get('labDes'),
+            course=course,
+            tutorials=request.POST.get('labtut')
+        )
+        lab.save()
+        return redirect("courseInfo", course_id=course_id)
+    dt = datetime.now()
+    context = {
+        'date': dt.strftime("%Y") + '-' + dt.strftime("%m") + '-' + dt.strftime("%d"),
+        'time': dt.strftime("%X")
+    }
+    return render(request, 'courses/createLab.html', context=context)
