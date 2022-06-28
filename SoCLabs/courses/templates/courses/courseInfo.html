@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="{% static 'courses/courseInfoStyles.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+    <title>Admin-Course</title>
+    <link rel="icon" href="https://img.icons8.com/nolan/64/admin-settings-male.png">
+</head>
+
+<body>
+    <div class="course">
+        <h1 class="cursive courses">Course</h1>
+        <hr>
+
+        <div class="col mb-4">
+            <div class="card">
+                <img class="center" width="40px" height="40px" alt="..."
+                    src="https://img.icons8.com/fluency-systems-regular/48/000000/course-assign.png" />
+
+                <div class="card-body">
+                    <h3 class="card-title">ELD</h3>
+                    <p class="card-text font">{{description}}</p>
+                    <button type="button" class="btn btn-primary btn-sm">Update</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    </div>
+    <hr>
+
+    <div class="top-section">
+        <h1 class="heading cursive">Course Labs</h1>
+        <hr>
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front font">
+
+                    <h1 style="font-family: 'Concert One', cursive;">Lab-1</h1>
+                    <br>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad cum dolore repudiandae sequi itaque
+                        sapiente facere non ea ipsum. Quas?</p>
+
+                </div>
+                <div class="flip-card-back">
+                    <div class="btn-group vertical-center" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-primary">Update</button>
+                        <button type="button" class="btn  btn-danger">Delete</button>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="flip-card">
+            <div class="flip-card-inner">
+                <div class="flip-card-front font">
+                    <h1 style="font-family: 'Concert One', cursive;">Lab-2</h1>
+                    <br>
+                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad cum dolore repudiandae sequi itaque
+                        sapiente facere non ea ipsum. Quas?lorem100</p>
+
+
+                </div>
+                <div class="flip-card-back">
+
+                    <div class="btn-group vertical-center" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-secondary">Update</button>
+                        <button type="button" class="btn btn-secondary">Delete</button>
+
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="Add-Course">
+
+            <a href="" class="vertical-center"><img
+                    src="https://icon-library.com/images/add-icon-transparent/add-icon-transparent-19.jpg" /></a>
+
+
+        </div>
+
+        <hr>
+
+
+
+
+    </div>
+
+</body>
+
+</html>

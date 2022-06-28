@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Concert+One&display=swap');
+
+body {
+    margin: 35px;
+
+
+
+}
+
+.cursive {
+    font-family: 'Concert One', cursive;
+    font-size: 60px;
+    color: #3eadab;
+}
+
+
+.courses {
+    text-align: center;
+
+
+}
+
+.font {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.heading {
+    text-align: center;
+    margin: 30px;
+
+}
+
+.flip-card {
+    background-color: transparent;
+    margin: 20px;
+
+    width: 200px;
+    height: 300px;
+    display: inline-block;
+
+
+    perspective: 1000px;
+    /* Remove this if you don't want the 3D effect */
+}
+
+/* This container is needed to position the front and back side */
+.flip-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+}
+
+/* Do an horizontal flip when you move the mouse over the flip box container */
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+}
+
+/* Position the front and back side */
+.flip-card-front,
+.flip-card-back {
+    position: absolute;
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    /* Safari */
+    backface-visibility: hidden;
+    overflow-y: scroll;
+}
+
+/* Style the front side (fallback if image is missing) */
+.flip-card-front {
+
+    color: black;
+    background-color: dodgerblue;
+    color: white;
+
+    border-radius: 15px;
+}
+
+/* Style the back side */
+.flip-card-back {
+    background-color: #3eadab;
+    color: white;
+    transform: rotateY(180deg);
+    border-radius: 15px;
+
+}
+
+
+.Add-Course {
+    display: inline-block;
+    border: 3px solid dodgerblue;
+    border-radius: 15px;
+    margin: 20px;
+    width: 200px;
+    height: 300px;
+    border-style: dashed;
+    text-align: center;
+    position: absolute;
+
+
+
+
+}
+
+.Add-Course img {
+
+    height: 96px;
+    width: 96px;
+    transition: width 0.3s, height 0.3s;
+
+}
+
+.Add-Course img:hover {
+    height: 130px;
+    width: 130px;
+
+}
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.card-body {
+    text-align: center;
+
+}
+
+.card {
+    padding: 20px;
+}
