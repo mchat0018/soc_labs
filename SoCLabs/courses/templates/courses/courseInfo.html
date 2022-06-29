@@ -59,8 +59,8 @@
         {% for lab in labs %}
             <div class="flip-card">
                 <div class="flip-card-inner">
+
                     <div class="flip-card-front font" style="overflow: hidden;">
-            
                         <h1 style="font-family: 'Concert One', cursive;">{{lab.lab_name}}</h1>
                         <br>
                         {% if lab.description|length > 140 %}
@@ -69,6 +69,7 @@
                             <p>{{lab.description}}</p>
                         {% endif %}
                     </div>
+
                     <div class="flip-card-back" style="overflow: hidden;">
                         <div class="btn-group vertical-center" role="group" aria-label="Basic example">
                             <a href="{% url 'updateLabDes' id lab.id %}" class="btn btn-primary">Update</a>
@@ -76,13 +77,10 @@
                                 {% csrf_token %}
                                 <button type="submit" class="btn  btn-danger">Delete</button>
                             </form>
-                            
-            
                         </div>
-            
                     </div>
+
                 </div>
-            
             </div>
         {% endfor %}
 
