@@ -196,6 +196,7 @@ def createLab(request, course_id):
     dt = datetime.now()
     context = {
         'date': dt.strftime("%Y") + '-' + dt.strftime("%m") + '-' + dt.strftime("%d"),
-        'time': dt.strftime("%X")
+        'time': dt.strftime("%X"),
+        'courseID': course_id
     }
     return render(request, 'courses/createLab.html', context=context)

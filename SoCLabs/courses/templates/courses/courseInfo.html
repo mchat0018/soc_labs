@@ -38,8 +38,8 @@
                     <!--p class="card-text font">{{description}}</p-->
                     <form action="{% url 'updateCourseDes' id %}" method="post">
                         {% csrf_token %}
-                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="courseDes">{{description}}</textarea>
-                        <br>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" name="courseDes"
+                            style="margin-bottom: 10px;" spellcheck="false">{{description}}</textarea>
                         <button type="submit" class="btn btn-primary btn-sm">Update</button>
                     </form>
                 </div>
@@ -59,14 +59,17 @@
         {% for lab in labs %}
             <div class="flip-card">
                 <div class="flip-card-inner">
-                    <div class="flip-card-front font">
+                    <div class="flip-card-front font" style="overflow: hidden;">
             
                         <h1 style="font-family: 'Concert One', cursive;">{{lab.lab_name}}</h1>
                         <br>
-                        <p>{{lab.description}}</p>
-            
+                        {% if lab.description|length > 140 %}
+                            <p>{{lab.description|truncatechars:140}}</p>
+                        {% else %}
+                            <p>{{lab.description}}</p>
+                        {% endif %}
                     </div>
-                    <div class="flip-card-back">
+                    <div class="flip-card-back" style="overflow: hidden;">
                         <div class="btn-group vertical-center" role="group" aria-label="Basic example">
                             <a href="{% url 'updateLabDes' id lab.id %}" class="btn btn-primary">Update</a>
                             <form method="post" action="{% url 'deleteLab' id lab.id %}">

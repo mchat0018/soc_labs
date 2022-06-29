@@ -17,39 +17,42 @@
 
 <body>
     <div class="position-absolute top-50 start-50 translate-middle">
-        <div class="card mx-auto" style="width: 18rem;">
+        <div class="card mx-auto" style="width: 22rem;">
             <div class="card-body">
                 <h5 class="card-title">Add Lab</h5>
                 <hr>
-                <form method="post">
+                <form method="post" class="row g-3">
                     {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="exampleFormControlInput0" class="form-label">Lab Number</label>
+                    <div class="col-md-4">
+                        <label for="exampleFormControlInput0" class="form-label">Lab No.</label>
                         <input type="number" class="form-control" id="exampleFormControlInput0" name="labNo" value="1">
                     </div>
-                    <div class="mb-3">
+                    <div class="col-md-8">
                         <label for="exampleFormControlInput1" class="form-label">Lab Name</label>
                         <input type="text" class="form-control" id="exampleFormControlInput1" name="labName">
                     </div>
-                    <div class="mb-3">
+                    <div class="col-md-6">
                         <label for="exampleFormControlInput2" class="form-label">Date Due</label>
                         <input type="date" class="form-control" id="exampleFormControlInput2" name="labDueDate" value="{{date}}">
                     </div>
-                    <div class="mb-3">
+                    <div class="col-md-6">
                         <label for="exampleFormControlInput3" class="form-label">Time Due</label>
                         <input type="time" class="form-control" id="exampleFormControlInput3" name="labDueTime" value="{{time}}">
                     </div>
-                    <div class="mb-3">
+                    <div class="col-12">
                         <label for="exampleFormControlTextarea1" class="form-label">Description</label>
                         <textarea class="form-control" id="exampleFormControlTextarea1" rows="2" name="labDes"></textarea>
                     </div>
-                    <div class="mb-3">
+                    <div class="col-12">
                         <label for="formFile" class="form-label">Tutorial File</label>
                         <input class="form-control" type="file" id="formFile" name="labtut">
                     </div>
                     <hr>
                     <div class="d-grid gap-2 col-6 mx-auto">
                         <button type="submit" class="btn btn-outline-success">Add Lab</button>
+                    </div>
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <a href="{% url 'courseInfo' courseID %}" class="btn btn-outline-danger">Cancel</a>
                     </div>
                 </form>
             </div>
