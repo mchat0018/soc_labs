@@ -55,17 +55,26 @@ def adminRts(request, course_id):
             # getting the board objects previously assigned to the course
             previous_boards = IPAddress.objects.filter(course=course).all()
 
+            # maintaining a list of boards which were kept as is, so as to avoid removing unnecessary
+            # slots
+            common_boards = []
+
             if previous_boards is not None and len(previous_boards) > 0:
                 print(previous_boards)
                 # setting the course field of the previously assigned boards to null
                 for board in previous_boards:
-                    board.course = None
-                    board.save()
+                    # if the board has been actually removed
+                    if board.board_name not in checked_board_names: 
+                        board.course = None
+                        board.save()
+                    else: common_boards.append(board)
 
             # setting the course attribute for the checked boards
             for board in checked_boards:
-                board.course = course
-                board.save()
+                # to avoid duplicates
+                if board not in common_boards:
+                    board.course = course
+                    board.save()
 
             messages.success(
                 request, 'Boards selected...Slots created successfully')

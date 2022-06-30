@@ -117,4 +117,4 @@ def bookSlots(request,course_id):
         'boards': Board.objects.filter(course=course).filter(day=selected_day).all(),
         'IPs': IPAddress.objects.filter(course=course).all()
     }    
-    return render(request,'slots/booking.html',context = data)
+    return render(request,'slots/booking2.html',context = data)

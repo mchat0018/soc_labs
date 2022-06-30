@@ -73,8 +73,8 @@ def addCourse(request):
         frmCode = request.POST.get('CourseCode')
         # fetching the course
         course = Course.objects.filter(course_code=frmCode).first()
-        #  if the code entered was valid
-        if course is not None:
+        #  if the code entered was valid and the student isn't already enrolled in the course
+        if course is not None and request.user not in course.students.all():
             course.students.add(request.user)
             messages.success(request,f'You have successfully enrolled in {course.name}')
         else: messages.error(request,'Incorrect course code')

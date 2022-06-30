@@ -22,6 +22,7 @@ import paramiko
 # port = 9999
 
 DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+print("Hello")
 
 def restart(ip_addr):
     
