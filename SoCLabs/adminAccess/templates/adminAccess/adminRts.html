@@ -72,6 +72,16 @@
                 {% endfor %}
             </tbody>
         </table>
+        
+        <hr>
+        
+        <form method="post" action="{% url 'reset' course.id %}">
+            {% csrf_token %}
+            <div class="text-center" style="margin: 30px;">
+                <button class="btn btn-lg btn-outline-danger" type="submit">Reset Boards</button>
+            </div>
+        </form>
+
     </div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

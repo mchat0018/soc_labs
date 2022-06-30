@@ -196,6 +196,24 @@ def delete_config(request, course_id, pk):
 
 
 @login_required
+def reset(request, course_id):
+    if request.method == "POST":
+        course = Course.objects.get(id=course_id)
+
+        # running authentication for user
+        if not run_authentication(request.user,course): raise PermissionDenied
+
+        # getiing all the slots of the course
+        boards = Board.objects.filter(course=course).all()
+        # setting the board_user attribute to None
+        boards.update(board_user = None)
+
+        return redirect("adminRts", course_id=course_id)
+        
+    return render(request,"adminAccess/adminRts.html")
+
+
+@login_required
 def board_page(request,course_id):
     course = Course.objects.get(id=course_id)
 

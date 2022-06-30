@@ -39,7 +39,7 @@ def add_course_staff(sender,instance,action,**kwargs):
             ta.profile.save()
 
 @receiver(m2m_changed,sender=Course.students.through)
-def add_course_staff(sender,instance,action,**kwargs):
+def add_course_student(sender,instance,action,**kwargs):
     print('Signal sent')
     if action == 'post_add':
         for student in instance.students.all():

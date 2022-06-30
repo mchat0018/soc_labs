@@ -65,3 +65,18 @@ def profile(request):
         'reg_courses':reg_courses
     }
     return render(request,'users/profile.html',context)
+
+
+@login_required
+def addCourse(request):
+    if request.method == 'POST':
+        frmCode = request.POST.get('CourseCode')
+        # fetching the course
+        course = Course.objects.filter(course_code=frmCode).first()
+        #  if the code entered was valid
+        if course is not None:
+            course.students.add(request.user)
+            messages.success(request,f'You have successfully enrolled in {course.name}')
+        else: messages.error(request,'Incorrect course code')
+
+    return redirect('profile')

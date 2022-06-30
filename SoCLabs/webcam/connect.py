@@ -6,6 +6,8 @@ import sys
 # connect to server
 try:
     host = str(sys.argv[1])
+    board_id = str(sys.argv[2])
+
     username = 'ecesoclab@iiitd.edu.in'
     password = 'ecesoclab@123'
     con = paramiko.SSHClient()
@@ -14,9 +16,9 @@ try:
     con.connect(host, username=username, password=password)
     print(host)
 
-
     # execute the script
-    stdin, stdout, stderr = con.exec_command('python E:\\remote_lab2\\aa.py')
+    stdin, stdout, stderr = con.exec_command(
+        f'python E:\\remote_lab2\\execScript.py {board_id}')
 
     # printing the output of command
     print(stderr.read())
@@ -32,7 +34,6 @@ try:
 
     # stdin, stdout, stderr = con.exec_command(r'E:\\Xilinx\\Vivado\\
     # 2019.1\\bin\\hw_server.bat -s TCP::' + port)
-
 
     # printing the output of command
     print(stderr.read())

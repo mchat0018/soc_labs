@@ -133,7 +133,7 @@
                                 {% if slot.day == curr_day %}
                                     {% if slot.time_slot.end_time_hours > curr_time_hours or slot.time_slot.end_time_hours == curr_time_hours and slot.time_slot.end_time_minutes > curr_time_minutes %}
                                         {% if slot.time_slot.start_time_hours < curr_time_hours or slot.time_slot.start_time_hours == curr_time_hours and slot.time_slot.start_time_minutes <= curr_time_minutes %}
-                                            <td><a href="{% url 'index' slot.course.pk slot.ip_addr.board_serial %}">In Progress</td>
+                                            <td><a href="{% url 'index' slot.course.pk slot.ip_addr.board_serial %}">In Progress</a></td>
                                         {% else %}
                                             <td>Pending</td>
                                         {% endif %}

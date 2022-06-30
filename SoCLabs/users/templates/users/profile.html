@@ -91,7 +91,16 @@
                             
                         </div>
                     {% endfor %}
-                  </div>
+                </div>
+            </div>
+            <div class="mx-auto" style="width: 40rem;">
+                <form action="{% url 'addCourse'%}" method="post">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Course Code" name="CourseCode">
+                        <button class="btn btn-primary" type="submit">Add Course</button>
+                    </div>
+                </form>
             </div>
         </div>
 
