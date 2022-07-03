@@ -5,13 +5,21 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from django.db.models import Q
-from .models import IPAddress, TimeConfig, TimeSchedule,Board,TimeSlot
+from .models import IPAddress, TimeConfig, TimeSchedule, Board, TimeSlot, StartDay
 from courses.models import Course
 from django.utils import timezone
 from datetime import date, timedelta, datetime
 import pytz
 
 DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+
+def ret_lab_days(offset):
+    day_list = []
+
+    for i in range(7):
+        day_list.append(DAYS_OF_WEEK[(i + offset) % 7])
+    
+    return day_list
 
 @login_required
 def bookSlots(request,course_id):
@@ -28,10 +36,16 @@ def bookSlots(request,course_id):
     date_now = date.today()
     day_now = date_now.weekday()
     today = DAYS_OF_WEEK[day_now]
+    
+    # setting an ordered list of the remaining lab days
     days = []
-    i = day_now
+    offset = StartDay.objects.filter(course=course).first()
+    lab_days = ret_lab_days(offset)
+    i = day_now - offset
+    if i < 0: i += 7
+
     while i<7:
-        days.append(DAYS_OF_WEEK[i])
+        days.append(lab_days[i])
         i+=1
     
     selected_day = today
@@ -58,12 +72,14 @@ def bookSlots(request,course_id):
                 # checking if slot limit for the day has been reached
                 slot_limit = TimeConfig.objects.filter(course=course).filter(day=selected_day).first().slot_limit
                 slots_booked = len(Board.objects.filter(board_user=request.user).filter(course=course).filter(day=selected_day).all())
+                
                 print(f'{slots_booked}/{slot_limit} slots_booked for {selected_day}')
+                
                 if(slot_limit<=slots_booked): 
                     messages.error(request,f'Failure to book slot. Slot limit for the day already been reached')
                     print('Failure to book slot. Slot limit for the day already been reached')
                 else:
-                # retrieving the TimeSlot object
+                    # retrieving the TimeSlot object
                     start_time,end_time = tuple(time_slot.replace(' ','').split('-'))
                     start_time_hours,start_time_minutes = tuple(start_time.split(':'))
                     end_time_hours,end_time_minutes = tuple(end_time.split(':'))
@@ -76,8 +92,11 @@ def bookSlots(request,course_id):
                         messages.error(request,f'Failure to book slot. Please book a pending slot')
                         print('Failure to book slot. Please book a pending slot')
                     else:
-                        # print(f'{start_time_hours}:{start_time_minutes}-{end_time_hours}:{end_time_minutes}')
-                        timeSlot = TimeSlot.objects.filter(Q(start_time_hours=start_time_hours) & Q(start_time_minutes=start_time_minutes) & Q(end_time_hours=end_time_hours) & Q(end_time_minutes=end_time_minutes)).first()
+                        # to ensure extracted time slot belongs to the given course
+                        timeSlot = TimeSlot.objects.filter(course=course).filter(
+                            Q(start_time_hours=start_time_hours) & Q(start_time_minutes=start_time_minutes) 
+                            & Q(end_time_hours=end_time_hours) & Q(end_time_minutes=end_time_minutes)).first()
+
                         print(timeSlot)
                         # making the Board object
                         board_user = request.user

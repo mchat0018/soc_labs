@@ -6,19 +6,27 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from django.db.models import Q
 from courses.models import Course,Lab
-from slots.models import IPAddress,Board,TimeConfig,TimeSchedule,TimeSlot
+from slots.models import IPAddress,Board,TimeConfig,TimeSchedule,TimeSlot,StartDay
 from .forms import ConfigsCRUD
 
+DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+
+def ret_lab_days(offset):
+    day_list = []
+
+    for i in range(7):
+        day_list.append(DAYS_OF_WEEK[(i + offset) % 7])
+    
+    return day_list
+
 # dictionary of days for key reference during sorting
-day_dict={
-    'Monday':0,
-    'Tuesday':1,
-    'Wednesday':2,
-    'Thursday':3,
-    'Friday':4,
-    'Saturday':5,
-    'Sunday':6
-}
+def ret_day_dict(course):
+    offset = StartDay.objects.filter(course=course).first()
+    lab_days = ret_lab_days(offset)
+    day_dict = {}
+
+    for i in range(len(lab_days)): day_dict[lab_days[i]] = i
+    return day_dict
 
 def run_authentication(user, course):
     # if logged-in user doesn't have staff credentials
@@ -125,6 +133,7 @@ def adminRts(request, course_id):
     # getting all the current TimeConfig objects
     configs = list(TimeConfig.objects.filter(course=course).all())
     # sorting the objects in ascending order of days and starting time
+    day_dict = ret_day_dict(course)
     configs.sort(key=lambda x: str(day_dict[x.day]+1) + x.start_time_hours + x.start_time_minutes,
                  reverse=False
                  )
@@ -183,7 +192,9 @@ def crud(request,course_id):
 
     # getting all the current TimeConfig objects 
     configs = list(TimeConfig.objects.filter(course=course).all())
+    
     # sorting the objects in ascending order of days and starting time
+    day_dict = ret_day_dict(course)
     configs.sort(key=lambda x: str(day_dict[x.day]+1) + x.start_time_hours + x.start_time_minutes,
                          reverse=False
     )

@@ -4,22 +4,28 @@ from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from django.db.models import Q
-from slots.models import Board,IPAddress,TimeSlot,TimeSchedule
+from slots.models import Board,IPAddress,TimeSlot,TimeSchedule,StartDay
 from .models import Course,Lab
 from django.utils import timezone
 from datetime import date, timedelta, datetime
 import pytz
 
 DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-day_dict={
-    'Monday':0,
-    'Tuesday':1,
-    'Wednesday':2,
-    'Thursday':3,
-    'Friday':4,
-    'Saturday':5,
-    'Sunday':6
-}
+
+
+def ret_lab_days(offset):
+    day_list = []
+
+    for i in range(7):
+        day_list.append(DAYS_OF_WEEK[(i + offset) % 7])
+    
+    return day_list
+
+def ret_lab_dict(lab_days):
+    day_dict = {}
+
+    for i in range(len(lab_days)): day_dict[lab_days[i]] = i
+    return day_dict
 
 @login_required
 def course_page(request,course_id):
@@ -50,15 +56,23 @@ def course_page(request,course_id):
     # getting the remaining booked slots for today
     booked_slots = Board.objects.filter(board_user=request.user).filter(course=course).filter(day=today).filter(time_slot__in=timeslots).all()
     booked_slots = list(booked_slots)
+    
     # getting the booked time slots for the remaining days of the lab week
+    offset = StartDay.objects.filter(course=course).first()
+    lab_days = ret_lab_days(offset)
+    curr_day -= offset
+    if curr_day < 0: curr_day += 7
+    
     if curr_day != 6:
-        days = DAYS_OF_WEEK[curr_day+1:]
+        days = lab_days[curr_day+1:]
         booked_slots += list(Board.objects.filter(board_user=request.user).filter(course=course).filter(day__in=days).all())
+    
     # sorting the booked slots
+    day_dict = ret_lab_dict(lab_days)
     booked_slots.sort(key=lambda x: str(day_dict[x.day]+1)+x.time_slot.start_time_hours+x.time_slot.start_time_minutes, reverse=False)
     
     print(booked_slots)
-    print(DAYS_OF_WEEK[curr_day])
+    print(lab_days[curr_day])
 
     data = {
         'id':course_id,

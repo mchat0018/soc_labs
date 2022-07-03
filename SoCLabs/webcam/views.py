@@ -162,10 +162,9 @@ def index(request,course_id,board_serial):
     
     # getting the all the current and pending time slots for the day
     # criterion for getting time slots
-    time_configs = TimeConfig.objects.filter(course=course).filter(day=DAYS_OF_WEEK[curr_day]).all()
     crit = (Q(end_time_hours__gt=curr_time_hours) | (Q(end_time_hours=curr_time_hours) & Q(end_time_minutes__gt=curr_time_minutes)))
     
-    timeslots = TimeSlot.objects.filter(crit).filter(time_config__in=time_configs).all()
+    timeslots = TimeSlot.objects.filter(crit).filter(course=course).all()
     timeslots = list(timeslots)
 
     # if there are no time slots for the day left, permission denied
@@ -240,10 +239,9 @@ def restartView(request,course_id,board_serial):
     curr_day = datetime.today().weekday()
     
     # criterion for getting time slots
-    time_configs = TimeConfig.objects.filter(course=course).filter(day=DAYS_OF_WEEK[curr_day]).all()
     crit = (Q(end_time_hours__gt=curr_time_hours) | (Q(end_time_hours=curr_time_hours) & Q(end_time_minutes__gt=curr_time_minutes)))
     
-    timeslots = TimeSlot.objects.filter(crit).filter(time_config__in=time_configs).all()
+    timeslots = TimeSlot.objects.filter(crit).filter(course=course).all()
     timeslots = list(timeslots)
     
     # checking if the time slots are actually available

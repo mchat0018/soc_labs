@@ -4,14 +4,16 @@ from django.dispatch import receiver
 from .models import *
 
 @receiver(post_save,sender=TimeConfig)
-def create_TimeSlots(sender,instance,created,**kwargs):
+def create_slots_from_time(sender,instance,created,**kwargs):
     if created:
         # getting the parameters of the saved instance
+        day = instance.day
         start_time_hours = int(instance.start_time_hours)
         start_time_minutes = int(instance.start_time_minutes)
         end_time_hours = int(instance.end_time_hours)
         end_time_minutes = int(instance.end_time_minutes)
         duration = instance.duration
+        course = instance.course
 
         # creating time slots according to the parameters
 
@@ -37,15 +39,21 @@ def create_TimeSlots(sender,instance,created,**kwargs):
             ed_m = str(ed%60).zfill(2)
             
             # creating new (or getting existing) time slot
-            time_slot,done = TimeSlot.objects.get_or_create(start_time_hours = st_h,start_time_minutes = st_m,end_time_hours = ed_h,end_time_minutes = ed_m, time_config=instance)
+            time_slot,done = TimeSlot.objects.get_or_create(
+                start_time_hours = st_h,start_time_minutes = st_m,end_time_hours = ed_h,
+                end_time_minutes = ed_m, course=course)
+
             # creating corresponding time schedule
-            day = instance.day
-            time_schedule = TimeSchedule.objects.create(day=day,time_slot=time_slot,time_config=instance,course=instance.course)
+            time_schedule = TimeSchedule.objects.create(day=day,time_slot=time_slot,time_config=instance,course=course)
+            
             # getting the boards presently allocated to the course
-            boards = IPAddress.objects.filter(course=instance.course).all()
+            boards = IPAddress.objects.filter(course=course).all()
+            
             # creating slots corresponding to the above information (objects)
             for board in boards:
-                slot = Board.objects.create(day=day,time_slot=time_slot,board_name=board.board_name,ip_addr=board,course=instance.course)
+                slot = Board.objects.create(day=day,time_slot=time_slot,time_sched=time_schedule,
+                                        board_name=board.board_name,ip_addr=board,course=course
+                        )
 
             # updating the start time variables
             st_h = ed_h
@@ -54,7 +62,7 @@ def create_TimeSlots(sender,instance,created,**kwargs):
             
 
 @receiver(post_save,sender=IPAddress)
-def create_slots(sender,instance,created,**kwargs):
+def create_slots_from_board(sender,instance,created,**kwargs):
     course = instance.course
     
     if not created:
@@ -67,22 +75,24 @@ def create_slots(sender,instance,created,**kwargs):
         for time_config in time_configs.all():
             time_scheds = TimeSchedule.objects.filter(time_config=time_config).all()
             for time_sched in time_scheds.all():
-                board,_= Board.objects.get_or_create(day=time_sched.day,time_slot=time_sched.time_slot,
-                                        board_name=instance.board_name,ip_addr=instance,course=course)
+                board,_= Board.objects.get_or_create(day=time_sched.day, time_slot=time_sched.time_slot,
+                                                    time_sched = time_sched, board_name=instance.board_name,
+                                                    ip_addr=instance, course=course
+                        )
 
 
-@receiver(pre_delete,sender=TimeConfig)
-def delete_slots(sender,instance,**kwargs):
-    # getting all the parameters
-    day = instance.day
-    start_time_hours = instance.start_time_hours
-    start_time_minutes = instance.start_time_minutes
-    end_time_hours = instance.end_time_hours
-    end_time_minutes = instance.end_time_minutes
-    duration = instance.duration
-    course = instance.course
+# @receiver(pre_delete,sender=TimeConfig)
+# def delete_slots(sender,instance,**kwargs):
+#     # getting all the parameters
+#     day = instance.day
+#     start_time_hours = instance.start_time_hours
+#     start_time_minutes = instance.start_time_minutes
+#     end_time_hours = instance.end_time_hours
+#     end_time_minutes = instance.end_time_minutes
+#     duration = instance.duration
+#     course = instance.course
 
-    # deleting all the time slots associated with the instance
-    time_slots = TimeSlot.objects.filter(time_config=instance).delete()
+#     # deleting all the time slots associated with the instance
+#     time_slots = TimeSlot.objects.filter(time_config=instance).delete()
 
-    # Note that deleting the time slots will also delete the corresponding Board and Time Schedule objects
+#     # Note that deleting the time slots will also delete the corresponding Board and Time Schedule objects

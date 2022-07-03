@@ -13,17 +13,6 @@ from datetime import datetime
 import time
 import pytz
 
-DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-day_dict={
-    'Monday':0,
-    'Tuesday':1,
-    'Wednesday':2,
-    'Thursday':3,
-    'Friday':4,
-    'Saturday':5,
-    'Sunday':6
-}
-
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
