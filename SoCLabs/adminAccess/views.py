@@ -21,7 +21,7 @@ def ret_lab_days(offset):
 
 # dictionary of days for key reference during sorting
 def ret_day_dict(course):
-    offset = StartDay.objects.filter(course=course).first()
+    offset = StartDay.objects.filter(course=course).first().day
     lab_days = ret_lab_days(offset)
     day_dict = {}
 
@@ -107,14 +107,14 @@ def adminRts(request, course_id):
                     ed = config.end_time_hours + config.end_time_minutes
 
                     # if timings clash, form object won't be saved
-                    if ed <= end_time and ed > start_time:
+                    if end_time <= ed and end_time > st:
                         messages.error(
                             request, 'Faliure to create slots due to timings clash.')
-                        return redirect("edit-time", course_id=course_id)
-                    if st >= start_time and st < end_time:
+                        return redirect("adminRts", course_id=course_id)
+                    if start_time >= st and start_time < ed:
                         messages.error(
                             request, 'Faliure to create slots due to timings clash.')
-                        return redirect("edit-time", course_id=course_id)
+                        return redirect("adminRts", course_id=course_id)
 
             # setting the course attribute of the object
             form.instance.course = course

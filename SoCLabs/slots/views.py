@@ -39,7 +39,7 @@ def bookSlots(request,course_id):
     
     # setting an ordered list of the remaining lab days
     days = []
-    offset = StartDay.objects.filter(course=course).first()
+    offset = StartDay.objects.filter(course=course).first().day
     lab_days = ret_lab_days(offset)
     i = day_now - offset
     if i < 0: i += 7

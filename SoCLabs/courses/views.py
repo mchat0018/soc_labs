@@ -48,7 +48,7 @@ def course_page(request,course_id):
     curr_day = datetime.today().weekday()
     today = DAYS_OF_WEEK[curr_day]
     print(curr_time)
-
+    print(today)
     # getting available time slots and days
     crit = (Q(end_time_hours__gt=curr_time_hours) | (Q(end_time_hours=curr_time_hours) & Q(end_time_minutes__gt=curr_time_minutes)))
     timeslots = TimeSlot.objects.filter(crit).all()
@@ -58,7 +58,7 @@ def course_page(request,course_id):
     booked_slots = list(booked_slots)
     
     # getting the booked time slots for the remaining days of the lab week
-    offset = StartDay.objects.filter(course=course).first()
+    offset = StartDay.objects.filter(course=course).first().day
     lab_days = ret_lab_days(offset)
     curr_day -= offset
     if curr_day < 0: curr_day += 7
@@ -67,6 +67,7 @@ def course_page(request,course_id):
         days = lab_days[curr_day+1:]
         booked_slots += list(Board.objects.filter(board_user=request.user).filter(course=course).filter(day__in=days).all())
     
+    print(days)
     # sorting the booked slots
     day_dict = ret_lab_dict(lab_days)
     booked_slots.sort(key=lambda x: str(day_dict[x.day]+1)+x.time_slot.start_time_hours+x.time_slot.start_time_minutes, reverse=False)
@@ -82,7 +83,7 @@ def course_page(request,course_id):
         'description':course.description,
         'labs':Lab.objects.filter(course=course).all(),
         'pending_slots':booked_slots,
-        'curr_day':DAYS_OF_WEEK[curr_day],
+        'curr_day':today,
         'curr_time_hours': curr_time_hours,
         'curr_time_minutes': curr_time_minutes
     }

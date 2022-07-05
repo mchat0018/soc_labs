@@ -17,12 +17,14 @@ from multiprocessing.connection import wait
 import subprocess
 from time import sleep
 import paramiko
+import threading
 # host_ip = '192.168.53.132'
 # host_ip = '192.168.50.233'
 # port = 9999
 
 DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
 print("Hello")
+feed = None
 
 def restart(ip_addr):
     
@@ -69,7 +71,7 @@ def restart(ip_addr):
         sleep(6)
 
 def camera_response(ip_addr, cam_port, end_time):
-    
+    global feed
     end_time = int(end_time)
     ist = pytz.timezone('Asia/Kolkata')
     datetime_now = datetime.now(ist)
@@ -107,7 +109,7 @@ def camera_response(ip_addr, cam_port, end_time):
             frame = pickle.loads(frame_data)
             frame = cv2.flip(frame, 1)
             _, jpeg = cv2.imencode('.jpg', frame)
-            yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
+            yield(b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')
 
 def connection(ip_addr, Board_id):
     host = ip_addr
@@ -214,7 +216,12 @@ def index(request,course_id,board_serial):
         raise PermissionDenied
     
 def fpgaview(request,course_id,ip_addr,end_time,cam_port):
+        global feed
         try:
+            # t1 = threading.Thread(target=camera_response, args=(ip_addr,cam_port,end_time,))
+            # t1.start()
+            # feed = t1.join()
+            # print("thread 2 being executed")
             return StreamingHttpResponse(camera_response(ip_addr,cam_port,end_time), content_type="multipart/x-mixed-replace;boundary=frame")
         except:
             pass
