@@ -1,9 +1,13 @@
-from django.shortcuts import render,redirect
+import re
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.db.models import Q
+import pandas as pd
+import secrets
+import string
 
 from courses.models import Course
 from .models import Profile
@@ -23,6 +27,31 @@ day_dict={
     'Saturday':5,
     'Sunday':6
 }
+
+
+def registerCSV(request):
+    if request.method == 'POST':
+        url = str(request.POST.get('url'))
+        url = url.replace('/edit#gid=', '/export?gid=')
+        data = pd.read_csv(url + '&format=csv')
+        source = string.ascii_letters + string.digits + string.punctuation
+        pat = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
+        for i in data.itertuples():
+            username = str(i[1])
+            email = str(i[2])
+            if not re.match(pat, email):
+                continue
+            if User.objects.filter(email=email).filter(username=username).all() is not None:
+                continue
+            User.objects.create(
+                username = username,
+                email = email,
+                password = ''.join((secrets.choice(source) for _ in range(8)))
+            )
+        return redirect('registerCSV')
+
+    return render(request, 'users/registerCSV.html')
+
 
 def register(request):
     if request.method == 'POST':
