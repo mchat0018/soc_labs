@@ -1,3 +1,4 @@
+import smtplib
 import re
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -70,6 +71,51 @@ def register(request):
     }
     
     return render(request,'users/register.html',context)
+
+
+def sendPass(request):
+    if request.method == 'POST':
+        user = User.objects.get(
+            username=request.POST.get('username'),email=request.POST.get('email'))
+        if user:
+            try:
+                #Create your SMTP session
+                smtp = smtplib.SMTP('smtp.gmail.com', 587)
+
+            #Use TLS to add security
+                smtp.starttls()
+
+                #User Authentication
+                smtp.login("arpajitofficial@gmail.com", "skcgsgxxtiohpiqm")
+
+                #Defining The Message
+                message = '\nReset password here: ' + str(request.get_host()) + '/resetPass/'
+
+                #Sending the Email
+                smtp.sendmail("arpajitofficial@gmail.com", str(user.email), message)
+
+                #Terminating the session
+                smtp.quit()
+                print("Email sent successfully!")
+
+            except Exception as ex:
+                print("Something went wrong....", ex)
+
+            return redirect('login')
+    return render(request, 'users/sendPass.html')
+
+
+def resetPass(request):
+    if request.method == 'POST':
+        user = User.objects.get(
+            username=request.POST.get('username'),email=request.POST.get('email'))
+        if user:
+            if request.POST.get('password'):
+                user.set_password(request.POST.get('password'))
+                user.save()
+            return redirect('login')
+    return render(request, 'users/resetPass.html')
+
 
 @login_required
 def profile(request):

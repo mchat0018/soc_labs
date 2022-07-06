@@ -27,6 +27,8 @@ urlpatterns = [
     path('register/',user_views.register,name='register'),
     path('registerCSV/',user_views.registerCSV,name='registerCSV'),
     path('login/',auth_views.LoginView.as_view(template_name='users/login.html'),name='login'),
+    path('sendPass/', user_views.sendPass, name='sendPass'),
+    path('resetPass/', user_views.resetPass, name='resetPass'),
     path('logout/',auth_views.LogoutView.as_view(template_name='users/logout.html'),name='logout'),
     path('course/<course_id>/',include('courses.urls')),
     path('reset/',include('reset.urls')),
