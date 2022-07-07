@@ -8,6 +8,10 @@ from django.db.models import Q
 from courses.models import Course,Lab
 from slots.models import IPAddress,Board,TimeConfig,TimeSchedule,TimeSlot
 from .forms import ConfigsCRUD
+import re
+import pandas as pd
+import secrets
+import string
 
 # dictionary of days for key reference during sorting
 day_dict={
@@ -269,3 +273,30 @@ def reset(request, course_id):
         boards.update(board_user = None)
         return redirect("adminRts", course_id=course_id)
     return render(request,"adminAccess/adminRts.html")
+
+@login_required
+def registerCSV(request, course_id):
+    if request.method == 'POST':
+        url = str(request.POST.get('url'))
+        url = url.replace('/edit#gid=', '/export?gid=')
+        data = pd.read_csv(url + '&format=csv')
+        source = string.ascii_letters + string.digits + string.punctuation
+        pat = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
+        userLst = []
+        for i in data.itertuples():
+            username = str(i[1])
+            email = str(i[2])
+            if not re.match(pat, email):
+                continue
+            if User.objects.filter(username=username, email=email):
+                continue
+            password = ''.join((secrets.choice(source) for _ in range(8)))
+            User.objects.create(
+                username=username,
+                email=email,
+                password=password
+            )
+            userLst.append([username, email, password])
+        return render(request, 'adminAccess/regUsers.html', {'users': userLst, 'courseID': course_id})
+
+    return render(request, 'adminAccess/adminRts.html')

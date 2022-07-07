@@ -53,7 +53,6 @@ def registerCSV(request):
             )
             userLst.append([username, email, password])
         return render(request, 'users/regUsers.html', {'users': userLst})
-        # return redirect('registerCSV')
 
     return render(request, 'users/registerCSV.html')
 
