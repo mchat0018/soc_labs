@@ -37,6 +37,7 @@ def registerCSV(request):
         data = pd.read_csv(url + '&format=csv')
         source = string.ascii_letters + string.digits + string.punctuation
         pat = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
+        userLst = []
         for i in data.itertuples():
             username = str(i[1])
             email = str(i[2])
@@ -44,12 +45,15 @@ def registerCSV(request):
                 continue
             if User.objects.filter(username=username,email=email):
                 continue
+            password = ''.join((secrets.choice(source) for _ in range(8)))
             User.objects.create(
                 username = username,
                 email = email,
-                password = ''.join((secrets.choice(source) for _ in range(8)))
+                password = password
             )
-        return redirect('registerCSV')
+            userLst.append([username, email, password])
+        return render(request, 'users/regUsers.html', {'users': userLst})
+        # return redirect('registerCSV')
 
     return render(request, 'users/registerCSV.html')
 
