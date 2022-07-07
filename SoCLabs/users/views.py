@@ -42,7 +42,7 @@ def registerCSV(request):
             email = str(i[2])
             if not re.match(pat, email):
                 continue
-            if User.objects.filter(email=email).filter(username=username).all() is not None:
+            if User.objects.filter(username=username,email=email):
                 continue
             User.objects.create(
                 username = username,
