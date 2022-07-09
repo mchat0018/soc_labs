@@ -260,8 +260,12 @@ def adminRts(request, course_id):
     configs.sort(key=lambda x: str(day_dict[x.day]+1) + x.start_time_hours + x.start_time_minutes,
                  reverse=False
                  )
+    context = {'form': form,
+               "configs": configs,
+               "course": course,
+               "boards": available_boards}
 
-    return render(request, "adminAccess/adminRts.html", {'form': form, "configs": configs, "course": course, "boards": available_boards})
+    return render(request, "adminAccess/adminRts.html", context=context)
 
 
 @login_required
