@@ -303,7 +303,7 @@ def registerCSV(request, course_id):
         for i in data.itertuples():
             username = str(i[1])
             email = str(i[2])
-            if not re.match(pat, email):
+            if (not username) or (not re.match(pat, email)):
                 continue
             if User.objects.filter(username=username, email=email):
                 continue
