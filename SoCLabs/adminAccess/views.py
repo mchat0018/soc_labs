@@ -299,6 +299,10 @@ def registerCSV(request, course_id):
         url = url.replace('/edit#gid=', '/export?gid=')
         try:
             data = pd.read_csv(url + '&format=csv')
+        except FileNotFoundError:
+            return render(request, 'adminAccess/regUsers.html', {'courseID': course_id, 'message': 'Invalid Link'})
+        except pd.errors.ParserError:
+            return render(request, 'adminAccess/regUsers.html', {'courseID': course_id, 'message': 'Sheet access Revoked or Invalid Data Format'})
         except:
             return redirect("adminRts", course_id=course_id)
         #source = string.ascii_letters + string.digits + string.punctuation

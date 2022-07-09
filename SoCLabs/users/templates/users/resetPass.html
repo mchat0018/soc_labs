@@ -15,7 +15,7 @@
     <div class="position-absolute top-50 start-50 translate-middle">
         <div class="card mx-auto" style="width: 22rem;">
             <div class="card-body">
-                <h5 class="card-title">Update Lab</h5>
+                <h5 class="card-title">Reset Password</h5>
                 <hr>
                 <form method="post" action="{% url 'resetPass' %}">
                     {% csrf_token %}
@@ -30,10 +30,10 @@
                     <div class="mb-3">
                         <label for="exampleFormControlInput3" class="form-label">New Password</label>
                         <input type="password" class="form-control" id="exampleFormControlInput3" name="password">
-                        <hr>
-                        <div class="d-grid gap-2 col-6 mx-auto">
-                            <button type="submit" class="btn btn-outline-danger">Reset</button>
-                        </div>
+                    </div>
+                    <hr>
+                    <div class="d-grid gap-2 col-6 mx-auto">
+                        <button type="submit" class="btn btn-outline-warning">Reset</button>
                     </div>
                 </form>
             </div>

@@ -110,8 +110,11 @@ def sendPass(request):
 
 def resetPass(request):
     if request.method == 'POST':
-        user = User.objects.get(
-            username=request.POST.get('username'),email=request.POST.get('email'))
+        try:
+            user = User.objects.get(
+                username=request.POST.get('username'),email=request.POST.get('email'))
+        except:
+            return render(request, 'users/resetPass.html')
         if user:
             if request.POST.get('password'):
                 user.set_password(request.POST.get('password'))
