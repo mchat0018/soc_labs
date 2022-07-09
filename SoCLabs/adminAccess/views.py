@@ -1,4 +1,5 @@
 from asyncio.windows_events import NULL
+from itertools import chain
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -279,8 +280,11 @@ def registerCSV(request, course_id):
     if request.method == 'POST':
         url = str(request.POST.get('url'))
         url = url.replace('/edit#gid=', '/export?gid=')
-        data = pd.read_csv(url + '&format=csv')
-        source = string.ascii_letters + string.digits + string.punctuation
+        try:
+            data = pd.read_csv(url + '&format=csv')
+        except:
+            return redirect("adminRts", course_id=course_id)
+        #source = string.ascii_letters + string.digits + string.punctuation
         pat = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
         userLst = []
         for i in data.itertuples():
@@ -290,7 +294,9 @@ def registerCSV(request, course_id):
                 continue
             if User.objects.filter(username=username, email=email):
                 continue
-            password = ''.join((secrets.choice(source) for _ in range(8)))
+            password = ''.join(chain((secrets.choice(string.ascii_letters) for _ in range(4)),(secrets.choice(
+                string.punctuation) for _ in range(2)),(secrets.choice(string.digits) for _ in range(2))))
+            #''.join((secrets.choice(source) for _ in range(8)))
             User.objects.create(
                 username=username,
                 email=email,
@@ -299,4 +305,4 @@ def registerCSV(request, course_id):
             userLst.append([username, email, password])
         return render(request, 'adminAccess/regUsers.html', {'users': userLst, 'courseID': course_id})
 
-    return render(request, 'adminAccess/adminRts.html')
+    return redirect("adminRts", course_id=course_id)
