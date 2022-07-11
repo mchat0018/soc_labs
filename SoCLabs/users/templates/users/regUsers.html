@@ -18,7 +18,6 @@
                 <tr>
                     <th scope="col">User Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Password</th>
                 </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -26,11 +25,10 @@
                 <tr>
                     <td>{{user.0}}</td>
                     <td>{{user.1}}</td>
-                    <td>{{user.2}}</td>
                 </tr>
                 {% endfor %}
                 <tr>
-                    <td colspan="3" style="text-align: center"><a href="{% url 'profile' %}"
+                    <td colspan="2" style="text-align: center"><a href="{% url 'profile' %}"
                         class="btn btn-outline-success">Home</a></td>
                 </tr>
             </tbody>

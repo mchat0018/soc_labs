@@ -51,7 +51,7 @@ def registerCSV(request):
                 email = email,
                 password = password
             )
-            userLst.append([username, email, password])
+            userLst.append([username, email])
         return render(request, 'users/regUsers.html', {'users': userLst})
 
     return render(request, 'users/registerCSV.html')
@@ -147,12 +147,12 @@ def profile(request):
     }
     return render(request,'users/profile.html',context)
 
-@login_required
-def addCourse(request, user_id):
-    user = User.objects.get(id=user_id)
-    if request.method == 'POST':
-        frmCode = request.POST.get('CourseCode')
-        course = Course.objects.get(course_code=frmCode)
-        course.students.add(user)
-    return redirect('profile')
+# @login_required
+# def addCourse(request, user_id):
+#     user = User.objects.get(id=user_id)
+#     if request.method == 'POST':
+#         frmCode = request.POST.get('CourseCode')
+#         course = Course.objects.get(course_code=frmCode)
+#         course.students.add(user)
+#     return redirect('profile')
 

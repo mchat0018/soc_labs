@@ -23,7 +23,7 @@ import users.views as user_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',user_views.profile,name='profile'),
-    path('addCourse/<user_id>/',user_views.addCourse,name='addCourse'),
+    # path('addCourse/<user_id>/',user_views.addCourse,name='addCourse'),
     path('register/',user_views.register,name='register'),
     path('registerCSV/',user_views.registerCSV,name='registerCSV'),
     path('login/',auth_views.LoginView.as_view(template_name='users/login.html'),name='login'),

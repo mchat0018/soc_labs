@@ -308,22 +308,24 @@ def registerCSV(request, course_id):
         #source = string.ascii_letters + string.digits + string.punctuation
         pat = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
         userLst = []
+        course = Course.objects.get(id=course_id)
         for i in data.itertuples():
             username = str(i[1])
             email = str(i[2])
             if (not username) or (not re.match(pat, email)):
                 continue
             if User.objects.filter(username=username, email=email):
+                course.students.add(User.objects.get(username=username))
                 continue
             password = ''.join(chain((secrets.choice(string.ascii_letters) for _ in range(4)),(secrets.choice(
                 string.punctuation) for _ in range(2)),(secrets.choice(string.digits) for _ in range(2))))
-            #''.join((secrets.choice(source) for _ in range(8)))
             User.objects.create(
                 username=username,
                 email=email,
                 password=password
             )
-            userLst.append([username, email, password])
+            course.students.add(User.objects.get(username=username))
+            userLst.append([username, email])
         return render(request, 'adminAccess/regUsers.html', {'users': userLst, 'courseID': course_id})
 
     return redirect("adminRts", course_id=course_id)

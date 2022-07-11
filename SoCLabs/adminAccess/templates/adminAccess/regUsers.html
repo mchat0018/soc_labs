@@ -13,12 +13,11 @@
 
 <body>
     <div class="mx-auto">
-        <table class="mx-auto table table-striped table-bordered" style="width:60%;margin-top:50px" ;>
+        <table class="mx-auto table table-striped table-bordered" style="width:40%;margin-top:50px" ;>
             <thead class="table-success">
                 <tr>
                     <th scope="col">User Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Password</th>
                 </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -31,16 +30,15 @@
                         <tr>
                             <td>{{user.0}}</td>
                             <td>{{user.1}}</td>
-                            <td>{{user.2}}</td>
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="3" style="text-align: center">No Users to register</td>
+                            <td colspan="2" style="text-align: center">No Users to register</td>
                         </tr>
                     {% endfor %}
                 {% endif %}
                 <tr>
-                    <td colspan="3" style="text-align: center"><a href="{% url 'adminRts' courseID %}"
+                    <td colspan="2" style="text-align: center"><a href="{% url 'adminRts' courseID %}"
                         class="btn btn-outline-success">Done</a></td>
                 </tr>
             </tbody>
