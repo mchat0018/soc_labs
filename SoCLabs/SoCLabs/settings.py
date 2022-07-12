@@ -34,7 +34,6 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'courses.apps.CoursesConfig',
     'adminAccess.apps.AdminaccessConfig',
-    'reset.apps.ResetConfig',
     'webcam.apps.WebcamConfig',
     'users.apps.UsersConfig',
     'slots.apps.SlotsConfig',

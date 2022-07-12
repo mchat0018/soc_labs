@@ -25,6 +25,7 @@ day_dict={
     'Sunday':6
 }
 
+
 def run_authentication(user, course):
     # if logged-in user doesn't have staff credentials
     if not user.profile.staff_cred:
@@ -35,6 +36,8 @@ def run_authentication(user, course):
 
     return True
 
+
+####---Obsolete Codes---####
 
 @login_required
 def board_page(request, course_id):
@@ -166,6 +169,8 @@ def delete_config(request, course_id, pk):
     config.delete()
     return redirect("edit-time", course_id=course_id)
 
+
+####---Codes in Work---####
 
 @login_required
 def adminRts(request, course_id):
@@ -305,7 +310,6 @@ def registerCSV(request, course_id):
             return render(request, 'adminAccess/regUsers.html', {'courseID': course_id, 'message': 'Sheet access Revoked or Invalid Data Format'})
         except:
             return redirect("adminRts", course_id=course_id)
-        #source = string.ascii_letters + string.digits + string.punctuation
         pat = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
         userLst = []
         course = Course.objects.get(id=course_id)

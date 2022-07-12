@@ -146,13 +146,3 @@ def profile(request):
         'reg_courses':reg_courses
     }
     return render(request,'users/profile.html',context)
-
-# @login_required
-# def addCourse(request, user_id):
-#     user = User.objects.get(id=user_id)
-#     if request.method == 'POST':
-#         frmCode = request.POST.get('CourseCode')
-#         course = Course.objects.get(course_code=frmCode)
-#         course.students.add(user)
-#     return redirect('profile')
-
