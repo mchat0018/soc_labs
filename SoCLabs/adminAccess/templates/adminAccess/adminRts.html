@@ -23,12 +23,12 @@
     
         .popup {
             position: absolute;
-            width: 22%;
-            height: 22%;
-            top: 39%;
-            left: 39%;
+            width: 18%;
+            height: 12%;
+            top: 44%;
+            left: 41%;
             text-align: center;
-            background: white;
+            /*background: white;*/
         }
     
         .popup h3 {
@@ -44,26 +44,37 @@
 <body>
     <div class="overlay" id="overlay">
         <div class="popup">
-            <h3>Registering New Users...</h3>
-            <img src="https://flevix.com/wp-content/uploads/2020/01/Bounce-Bar-Preloader-1.gif" alt="Loading..."
-                style="width:210px;height:140px;">
+            <div class="alert alert-secondary" role="alert">
+                <div class="mx-auto">
+                    <h3>Registering New Users   </h3>
+                    <div class="spinner-grow text-warning" role="status" style="margin: 10px;"></div>
+                </div>
+            </div>
+            <!--img src="https://flevix.com/wp-content/uploads/2020/01/Bounce-Bar-Preloader-1.gif" alt="Loading..."
+                style="width:210px;height:140px;"-->
         </div>
     </div>
 
-    <div class="container-fluid text-center" style="margin-top: 50px;">
+    <div class="container-fluid text-center"
+        style="margin-top: 30px; border: 1px solid rgb(199, 199, 199); border-radius: 5px; max-width: fit-content; padding: 20px;">
+        <div class="mx-auto">
+            <h4><u>Edit Available Boards</u></h4>
+        </div>
+        <br>
         <form action="" method="post" class="board_form">
             {% csrf_token %}
-    
-            {% for board in boards %}
-            {% if board.course.id == course.id %}
-            <input type="checkbox" name="board_name" id="{{board.board_name}}" value="{{board.board_name}}" checked>
-            <label for="{{board.board_name}}">{{board.board_name}}</label>
-            {% else %}
-            <input type="checkbox" name="board_name" id="{{board.board_name}}" value="{{board.board_name}}">
-            <label for="{{board.board_name}}">{{board.board_name}}</label>
-            {% endif %}
-            {% endfor %}
-    
+            <div>
+                {% for board in boards %}
+                    {% if board.course.id == course.id %}
+                        <input type="checkbox" name="board_name" id="{{board.board_name}}" value="{{board.board_name}}" checked>
+                        <label for="{{board.board_name}}" style="margin-right: 10px;">{{board.board_name}}</label>
+                    {% else %}
+                        <input type="checkbox" name="board_name" id="{{board.board_name}}" value="{{board.board_name}}">
+                        <label for="{{board.board_name}}" style="margin-right: 10px;">{{board.board_name}}</label>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <br>
             <div style="margin-top: 10px;">
                 <button type="submit" class="btn btn-outline-primary" name="board-submit">Submit</button>
             </div>
@@ -85,10 +96,11 @@
 
     <hr>
 
-    <div class="mx-auto text-center" style="margin: 30px; width: 20rem;">
+    <div class="mx-auto text-center" style="margin: 30px; width: 30rem;">
         <form method="post" action="{% url 'registerCSV' course.id %}">
             {% csrf_token %}
             <div class="input-group mb-3">
+                <span class="input-group-text" id="addon-wrapping">Register Students<br>through Google Sheets</span>
                 <input type="text" class="form-control" placeholder="Sheet URL" aria-describedby="button-addon2" name="url">
                 <button class="btn btn-outline-primary" type="submit" id="button-addon2"
                     onclick="OpenModal()">Register</button>
@@ -98,8 +110,9 @@
 
     <hr>
 
-    <div class="mx-auto">
-        <table class="mx-auto table table-striped table-bordered" style="width:60%;margin-top:50px" ;>
+    <div class="mx-auto text-center" style="margin-top: 30px;">
+        <h4><u>Add/Edit Time Configs</u></h4>
+        <table class="mx-auto table table-striped table-bordered" style="width:60%;margin-top:20px" ;>
             <thead class="table-success">
                 <tr>
                     <th scope="col">Day</th>

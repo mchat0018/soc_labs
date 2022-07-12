@@ -30,31 +30,11 @@ day_dict={
 }
 
 
-def registerCSV(request):
-    if request.method == 'POST':
-        url = str(request.POST.get('url'))
-        url = url.replace('/edit#gid=', '/export?gid=')
-        data = pd.read_csv(url + '&format=csv')
-        source = string.ascii_letters + string.digits + string.punctuation
-        pat = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
-        userLst = []
-        for i in data.itertuples():
-            username = str(i[1])
-            email = str(i[2])
-            if not re.match(pat, email):
-                continue
-            if User.objects.filter(username=username,email=email):
-                continue
-            password = ''.join((secrets.choice(source) for _ in range(8)))
-            User.objects.create(
-                username = username,
-                email = email,
-                password = password
-            )
-            userLst.append([username, email])
-        return render(request, 'users/regUsers.html', {'users': userLst})
-
-    return render(request, 'users/registerCSV.html')
+def run_authentication(user):
+    # if logged-in user doesn't have staff credentials
+    if not user.profile.staff_cred:
+        return False
+    return True
 
 
 def register(request):
@@ -139,10 +119,10 @@ def profile(request):
         p_form = ProfileForm(instance=request.user.profile)
     
     reg_courses = request.user.profile.courses.all()
-    
     context = {
         'u_form':u_form,
         'p_form':p_form,
-        'reg_courses':reg_courses
+        'reg_courses':reg_courses,
+        'flag':run_authentication(request.user)
     }
     return render(request,'users/profile.html',context)
