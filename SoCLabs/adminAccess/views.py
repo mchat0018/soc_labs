@@ -288,13 +288,13 @@ def reset(request, course_id):
         course = Course.objects.get(id=course_id)
         boards = Board.objects.filter(course=course)
         boards.update(board_user = None)
-        return redirect("adminRts", course_id=course_id)
-    return render(request,"adminAccess/adminRts.html")
+    return redirect("adminRts", course_id=course_id)
 
 
 @login_required
 def registerCSV(request, course_id):
     if request.method == 'POST':
+        print(request.POST)
         url = str(request.POST.get('url'))
         url = url.replace('/edit#gid=', '/export?gid=')
         try:
@@ -315,7 +315,9 @@ def registerCSV(request, course_id):
             if (not username) or (not re.match(pat, email)):
                 continue
             if User.objects.filter(username=username, email=email):
-                course.students.add(User.objects.get(username=username))
+                if not course.students.filter(username=username, email=email):
+                    course.students.add(User.objects.get(username=username))
+                    userLst.append([username, email])
                 continue
             password = ''.join(chain((secrets.choice(string.ascii_letters) for _ in range(4)),(secrets.choice(
                 string.punctuation) for _ in range(2)),(secrets.choice(string.digits) for _ in range(2))))
