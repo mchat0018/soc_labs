@@ -175,15 +175,6 @@
 </body>
 
 <script>
-    function calDur() {
-        var sh = document.getElementById("id_start_time_hours").value;
-        var sm = document.getElementById("id_start_time_minutes").value;
-        var eh = document.getElementById("id_end_time_hours").value;
-        var em = document.getElementById("id_end_time_minutes").value;
-        s = parseInt(sh)*60 + parseInt(sm);
-        e = parseInt(eh)*60 + parseInt(em);
-        document.getElementById("id_duration").value = e-s;
-    }
     function OpenModal() {
         let element = document.getElementById('overlay')
         element.style.display = 'block'

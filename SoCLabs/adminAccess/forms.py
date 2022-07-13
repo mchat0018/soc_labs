@@ -23,7 +23,6 @@ mins = [
 ]
 
 dur = [
-    (0,0),
     (15,15),
     (30,30),
     (45,45),
@@ -71,7 +70,6 @@ class ConfigsCRUD(forms.ModelForm):
         widget=forms.Select(
             attrs={
                 "class": "form-control form-select",
-                'onchange': 'calDur()'
             },
             choices=hrs
         ),
@@ -81,18 +79,17 @@ class ConfigsCRUD(forms.ModelForm):
         widget=forms.Select(
             attrs={
                 "class": "form-control form-select",
-                'onchange': 'calDur()'
             },
             choices=mins
         ),
     )
 
     duration = forms.IntegerField(
-        widget=forms.NumberInput(
+        widget=forms.Select(
             attrs={
-                "class": "form-control",
-                'size': '4'
+                "class": "form-control form-select",
             },
+            choices=dur
         ),
     )
 
