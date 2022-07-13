@@ -242,11 +242,11 @@ def adminRts(request, course_id):
                     if ed <= end_time and ed > start_time:
                         messages.error(
                             request, 'Faliure to create slots due to timings clash.')
-                        return redirect("edit-time", course_id=course_id)
+                        return redirect("adminRts", course_id=course_id)
                     if st >= start_time and st < end_time:
                         messages.error(
                             request, 'Faliure to create slots due to timings clash.')
-                        return redirect("edit-time", course_id=course_id)
+                        return redirect("adminRts", course_id=course_id)
 
             # setting the course attribute of the object
             form.instance.course = course

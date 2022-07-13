@@ -71,6 +71,7 @@ class ConfigsCRUD(forms.ModelForm):
         widget=forms.Select(
             attrs={
                 "class": "form-control form-select",
+                'onchange': 'calDur()'
             },
             choices=hrs
         ),
@@ -80,17 +81,18 @@ class ConfigsCRUD(forms.ModelForm):
         widget=forms.Select(
             attrs={
                 "class": "form-control form-select",
+                'onchange': 'calDur()'
             },
             choices=mins
         ),
     )
 
     duration = forms.IntegerField(
-        widget=forms.Select(
+        widget=forms.NumberInput(
             attrs={
-                "class": "form-control form-select",
+                "class": "form-control",
+                'size': '4'
             },
-            choices=dur
         ),
     )
 
@@ -104,24 +106,3 @@ class ConfigsCRUD(forms.ModelForm):
             MinValueValidator(1),
         ]
     )
-
-    # course = forms.ChoiceField(
-    #     widget=forms.Select(
-    #         attrs={
-    #             "class": "form-control form-select",
-    #         }, choices=[]
-    #     ),
-    # )
-
-    # def __init__(self, coursenames=None, *args, **kwargs):
-    #     super(ConfigsCRUD, self).__init__(*args, **kwargs)
-    #     if coursenames:
-    #         self.fields['course'].choices = coursenames
-
-    # def save(self, course=None):
-    #     form_object =  super(ConfigsCRUD,self).save(commit=False)
-    #     if course is not None:
-    #         form_object.course = course
-            
-    #     form_object.save()
-    #     return form_object

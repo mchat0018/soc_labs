@@ -40,13 +40,12 @@
     </style>
 
 </head>
-
 <body>
     <div class="overlay" id="overlay">
         <div class="popup">
             <div class="alert alert-secondary" role="alert">
                 <div class="mx-auto">
-                    <h3>Registering New Users   </h3>
+                    <h3>Working Changes...</h3>
                     <div class="spinner-grow text-warning" role="status" style="margin: 10px;"></div>
                 </div>
             </div>
@@ -76,7 +75,7 @@
             </div>
             <br>
             <div style="margin-top: 10px;">
-                <button type="submit" class="btn btn-outline-primary" name="board-submit">Submit</button>
+                <button type="submit" class="btn btn-outline-primary" name="board-submit" onclick="OpenModal()">Submit</button>
             </div>
     
         </form>
@@ -90,7 +89,7 @@
     <form method="post" action="{% url 'reset' course.id %}">
         {% csrf_token %}
         <div class="text-center" style="margin: 30px;">
-            <button class="btn btn-lg btn-outline-danger" type="submit">Reset Boards</button>
+            <button class="btn btn-lg btn-outline-danger" type="submit" onclick="OpenModal()">Reset Boards</button>
         </div>
     </form>
 
@@ -112,15 +111,15 @@
 
     <div class="mx-auto text-center" style="margin-top: 30px;">
         <h4><u>Add/Edit Time Configs</u></h4>
-        <table class="mx-auto table table-striped table-bordered" style="width:60%;margin-top:20px" ;>
+        <table class="mx-auto table table-striped table-bordered" style="width:50%;margin-top:20px" ;>
             <thead class="table-success">
                 <tr>
-                    <th scope="col">Day</th>
-                    <th scope="col">Start Time</th>
-                    <th scope="col">End Time</th>
-                    <th scope="col">Duration</th>
-                    <th scope="col">Slot Limit</th>
-                    <th scope="col"></th>
+                    <th scope="col" style="width: 20%;">Day</th>
+                    <th scope="col" style="width: 30%;">Start Time</th>
+                    <th scope="col" style="width: 30%;">End Time</th>
+                    <th scope="col" style="width: 10%;">Duration</th>
+                    <th scope="col" style="width: 10%;">Slot Limit</th>
+                    <th scope="col" style="width: 15%;"></th>
                 </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -128,11 +127,35 @@
                     <form method="post">
                         {% csrf_token %}
                         <td>{{form.day}}</td>
-                        <td>{{form.start_time_hours}}:{{form.start_time_minutes}}</td>
-                        <td>{{form.end_time_hours}}:{{form.end_time_minutes}}</td>
+                        <td>
+                            <div class="row mx-auto">
+                                <div class="col-5">
+                                    {{form.start_time_hours}}
+                                </div>
+                                <div class="col-1">
+                                    :
+                                </div>
+                                <div class="col-5">
+                                    {{form.start_time_minutes}}
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="row mx-auto">
+                                <div class="col-5">
+                                    {{form.end_time_hours}}
+                                </div>
+                                <div class="col-1">
+                                    :
+                                </div>
+                                <div class="col-5">
+                                    {{form.end_time_minutes}}
+                                </div>
+                            </div>
+                        </td>
                         <td>{{form.duration}}</td>
                         <td>{{form.slot_limit}}</td>
-                        <td><button type="submit" class="btn btn-outline-success btn">Add</button></td>
+                        <td><button type="submit" class="btn btn-outline-success btn" onclick="OpenModal()">Add</button></td>
                     </form>
                 </tr>
                 {% for config in configs %}
@@ -152,6 +175,15 @@
 </body>
 
 <script>
+    function calDur() {
+        var sh = document.getElementById("id_start_time_hours").value;
+        var sm = document.getElementById("id_start_time_minutes").value;
+        var eh = document.getElementById("id_end_time_hours").value;
+        var em = document.getElementById("id_end_time_minutes").value;
+        s = parseInt(sh)*60 + parseInt(sm);
+        e = parseInt(eh)*60 + parseInt(em);
+        document.getElementById("id_duration").value = e-s;
+    }
     function OpenModal() {
         let element = document.getElementById('overlay')
         element.style.display = 'block'
