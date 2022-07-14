@@ -1,5 +1,6 @@
 from asyncio.windows_events import NULL
 from itertools import chain
+import profile
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -8,6 +9,7 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from courses.models import Course,Lab
 from slots.models import IPAddress,Board,TimeConfig,TimeSchedule,TimeSlot
+from users.models import Profile
 from .forms import ConfigsCRUD
 import re
 import pandas as pd
@@ -185,9 +187,21 @@ def adminRts(request, course_id):
     # coursenames = [(str(i), str(i)) for i in coursenames]
     # coursenames.insert(0, ('Select Course', 'Select Course'))
     form = ConfigsCRUD()
+    students = course.students.all()
 
     # if form data was submitted
     if request.method == "POST":
+        # filter students
+        uname = request.POST.get('uName')
+        email = request.POST.get('email')
+
+        if uname and email:
+            students = students.filter(username=uname, email=email).all()
+        elif uname:
+            students = students.filter(username=uname).all()
+        elif email:
+            students = students.filter(email=email).all()
+
         # getting the checked board objects from the submitted form
         checked_board_names = request.POST.getlist('board_name')
         print(checked_board_names)
@@ -268,8 +282,8 @@ def adminRts(request, course_id):
     context = {'form': form,
                "configs": configs,
                "course": course,
-               "boards": available_boards}
-
+               "boards": available_boards,
+               'students': students}
     return render(request, "adminAccess/adminRts.html", context=context)
 
 
@@ -288,6 +302,22 @@ def delete_config2(request, course_id, pk):
 
 
 @login_required
+def unenroll(request, course_id, pk):
+    course = Course.objects.get(id=course_id)
+
+    # running authentication for user
+    if not run_authentication(request.user, course):
+        raise PermissionDenied
+
+    # fetching and deleting the object
+    student = User.objects.get(id=pk)
+    user = Profile.objects.get(user=student)
+    course.students.remove(student)
+    user.courses.remove(course)
+    return redirect("adminRts", course_id=course_id)
+
+
+@login_required
 def reset(request, course_id):
     if request.method == "POST":
         course = Course.objects.get(id=course_id)
@@ -299,7 +329,6 @@ def reset(request, course_id):
 @login_required
 def registerCSV(request, course_id):
     if request.method == 'POST':
-        print(request.POST)
         url = str(request.POST.get('url'))
         url = url.replace('/edit#gid=', '/export?gid=')
         try:
