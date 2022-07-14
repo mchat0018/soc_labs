@@ -28,14 +28,6 @@
             top: 44%;
             left: 41%;
             text-align: center;
-            /*background: white;*/
-        }
-    
-        .popup h3 {
-            font-size: 15px;
-            height: 50px;
-            line-height: 50px;
-            color: black;
         }
     </style>
 
@@ -45,7 +37,7 @@
         <div class="popup">
             <div class="alert alert-secondary" role="alert">
                 <div class="mx-auto">
-                    <h3>Working Changes...</h3>
+                    <h5>Working Changes...</h5>
                     <div class="spinner-grow text-warning" role="status" style="margin: 10px;"></div>
                 </div>
             </div>
@@ -86,26 +78,25 @@
 
     <hr>
 
+    <div class="mx-auto text-center" style="margin: 30px; width: 30rem;">
+        <form method="post" action="{% url 'registerCSV' course.id %}">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="addon-wrapping">Register Students<br>through Google Sheets</span>
+                <input type="text" class="form-control" placeholder="Sheet URL" name="url">
+                <button class="btn btn-outline-primary" type="submit" onclick="OpenModal()">Register</button>
+            </div>
+        </form>
+    </div>
+
+    <hr>
+
     <form method="post" action="{% url 'reset' course.id %}">
         {% csrf_token %}
         <div class="text-center" style="margin: 30px;">
             <button class="btn btn-lg btn-outline-danger" type="submit" onclick="OpenModal()">Reset Boards</button>
         </div>
     </form>
-
-    <hr>
-
-    <div class="mx-auto text-center" style="margin: 30px; width: 30rem;">
-        <form method="post" action="{% url 'registerCSV' course.id %}">
-            {% csrf_token %}
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="addon-wrapping">Register Students<br>through Google Sheets</span>
-                <input type="text" class="form-control" placeholder="Sheet URL" aria-describedby="button-addon2" name="url">
-                <button class="btn btn-outline-primary" type="submit" id="button-addon2"
-                    onclick="OpenModal()">Register</button>
-            </div>
-        </form>
-    </div>
 
     <hr>
 
@@ -155,7 +146,7 @@
                         </td>
                         <td>{{form.duration}}</td>
                         <td>{{form.slot_limit}}</td>
-                        <td><button type="submit" class="btn btn-outline-success btn" onclick="OpenModal()">Add</button></td>
+                        <td><button type="submit" class="btn btn-outline-success btn" onclick="OpenModalVal()">Add</button></td>
                     </form>
                 </tr>
                 {% for config in configs %}
@@ -176,8 +167,16 @@
 
 <script>
     function OpenModal() {
-        let element = document.getElementById('overlay')
-        element.style.display = 'block'
+        let element = document.getElementById('overlay');
+        element.style.display = 'block';
+    }
+    function OpenModalVal() {
+        var slot_limit = document.getElementById('id_slot_limit').value;
+        if (slot_limit==null || slot_limit=='') {
+            return
+        }
+        let element = document.getElementById('overlay');
+        element.style.display = 'block';
     }
 </script>
 
