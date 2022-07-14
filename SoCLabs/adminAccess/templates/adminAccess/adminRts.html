@@ -127,7 +127,7 @@
                     <td>{{student.username}}</td>
                     <td>{{student.email}}</td>
                     <td><a href="{% url 'unenroll' course.id student.id %}"
-                            class="btn btn-sm btn-outline-danger">Unenroll</a></td>
+                            class="btn btn-sm btn-outline-danger" onclick="OpenModalVal()">Unenroll</a></td>
                 </tr>
                 {% empty %}
                 <tr>
