@@ -10,6 +10,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <style>
+        td,th {
+            text-align: center;
+        }
+
         .overlay {
             position: absolute;
             display: none;
@@ -33,6 +37,199 @@
 
 </head>
 <body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+
+    <div class="mx-auto position-absolute top-50 start-50 translate-middle" style="width: 80%; margin: 50px;">
+        <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                        Edit Available Boards
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <form action="" method="post" class="board_form">
+                            {% csrf_token %}
+                            <div class="mx-auto text-center">
+                                {% for board in boards %}
+                                {% if board.course.id == course.id %}
+                                <input type="checkbox" name="board_name" id="{{board.board_name}}" value="{{board.board_name}}" checked>
+                                <label for="{{board.board_name}}" style="margin-right: 10px;">{{board.board_name}}</label>
+                                {% else %}
+                                <input type="checkbox" name="board_name" id="{{board.board_name}}" value="{{board.board_name}}">
+                                <label for="{{board.board_name}}" style="margin-right: 10px;">{{board.board_name}}</label>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                            <br>
+                            <div class="mx-auto text-center" style="margin-top: 10px;">
+                                <button type="submit" class="btn btn-outline-primary" name="board-submit" onclick="OpenModal()">Submit</button>
+                            </div>
+                        </form>
+                        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+                        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Reset Boards
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <form method="post" action="{% url 'reset' course.id %}">
+                            {% csrf_token %}
+                            <div class="text-center" style="margin: 30px;">
+                                <button class="btn btn-lg btn-outline-danger" type="submit" onclick="OpenModal()">Reset Boards</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFour">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        Register Students through Google Sheets
+                    </button>
+                </h2>
+                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <form method="post" action="{% url 'registerCSV' course.id %}">
+                            {% csrf_token %}
+                            <div class="input-group mb-3 mx-auto" style="width: 50%;">
+                                <span class="input-group-text" id="addon-wrapping">Link</span>
+                                <input type="text" class="form-control" placeholder="Sheet URL" name="url">
+                                <button class="btn btn-outline-primary" type="submit" onclick="OpenModal()">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingFive">
+                    <button class="accordion-button{{params1}}" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="{{params2}}" aria-controls="collapseFive">
+                        Enrolled Students
+                    </button>
+                </h2>
+                <div id="collapseFive" class="accordion-collapse{{params3}}" aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <table class="mx-auto table table-striped table-bordered" style="width:90%;margin-top:20px" ;>
+                            <thead class="table-success">
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">User Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <tr>
+                                    <form method="post" action="">
+                                        {% csrf_token %}
+                                        <td></td>
+                                        <td><input type="text" class="form-control" placeholder="User Name" name="uName"></td>
+                                        <td><input type="text" class="form-control" placeholder="Email" name="email"></td>
+                                        <td><button type="submit" class="btn btn-outline-primary btn" onclick="OpenModalVal()">{{filterbtn}}</button>
+                                        </td>
+                                    </form>
+                                </tr>
+                                {% for student in students %}
+                                <tr>
+                                    <td>{{student.first_name}} {{student.last_name}}</td>
+                                    <td>{{student.username}}</td>
+                                    <td>{{student.email}}</td>
+                                    <td><a href="{% url 'unenroll' course.id student.id %}" class="btn btn-sm btn-outline-danger"
+                                            onclick="OpenModalVal()">Unenroll</a></td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" style="text-align: center">No students to show</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        Add/Edit Time Configs
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <table class="mx-auto table table-striped table-bordered" style="width:90%;margin-top:20px" ;>
+                            <thead class="table-success">
+                                <tr>
+                                    <th scope="col" style="width: 18%;">Day</th>
+                                    <th scope="col" style="width: 26%;">Start Time</th>
+                                    <th scope="col" style="width: 26%;">End Time</th>
+                                    <th scope="col" style="width: 13%;">Duration</th>
+                                    <th scope="col" style="width: 8%;">Slot Limit</th>
+                                    <th scope="col" style="width: 9%;"></th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <tr>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <td>{{form.day}}</td>
+                                        <td>
+                                            <div class="row mx-auto">
+                                                <div class="col-5">
+                                                    {{form.start_time_hours}}
+                                                </div>
+                                                <div class="col-1">
+                                                    :
+                                                </div>
+                                                <div class="col-5">
+                                                    {{form.start_time_minutes}}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="row mx-auto">
+                                                <div class="col-5">
+                                                    {{form.end_time_hours}}
+                                                </div>
+                                                <div class="col-1">
+                                                    :
+                                                </div>
+                                                <div class="col-5">
+                                                    {{form.end_time_minutes}}
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{{form.duration}}</td>
+                                        <td>{{form.slot_limit}}</td>
+                                        <td><button type="submit" class="btn btn-outline-success btn" onclick="OpenModalVal()">Add</button></td>
+                                    </form>
+                                </tr>
+                                {% for config in configs %}
+                                <tr>
+                                    <td>{{config.day}}</td>
+                                    <td>{{config.start_time_hours}}:{{config.start_time_minutes}}</td>
+                                    <td>{{config.end_time_hours}}:{{config.end_time_minutes}}</td>
+                                    <td>{{config.duration}}</td>
+                                    <td>{{config.slot_limit}}</td>
+                                    <td><a href="{% url 'delete_config2' course.id config.id %}"
+                                            class="btn btn-sm btn-outline-danger">Delete</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="overlay" id="overlay">
         <div class="popup">
             <div class="alert alert-secondary" role="alert">
@@ -41,12 +238,11 @@
                     <div class="spinner-grow text-warning" role="status" style="margin: 10px;"></div>
                 </div>
             </div>
-            <!--img src="https://flevix.com/wp-content/uploads/2020/01/Bounce-Bar-Preloader-1.gif" alt="Loading..."
-                style="width:210px;height:140px;"-->
         </div>
     </div>
 
-    <div class="container-fluid text-center"
+{% comment %}
+    <!--div class="container-fluid text-center"
         style="margin-top: 30px; border: 1px solid rgb(199, 199, 199); border-radius: 5px; max-width: fit-content; padding: 20px;">
         <div class="mx-auto">
             <h4><u>Edit Available Boards</u></h4>
@@ -202,7 +398,8 @@
                 {% endfor %}
             </tbody>
         </table>
-    </div>
+    </div-->
+{% endcomment %}
 </body>
 
 <script>

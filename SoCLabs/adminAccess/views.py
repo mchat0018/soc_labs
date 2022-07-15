@@ -188,6 +188,8 @@ def adminRts(request, course_id):
     # coursenames.insert(0, ('Select Course', 'Select Course'))
     form = ConfigsCRUD()
     students = course.students.all()
+    filterbtn = 'Search'
+    params = [' collapsed','false',' collapse']
 
     # if form data was submitted
     if request.method == "POST":
@@ -197,10 +199,16 @@ def adminRts(request, course_id):
 
         if uname and email:
             students = students.filter(username=uname, email=email).all()
+            filterbtn = 'Reset'
+            params = ['', 'true', '']
         elif uname:
             students = students.filter(username=uname).all()
+            filterbtn = 'Reset'
+            params = ['', 'true', '']
         elif email:
             students = students.filter(email=email).all()
+            filterbtn = 'Reset'
+            params = ['', 'true', '']
 
         # getting the checked board objects from the submitted form
         checked_board_names = request.POST.getlist('board_name')
@@ -283,7 +291,12 @@ def adminRts(request, course_id):
                "configs": configs,
                "course": course,
                "boards": available_boards,
-               'students': students}
+               'students': students,
+               'filterbtn': filterbtn,
+               'params1': params[0],
+               'params2': params[1],
+               'params3': params[2]
+               }
     return render(request, "adminAccess/adminRts.html", context=context)
 
 
