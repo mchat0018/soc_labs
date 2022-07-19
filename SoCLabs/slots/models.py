@@ -44,7 +44,7 @@ BOARD_TYPES = (
 
 class StartDay(models.Model):
     day = models.IntegerField(default=0, choices=INDEXED_DAYS)
-    course = models.ForeignKey(Course,on_delete=models.CASCADE)
+    course = models.OneToOneField(Course,on_delete=models.CASCADE)
 
 class TimeConfig(models.Model):
     day = models.CharField(max_length=10,choices=DAYS_OF_WEEK,null=True)
@@ -65,7 +65,8 @@ class TimeSlot(models.Model):
     end_time_hours = models.CharField(max_length=2,choices=HOUR_SLOTS,null=True)
     end_time_minutes = models.CharField(max_length=2,choices=MINUTE_SLOTS,null=True)
 
-    course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
+    time_config = models.ForeignKey(TimeConfig,on_delete=models.CASCADE,null=True)
+    # course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
 
     def __str__(self):
         return f'{self.start_time_hours}:{self.start_time_minutes} - {self.end_time_hours}:{self.end_time_minutes}'
@@ -86,6 +87,7 @@ class IPAddress(models.Model):
     board_name = models.CharField(max_length=12,null=True)
     ip = models.GenericIPAddressField(protocol='both',null=True)
     cam_port = models.CharField(max_length=6,null=True)
+    arduino_pin = models.IntegerField(default=1,null=True)
     course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True,blank=True)
 
     def __str__(self):
@@ -95,7 +97,9 @@ class Board(models.Model):
     board_user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True)
     day = models.CharField(max_length=10,choices=DAYS_OF_WEEK,null=True)
     time_slot = models.ForeignKey(TimeSlot,on_delete=models.CASCADE,null=True)
+
     time_sched = models.ForeignKey(TimeSchedule,on_delete=models.CASCADE,null=True)
+
     board_name = models.CharField(max_length=12,null=True)
     ip_addr = models.ForeignKey(IPAddress,on_delete=models.SET_NULL,null=True)
     course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True)

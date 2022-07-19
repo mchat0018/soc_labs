@@ -92,15 +92,18 @@ def bookSlots(request,course_id):
                         messages.error(request,f'Failure to book slot. Please book a pending slot')
                         print('Failure to book slot. Please book a pending slot')
                     else:
-                        # to ensure extracted time slot belongs to the given course
-                        timeSlot = TimeSlot.objects.filter(course=course).filter(
+                        # extracting the corresponding time slots
+                        time_configs = TimeConfig.objects.filter(course=course).filter(day=selected_day).all()
+                        timeSlot = TimeSlot.objects.filter(
                             Q(start_time_hours=start_time_hours) & Q(start_time_minutes=start_time_minutes) 
-                            & Q(end_time_hours=end_time_hours) & Q(end_time_minutes=end_time_minutes)).first()
-
+                            & Q(end_time_hours=end_time_hours) & Q(end_time_minutes=end_time_minutes)
+                        ).filter(time_config__in=time_configs).first()
+                        # Since there is only one time slot of queried timings that points to a TimeConfig of a particular day
+                        # and course  
                         print(timeSlot)
                         # making the Board object
                         board_user = request.user
-                        # time_sched = TimeSchedule.objects.get(time_slot=timeSlot,day=selected_day)
+                        # time_sched = TimeSchedule.objects.get(course=course,day=selected_day,time_slot__in=timeSlots)
                         # print(time_sched)
                         boardObj = Board.objects.get(board_name=board,day=selected_day,time_slot=timeSlot,course=course)
                         print(boardObj)
@@ -129,11 +132,29 @@ def bookSlots(request,course_id):
     timescheds = list(timescheds)
     timescheds.sort(key=lambda x: x.time_slot.start_time_hours+x.time_slot.start_time_minutes, reverse=False)
     
+    # We want to order the Board objects (slots) according to the ordering of the IPAddress objects
+    
+    # Fetching the assigned boards (IPAddress objects)
+    boards = IPAddress.objects.filter(course=course).all()
+    boards = list(boards)
+    # making a dictionary of board names with their indices
+    board_dict = {}
+    for i in range(len(boards)):
+        board_dict[boards[i].board_name] = i
+    # ordering the slots accordingly
+    slots = list(Board.objects.filter(course=course).filter(day=selected_day).all())
+    slots.sort(
+        key=lambda x: x.time_slot.start_time_hours+x.time_slot.start_time_minutes+str(board_dict[x.board_name]), 
+        reverse=False
+    )
+
     data = {
         'selected_day' : selected_day,
         'days': days,
         'time_schedules': timescheds,
-        'boards': Board.objects.filter(course=course).filter(day=selected_day).all(),
-        'IPs': IPAddress.objects.filter(course=course).all()
+        'boards': slots,
+        'IPs': boards
     }    
+
+    # print(Board.objects.filter(course=course).filter(day=selected_day).all())
     return render(request,'slots/booking2.html',context = data)

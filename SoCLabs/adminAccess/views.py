@@ -95,6 +95,17 @@ def adminRts(request, course_id):
             day = form.cleaned_data['day']
             start_time = form.cleaned_data['start_time_hours'] + form.cleaned_data['start_time_minutes']
             end_time = form.cleaned_data['end_time_hours'] + form.cleaned_data['end_time_minutes']
+            slot_limit = form.cleaned_data['slot_limit']
+
+            # if ending time is numerically smaller than starting time
+            if end_time <= start_time:
+                # if ending time exceeds midnight, it should be invalid
+                if end_time > "0000": 
+                    messages.error(request,'Please choose time slots within the day')
+                    return redirect("adminRts", course_id=course_id)
+                # if end_time is at midnight
+                else:
+                    end_time = "2400"
 
             # getting the TimeConfigs of the course on the day in question
             time_configs = TimeConfig.objects.filter(
@@ -106,19 +117,28 @@ def adminRts(request, course_id):
                     st = config.start_time_hours + config.start_time_minutes
                     ed = config.end_time_hours + config.end_time_minutes
 
+                    # if ed is at midnight
+                    if ed == "0000": ed = "2400"
+
                     # if timings clash, form object won't be saved
                     if end_time <= ed and end_time > st:
+                        print('Failure to create slots due to timings clash.')
                         messages.error(
-                            request, 'Faliure to create slots due to timings clash.')
+                            request, 'Failure to create slots due to timings clash.')
                         return redirect("adminRts", course_id=course_id)
                     if start_time >= st and start_time < ed:
+                        print('Failure to create slots due to timings clash.')
                         messages.error(
-                            request, 'Faliure to create slots due to timings clash.')
+                            request, 'Failure to create slots due to timings clash.')
                         return redirect("adminRts", course_id=course_id)
+
+                    # checking if entered slot limit matches with all slot limits set for that day
+                    lim = config.slot_limit
+                    if(slot_limit!=lim): return redirect("adminRts", course_id=course_id)
 
             # setting the course attribute of the object
             form.instance.course = course
-
+            # saving the object, now that it has passed all the tests
             form.save()
             messages.success(request, f'Slots successfully created')
 
@@ -141,6 +161,38 @@ def adminRts(request, course_id):
     return render(request, "adminAccess/adminRts.html", {'form': form, "configs": configs, "course": course, "boards": available_boards})
 
 
+@login_required
+def delete_config(request, course_id, pk):
+    course = Course.objects.get(id=course_id)
+    
+    # running authentication for user
+    if not run_authentication(request.user,course): raise PermissionDenied
+
+    # fetching and deleting the object
+    config = TimeConfig.objects.get(id=pk)
+    config.delete()
+    return redirect("adminRts",course_id=course_id)
+
+
+@login_required
+def reset(request, course_id):
+    if request.method == "POST":
+        course = Course.objects.get(id=course_id)
+
+        # running authentication for user
+        if not run_authentication(request.user,course): raise PermissionDenied
+
+        # getiing all the slots of the course
+        boards = Board.objects.filter(course=course).all()
+        # setting the board_user attribute to None
+        boards.update(board_user = None)
+
+        return redirect("adminRts", course_id=course_id)
+        
+    return render(request,"adminAccess/adminRts.html")
+
+
+# Earlier views (outdated, but kept for archiving purposes)
 @login_required
 def crud(request,course_id):
     course = Course.objects.get(id=course_id)
@@ -200,38 +252,6 @@ def crud(request,course_id):
     )
     
     return render(request, "adminAccess/crud.html", {'form': form, "configs": configs, "course": course })
-
-
-@login_required
-def delete_config(request, course_id, pk):
-    course = Course.objects.get(id=course_id)
-    
-    # running authentication for user
-    if not run_authentication(request.user,course): raise PermissionDenied
-
-    # fetching and deleting the object
-    config = TimeConfig.objects.get(id=pk)
-    config.delete()
-    return redirect("adminRts",course_id=course_id)
-
-
-@login_required
-def reset(request, course_id):
-    if request.method == "POST":
-        course = Course.objects.get(id=course_id)
-
-        # running authentication for user
-        if not run_authentication(request.user,course): raise PermissionDenied
-
-        # getiing all the slots of the course
-        boards = Board.objects.filter(course=course).all()
-        # setting the board_user attribute to None
-        boards.update(board_user = None)
-
-        return redirect("adminRts", course_id=course_id)
-        
-    return render(request,"adminAccess/adminRts.html")
-
 
 @login_required
 def board_page(request,course_id):

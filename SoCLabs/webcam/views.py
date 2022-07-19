@@ -26,7 +26,7 @@ DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','S
 print("Hello")
 feed = None
 
-def restart(ip_addr):
+def restart(ip_addr,pin):
     
     # connect to server
     try:
@@ -41,7 +41,7 @@ def restart(ip_addr):
 
 
         # execute the script
-        stdin, stdout, stderr = con.exec_command('python E:\\remote_lab2\\arduino.py')
+        stdin, stdout, stderr = con.exec_command(f'python E:\\remote_lab2\\arduino.py {str(pin)}')
 
         # printing the output of command
         print(stderr.read())
@@ -113,10 +113,12 @@ def camera_response(ip_addr, cam_port, end_time):
 
 def connection(ip_addr, Board_id):
     host = ip_addr
+    print(host)
+    print(Board_id)
     username = 'ecesoclab@iiitd.edu.in'
     password = 'ecesoclab@123'
 
-    p = subprocess.Popen(f"python .\connect.py {str(host)} {str(Board_id)}",
+    p = subprocess.Popen("python C:\Mihir\Django\SoCLabs\SoCLabs\webcam\connect.py " + str(host) + " " + str(Board_id),
                          creationflags=subprocess.CREATE_NEW_CONSOLE)
 
     sleep(5)
@@ -128,7 +130,7 @@ def connection(ip_addr, Board_id):
     con.connect(host, username=username, password=password)
 
     sftp_client = con.open_sftp()
-    remote_file = sftp_client.open(f"E:\\remote_lab2\\{Board_id}.txt")
+    remote_file = sftp_client.open("E:\\remote_lab2\\" + Board_id + ".txt")
     hw_port = '0000'
     try:
         for line in remote_file:
@@ -161,18 +163,23 @@ def index(request,course_id,board_serial):
     curr_time = datetime_now.strftime('%H:%M')
     curr_time_hours,curr_time_minutes = tuple(curr_time.split(':'))
     curr_day = datetime.today().weekday()
-    
+    day = DAYS_OF_WEEK[curr_day]
+
     # getting the all the current and pending time slots for the day
     # criterion for getting time slots
     crit = (Q(end_time_hours__gt=curr_time_hours) | (Q(end_time_hours=curr_time_hours) & Q(end_time_minutes__gt=curr_time_minutes)))
     
-    timeslots = TimeSlot.objects.filter(crit).filter(course=course).all()
+    time_configs = TimeConfig.objects.filter(course=course).filter(day=day)
+    timeslots = TimeSlot.objects.filter(crit).filter(time_config__in=time_configs).all()
     timeslots = list(timeslots)
 
     # if there are no time slots for the day left, permission denied
-    if len(timeslots) == 0: raise PermissionDenied
+    if len(timeslots) == 0: 
+        print('No time slots left')
+        raise PermissionDenied
     
     # sorting the time slots in increasing order
+    print(timeslots)
     timeslots.sort(key=lambda x: x.start_time_hours+x.start_time_minutes, reverse=False)
     # getting the closest time slot available
     timeslot = timeslots[0]    
@@ -180,21 +187,25 @@ def index(request,course_id,board_serial):
     curr = curr_time_hours + curr_time_minutes
     st = timeslot.start_time_hours + timeslot.start_time_minutes
     # if closest time slot is not current time slot
-    if curr < st: raise PermissionDenied
+    if curr < st: 
+        print('Invalid slot')
+        raise PermissionDenied
     
     print(curr_time)
     # print(timeslots)
     # print(type(timeslots))
     print(timeslot)
 
-    day = DAYS_OF_WEEK[curr_day]
     
     # getting the board corresponding to the serial number
     ip_addr = IPAddress.objects.get(board_serial=board_serial)
-    if ip_addr is None: raise PermissionDenied
+    if ip_addr is None: 
+        print('Board not detected')
+        raise PermissionDenied
 
     booked_slot = Board.objects.filter(course=course).filter(day=day).filter(time_slot=timeslot).filter(ip_addr=ip_addr).first()
-    
+    print(booked_slot)
+
     if booked_slot is not None and booked_slot.board_user is not None and booked_slot.board_user.username == request.user.username:
         hw_port = connection(ip_addr.ip, board_serial)
         end_time = booked_slot.time_slot.end_time_hours+booked_slot.time_slot.end_time_minutes
@@ -213,6 +224,7 @@ def index(request,course_id,board_serial):
         return render(request,'webcam/index.html',data)
     
     else:
+        print('Invalid user')
         raise PermissionDenied
     
 def fpgaview(request,course_id,ip_addr,end_time,cam_port):
@@ -244,11 +256,12 @@ def restartView(request,course_id,board_serial):
     curr_time = datetime_now.strftime('%H:%M')
     curr_time_hours,curr_time_minutes = tuple(curr_time.split(':'))
     curr_day = datetime.today().weekday()
-    
+    day = DAYS_OF_WEEK[curr_day]
+
     # criterion for getting time slots
     crit = (Q(end_time_hours__gt=curr_time_hours) | (Q(end_time_hours=curr_time_hours) & Q(end_time_minutes__gt=curr_time_minutes)))
-    
-    timeslots = TimeSlot.objects.filter(crit).filter(course=course).all()
+    time_configs = TimeConfig.objects.filter(course=course).filter(day=day)
+    timeslots = TimeSlot.objects.filter(crit).filter(time_config__in=time_configs).all()
     timeslots = list(timeslots)
     
     # checking if the time slots are actually available
@@ -268,16 +281,17 @@ def restartView(request,course_id,board_serial):
     # print(timeslots)
     # print(type(timeslots))
     # print(timeslot)
-    day = DAYS_OF_WEEK[curr_day]
     
     # extracting the currently booked board
     ip_addr = IPAddress.objects.get(board_serial=board_serial)
     if ip_addr is None: raise PermissionDenied
 
     booked_slot = Board.objects.filter(course=course).filter(day=day).filter(time_slot=timeslot).filter(ip_addr=ip_addr).first()
+    
     # checking if the board user is the currently logged in user
     if booked_slot is not None and booked_slot.board_user is not None and booked_slot.board_user.username == request.user.username:
-        restart(ip_addr.ip)
+        
+        restart(ip_addr.ip,ip_addr.arduino_pin)
         data = {
             'ip_addr':ip_addr.ip,
             'u_name': booked_slot.board_user.username

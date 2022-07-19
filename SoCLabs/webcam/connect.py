@@ -16,10 +16,10 @@ try:
     con.connect(host, username=username, password=password)
     print(host)
 
-    # execute the script
-    stdin, stdout, stderr = con.exec_command(
-        f'python E:\\remote_lab2\\execScript.py {board_id}')
 
+    # execute the script
+    stdin, stdout, stderr = con.exec_command('python E:\\remote_lab2\\execScript.py' + ' ' + board_id)
+    print('abc')
     # printing the output of command
     print(stderr.read())
     output = (str(stdout.read()))
@@ -34,6 +34,7 @@ try:
 
     # stdin, stdout, stderr = con.exec_command(r'E:\\Xilinx\\Vivado\\
     # 2019.1\\bin\\hw_server.bat -s TCP::' + port)
+
 
     # printing the output of command
     print(stderr.read())

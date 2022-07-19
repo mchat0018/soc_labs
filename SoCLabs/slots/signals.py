@@ -41,7 +41,7 @@ def create_slots_from_time(sender,instance,created,**kwargs):
             # creating new (or getting existing) time slot
             time_slot,done = TimeSlot.objects.get_or_create(
                 start_time_hours = st_h,start_time_minutes = st_m,end_time_hours = ed_h,
-                end_time_minutes = ed_m, course=course)
+                end_time_minutes = ed_m, time_config=instance)
 
             # creating corresponding time schedule
             time_schedule = TimeSchedule.objects.create(day=day,time_slot=time_slot,time_config=instance,course=course)
@@ -81,18 +81,10 @@ def create_slots_from_board(sender,instance,created,**kwargs):
                         )
 
 
-# @receiver(pre_delete,sender=TimeConfig)
-# def delete_slots(sender,instance,**kwargs):
-#     # getting all the parameters
-#     day = instance.day
-#     start_time_hours = instance.start_time_hours
-#     start_time_minutes = instance.start_time_minutes
-#     end_time_hours = instance.end_time_hours
-#     end_time_minutes = instance.end_time_minutes
-#     duration = instance.duration
-#     course = instance.course
+@receiver(pre_delete,sender=TimeConfig)
+def delete_slots(sender,instance,**kwargs):
 
-#     # deleting all the time slots associated with the instance
-#     time_slots = TimeSlot.objects.filter(time_config=instance).delete()
+    # deleting all the time slots associated with the instance
+    time_slots = TimeSlot.objects.filter(time_config=instance).delete()
 
-#     # Note that deleting the time slots will also delete the corresponding Board and Time Schedule objects
+    # Note that deleting the time slots will also delete the corresponding Board and Time Schedule objects
