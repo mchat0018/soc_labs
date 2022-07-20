@@ -1,14 +1,9 @@
-import smtplib
-import re
-from django.shortcuts import render, redirect
+from django.shortcuts import render,redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.db.models import Q
-import pandas as pd
-import secrets
-import string
 
 from courses.models import Course
 from .models import Profile
@@ -17,17 +12,6 @@ from .forms import UserRegisterForm,UserUpdateForm,ProfileForm
 from datetime import datetime
 import time
 import pytz
-
-DAYS_OF_WEEK = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-day_dict={
-    'Monday':0,
-    'Tuesday':1,
-    'Wednesday':2,
-    'Thursday':3,
-    'Friday':4,
-    'Saturday':5,
-    'Sunday':6
-}
 
 
 def run_authentication(user):
@@ -59,7 +43,7 @@ def register(request):
 def sendPass(request):
     if request.method == 'POST':
         user = User.objects.get(
-            username=request.POST.get('username'),email=request.POST.get('email'))
+            username=request.POST.get('username'), email=request.POST.get('email'))
         if user:
             try:
                 #Create your SMTP session
@@ -72,10 +56,12 @@ def sendPass(request):
                 smtp.login("arpajitofficial@gmail.com", "skcgsgxxtiohpiqm")
 
                 #Defining The Message
-                message = '\nReset password here: ' + str(request.get_host()) + '/resetPass/'
+                message = '\nReset password here: ' + \
+                    str(request.get_host()) + '/resetPass/'
 
                 #Sending the Email
-                smtp.sendmail("arpajitofficial@gmail.com", str(user.email), message)
+                smtp.sendmail("arpajitofficial@gmail.com",
+                              str(user.email), message)
 
                 #Terminating the session
                 smtp.quit()
@@ -92,7 +78,7 @@ def resetPass(request):
     if request.method == 'POST':
         try:
             user = User.objects.get(
-                username=request.POST.get('username'),email=request.POST.get('email'))
+                username=request.POST.get('username'), email=request.POST.get('email'))
         except:
             return render(request, 'users/resetPass.html')
         if user:
@@ -119,10 +105,25 @@ def profile(request):
         p_form = ProfileForm(instance=request.user.profile)
     
     reg_courses = request.user.profile.courses.all()
+    
     context = {
         'u_form':u_form,
         'p_form':p_form,
-        'reg_courses':reg_courses,
-        'flag':run_authentication(request.user)
+        'reg_courses':reg_courses
     }
     return render(request,'users/profile.html',context)
+
+
+@login_required
+def addCourse(request):
+    if request.method == 'POST':
+        frmCode = request.POST.get('CourseCode')
+        # fetching the course
+        course = Course.objects.filter(course_code=frmCode).first()
+        #  if the code entered was valid and the student isn't already enrolled in the course
+        if course is not None and request.user not in course.students.all():
+            course.students.add(request.user)
+            messages.success(request,f'You have successfully enrolled in {course.name}')
+        else: messages.error(request,'Incorrect course code')
+
+    return redirect('profile')

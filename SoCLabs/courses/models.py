@@ -4,12 +4,12 @@ from django.contrib.auth.models import User
 # from slots.models import TimeConfig,IPAddress
     
 class Course(models.Model):
+    course_code = models.CharField(max_length=5,null=True)
     name = models.CharField(max_length=100)
     professors = models.ManyToManyField(User,related_name='professors')
     staff = models.ManyToManyField(User,related_name='staff')
     students = models.ManyToManyField(User,related_name='students')
     description = models.TextField(null=True)
-    course_code = models.CharField(max_length=5)
     
     def __str__(self):
         return self.name
