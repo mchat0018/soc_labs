@@ -1,14 +1,19 @@
-from django.shortcuts import render,redirect
+import smtplib
+import re
+from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.db.models import Q
+import pandas as pd
+import secrets
+import string
 
 from courses.models import Course
 from .models import Profile
-from slots.models import Board,TimeConfig,TimeSchedule,TimeSlot
-from .forms import UserRegisterForm,UserUpdateForm,ProfileForm
+from slots.models import Board, TimeConfig, TimeSchedule, TimeSlot
+from .forms import UserRegisterForm, UserUpdateForm, ProfileForm
 from datetime import datetime
 import time
 import pytz
@@ -109,7 +114,8 @@ def profile(request):
     context = {
         'u_form':u_form,
         'p_form':p_form,
-        'reg_courses':reg_courses
+        'reg_courses':reg_courses,
+        'flag': run_authentication(request.user)
     }
     return render(request,'users/profile.html',context)
 
