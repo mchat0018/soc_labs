@@ -210,6 +210,8 @@ def adminRts(request, course_id):
             filterbtn = 'Reset'
             params = ['', 'true', '']
 
+       # if form data was submitted
+    if request.method == "POST":
         # getting the checked board objects from the submitted form
         checked_board_names = request.POST.getlist('board_name')
         print(checked_board_names)
@@ -224,17 +226,26 @@ def adminRts(request, course_id):
             # getting the board objects previously assigned to the course
             previous_boards = IPAddress.objects.filter(course=course).all()
 
+            # maintaining a list of boards which were kept as is, so as to avoid removing unnecessary
+            # slots
+            common_boards = []
+
             if previous_boards is not None and len(previous_boards) > 0:
                 print(previous_boards)
                 # setting the course field of the previously assigned boards to null
                 for board in previous_boards:
-                    board.course = None
-                    board.save()
+                    # if the board has been actually removed
+                    if board.board_name not in checked_board_names: 
+                        board.course = None
+                        board.save()
+                    else: common_boards.append(board)
 
             # setting the course attribute for the checked boards
             for board in checked_boards:
-                board.course = course
-                board.save()
+                # to avoid duplicates
+                if board not in common_boards:
+                    board.course = course
+                    board.save()
 
             messages.success(
                 request, 'Boards selected...Slots created successfully')
@@ -245,31 +256,53 @@ def adminRts(request, course_id):
 
             # getting the parameters from the form
             day = form.cleaned_data['day']
-            start_time = form.cleaned_data['start_time_hours'] + \
-                form.cleaned_data['start_time_minutes']
-            end_time = form.cleaned_data['end_time_hours'] + \
-                form.cleaned_data['end_time_minutes']
+            start_time = form.cleaned_data['start_time_hours'] + form.cleaned_data['start_time_minutes']
+            end_time = form.cleaned_data['end_time_hours'] + form.cleaned_data['end_time_minutes']
+            slot_limit = form.cleaned_data['slot_limit']
+
+            # if ending time is numerically smaller than starting time
+            if end_time <= start_time:
+                # if ending time exceeds midnight, it should be invalid
+                if end_time > "0000": 
+                    messages.error(request,'Please choose time slots within the day')
+                    return redirect("adminRts", course_id=course_id)
+                # if end_time is at midnight
+                else:
+                    end_time = "2400"
 
             # getting the TimeConfigs of the course on the day in question
             time_configs = TimeConfig.objects.filter(
                 course=course).filter(day=day).all()
-            print(time_configs)
+            
             # iterating through the time configs and checking for clashes
             if time_configs is not None and len(time_configs) > 0:
                 for config in time_configs.all():
                     st = config.start_time_hours + config.start_time_minutes
                     ed = config.end_time_hours + config.end_time_minutes
 
+                    # if ed is at midnight
+                    if ed == "0000": ed = "2400"
+
                     # if timings clash, form object won't be saved
-                    if ed <= end_time and ed > start_time:
+                    if end_time <= ed and end_time > st:
+                        print('Failure to create slots due to timings clash.')
                         messages.error(
-                            request, 'Faliure to create slots due to timings clash.')
+                            request, 'Failure to create slots due to timings clash.')
                         return redirect("adminRts", course_id=course_id)
-                    if st >= start_time and st < end_time:
+                    if start_time >= st and start_time < ed:
+                        print('Failure to create slots due to timings clash.')
                         messages.error(
-                            request, 'Faliure to create slots due to timings clash.')
+                            request, 'Failure to create slots due to timings clash.')
                         return redirect("adminRts", course_id=course_id)
 
+                    # checking if entered slot limit matches with all slot limits set for that day
+                    lim = config.slot_limit
+                    if(slot_limit!=lim): 
+                        messages.error(
+                            request, 'Failure...Slot limit is fixed for a day')
+                        print('Slot limit is fixed for a day')
+                        return redirect("adminRts", course_id=course_id)
+            
             # setting the course attribute of the object
             form.instance.course = course
 

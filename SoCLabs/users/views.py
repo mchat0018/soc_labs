@@ -58,14 +58,14 @@ def sendPass(request):
                 smtp.starttls()
 
                 #User Authentication
-                smtp.login("arpajitofficial@gmail.com", "skcgsgxxtiohpiqm")
+                smtp.login("ecesoclabs@iiitd.ac.in", "ecesoclabs@123")
 
                 #Defining The Message
                 message = '\nReset password here: ' + \
                     str(request.get_host()) + '/resetPass/'
 
                 #Sending the Email
-                smtp.sendmail("arpajitofficial@gmail.com",
+                smtp.sendmail("ecesoclabs@iiitd.ac.in",
                               str(user.email), message)
 
                 #Terminating the session

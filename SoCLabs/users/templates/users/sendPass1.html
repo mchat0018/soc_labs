@@ -10,32 +10,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
 </head>
-<style>
-    .card-body{
-    border: 4px solid white;
-    border-radius: 10px;
-  }
-</style>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3fadab; font-size:x-large;border-radius: 7px;border: 0px solid black;margin: 10px;">
-        <div class="container-fluid">
-            <a class="navbar-brand"><img src="https://www.iiitd.ac.in/sites/default/files/images/logo/style1invertedgreyscalelarge.png" class="logo" width="80"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                        <a class="nav-link" href="{% url 'login' %}">Login</a>    
-                </div>
-            </div>
-        </div>
-    </nav>
-
     <div class="position-absolute top-50 start-50 translate-middle">
         <div class="card mx-auto" style="width: 22rem;">
             <div class="card-body">
-                <h5 class="card-title">🪪 Credentials</h5>
+                <h5 class="card-title">Credentials...</h5>
                 <hr>
                 <form method="post" action="{% url 'sendPass' %}" class="row g-3">
                     {% csrf_token %}
@@ -49,10 +28,10 @@
                     </div>
                     <hr>
                     <div class="d-grid gap-2 col-6 mx-auto">
-                        <button type="submit" class="btn btn-outline-success">✔️</button>
+                        <button type="submit" class="btn btn-outline-primary">Send</button>
                     </div>
                     <div class="d-grid gap-2 col-6 mx-auto">
-                        <a href="{% url 'login' %}" class="btn btn-outline-danger">❌</a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-danger">Cancel</a>
                     </div>
                 </form>
             </div>

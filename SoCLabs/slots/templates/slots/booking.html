@@ -10,12 +10,16 @@
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
     <link rel="stylesheet" href="{% static 'slots/styles1.css' %}" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
+    <!-- {% static 'slots/styles1.css' %} -->
     <!-- <script src="booking.js" async></script> -->
-    <title>Document</title>
+    <link rel="icon" href="https://www.iiitd.ac.in/sites/default/files/images/logo/style1invertedgreyscalelarge.png">
+    <title>Book Your Slot!</title>
 </head>
 <body>
-    
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3fadab; font-size:x-large;">
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3fadab; font-size:x-large; border: 0px solid black; border-radius: 7px; margin: 10px;margin-bottom: -20px;">
         <div class="container-fluid">
             <a class="navbar-brand"><img src="https://www.iiitd.ac.in/sites/default/files/images/logo/style1invertedgreyscalelarge.png" class="logo" width="80"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -24,13 +28,15 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link active " aria-current="page">Book Slots</a>
+                    <a class="nav-link active" aria-current="page">Book Slots</a>
                     {% if user.is_authenticated %}
                         <a class="nav-link" href="{% url 'profile' %}">Profile</a>
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                        {% if user.profile.staff_cred %}
+                            <a class="nav-link" href="{% url 'adminRts' course.pk %}">Admin Page</a>
+                        {% endif %}
                     {% else %}
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
-                        <a class="nav-link" href="{% url 'register' %}">Register</a>
                     {% endif %}
                 </div>
             </div>
@@ -44,33 +50,19 @@
         </div>
     {% endfor %}
     {% endif %} {% endcomment %}
-    <h1 class="page-header booking-header">Book Slot</h2>
-    <section class="container dropdown-option day-option">
-        <form class="dropdown-form" method="POST" action="">
-            {% csrf_token %}
-            <legend class="form-legend">Choose a Day</legend>
-            <div class="input-group w-25 mx-auto">
-                <select class="form-select" name="days" id="days" aria-label="Example select with button addon">
-                    {% for day in days %}
-                    {% if day == selected_day %}
-                    <option value="{{ day }}" selected>{{day}}</option>
-                    {% else %}
-                    <option value="{{ day }}">{{day}}</option>
-                    {% endif %}
-                    {% endfor %}
-                </select>
-                <button class="btn btn-outline-primary btn-form-submit" type="submit" name="select_day">Search</button>
-            </div>
-        </form>
-    </section>
-    <section class="container slot-booking">
-        <div class="flex-container">
-            <div class="table-legend">
-                <div class="legend-item"><div class="box red"></div>|Unavailable</div>
-                <div class="legend-item"><div class="box green"></div>|Available</div>
-                <div class="legend-item"><div class="box orange"></div>|Booked</div>
-            </div>
-            <table class="booking-table" style="width:auto;">
+    <h1 class="page-header "> <b>Book Your Slot</b></h2>
+
+    <section class="slot-booking ">
+        <div class="container-fluid ">
+            <div class="row">
+            <div class="col-8">
+                <ul class="tableinfo">
+                    <li> <span><img src="https://img.icons8.com/emoji/96/000000/orange-circle-emoji.png"/ width="30rem" height="30rem"></span> Unavailable</li>
+                    <li> <span><img src="https://img.icons8.com/emoji/96/000000/blue-circle-emoji.png"/ width="30rem" height="30rem"></span> Available</li>
+                    <li> <span><img src="https://img.icons8.com/emoji/96/000000/yellow-circle-emoji.png"/ width="30rem" height="30rem"></span> Selected</li>
+                </ul>
+            
+            <table class="booking-table" style="width:auto; height: 510px;">
                 <thead>
                     <tr>
                         <th scope="col">Slots</th>
@@ -101,27 +93,53 @@
                 </tbody>
             </table>
         </div>    
-        <form class="timing-form row" method="POST">
-            {% csrf_token %}
-            <div  class="row">
-                <div class="col">
-                    <label for="time-slot">Time Slot:</label>
-                    <input type="text" class="form-control" name="time-slot" id="time-slot" readonly>
+        <form class="timing-form col-4" method="POST">
+            <section class="container-fluid dropdown-option day-option" >
+                <form class="dropdown-form" method="POST" action="">
+                    {% csrf_token %}
+                    <legend class="form-legend ">Choose a Day</legend>
+                    <div class="input-group">
+                        <select class="form-select" name="days" id="days" aria-label="Example select with button addon">
+                            {% for day in days %}
+                            {% if day == selected_day %}
+                            <option value="{{ day }}" selected>{{day}}</option>
+                            {% else %}
+                            <option value="{{ day }}">{{day}}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                        <button class="btn btn-outline-primary btn-form-submit" type="submit" name="select_day ">Search</button>
+                    </div>
+                </form>
+                {% csrf_token %}
+                <!-- <div  class="row"> -->
+                    <!-- <div class="col"> -->
+                <div class="aside">
+                        <label class="spacing" for="time-slot"> <span class="opensans">Time Slot:</span></label>
+                        <input type="text" class="form-control" name="time-slot" id="time-slot" readonly>
+                    <!-- </div> -->
+                    <!-- <div class="col"> -->
+                        <label class="spacing" for="board"><span class="opensans">Board No.:</span></label>
+                        <input type="text" class="form-control " name='board' id="board" readonly>
+                    <!-- </div> -->
+                    <!-- <div class="col"> -->
+                        <label class="spacing" for="selected_day"><span class="opensans">Day:</span></label>
+                        <input type="text" class="form-control" name='selected_day' id="board" value={{selected_day}} readonly>
+                    <!-- </div> -->
+                <!-- </div> -->
+                </div>  
+                <div class=" mgn btn-group-vertical timimg-form-submit w-25" role="group" aria-label="Basic outlined example">
+                    <button class="btn btn-outline-primary btn-timing-submit" type="submit" name="select_time">Submit</button>
+                    <button class="btn btn-outline-danger btn-clear" type="button">Clear</button>
                 </div>
-                <div class="col">
-                    <label for="board">Board Name.:</label>
-                    <input type="text" class="form-control" name='board' id="board" readonly>
-                </div>
-                <div class="col">
-                    <label for="selected_day">Day:</label>
-                    <input type="text" class="form-control" name='selected_day' id="board" value={{selected_day}} readonly>
-                </div>
-            </div>
-            <div class="btn-group-vertical timimg-form-submit w-25" role="group" aria-label="Basic outlined example">
-                <button class="btn btn-outline-primary btn-timing-submit" type="submit" name="select_time">Submit</button>
-                <button class="btn btn-outline-danger btn-clear" type="button">Clear</button>
-            </div>
+
+            </section>
+
+
         </form>
+        </div>
+        </div>
+
     </section>
     <!-- {{data|json_script:"data"}} -->
     {% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> {% endcomment %}

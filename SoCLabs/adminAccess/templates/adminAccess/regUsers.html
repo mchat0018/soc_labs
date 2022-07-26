@@ -3,15 +3,47 @@
 <!doctype html>
 <html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Registered Students</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-</head>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Registered Students</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    </head>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+        h1{
+            text-align: center;
+            margin-top: 40px;
+            font-family: 'Roboto', sans-serif;
+            margin-bottom: -30px;
+            font-size: 50px;
+        }
+    
+    
+    </style>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3fadab; font-size:x-large;border: 0px solid black;border-radius: 7px;margin: 10px;">
+        <div class="container-fluid">
+            <a class="navbar-brand"><img
+                    src="https://www.iiitd.ac.in/sites/default/files/images/logo/style1invertedgreyscalelarge.png"
+                    class="logo" width="80"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    
+                    <a class="nav-link active" href="{% url 'profile' %}">Profile</a>
+                    <a class="nav-link active" href="{% url 'logout' %}">Logout</a>
+
+                </div>
+            </div>
+        </div>
+    </nav>
     <div class="mx-auto">
         <table class="mx-auto table table-striped table-bordered" style="width:40%;margin-top:50px" ;>
             <thead class="table-success">

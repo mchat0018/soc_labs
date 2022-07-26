@@ -153,8 +153,9 @@ def bookSlots(request,course_id):
         'days': days,
         'time_schedules': timescheds,
         'boards': slots,
-        'IPs': boards
+        'IPs': boards,
+        'course': course
     }    
 
     # print(Board.objects.filter(course=course).filter(day=selected_day).all())
-    return render(request,'slots/booking2.html',context = data)
+    return render(request,'slots/booking.html',context = data)
