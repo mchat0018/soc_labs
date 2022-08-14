@@ -1,3 +1,5 @@
+import email
+import random
 import smtplib
 import re
 from django.shortcuts import render, redirect
@@ -11,7 +13,7 @@ import secrets
 import string
 
 from courses.models import Course
-from .models import Profile
+from .models import Profile, ResetPassword
 from slots.models import Board, TimeConfig, TimeSchedule, TimeSlot
 from .forms import UserRegisterForm, UserUpdateForm, ProfileForm
 from datetime import datetime
@@ -54,29 +56,61 @@ def sendPass(request):
                 #Create your SMTP session
                 smtp = smtplib.SMTP('smtp.gmail.com', 587)
 
-            #Use TLS to add security
+                #Use TLS to add security
                 smtp.starttls()
 
                 #User Authentication
-                smtp.login("ecesoclabs@iiitd.ac.in", "ecesoclabs@123")
+                smtp.login("arpajitofficial@gmail.com", "skcgsgxxtiohpiqm")
+
+                #Check for previous attempts
+                chkUser = None
+                try:
+                    chkUser = ResetPassword.objects.get(user = user)
+                    if chkUser:
+                        code = chkUser.code
+                except:
+                    characters = string.ascii_letters + string.digits + string.punctuation
+                    code = ''.join(random.choice(characters) for i in range(8))
+                    code += str(user.username)
 
                 #Defining The Message
                 message = '\nReset password here: ' + \
-                    str(request.get_host()) + '/resetPass/'
+                    str(request.get_host()) + '/resetPassword/' + \
+                    str(code)
 
                 #Sending the Email
-                smtp.sendmail("ecesoclabs@iiitd.ac.in",
+                smtp.sendmail("arpajitofficial@gmail.com",
                               str(user.email), message)
 
                 #Terminating the session
                 smtp.quit()
                 print("Email sent successfully!")
 
+                if not chkUser:
+                    urlCode = ResetPassword(user = user, code = code)
+                    urlCode.save()
+
             except Exception as ex:
                 print("Something went wrong....", ex)
 
             return redirect('login')
     return render(request, 'users/sendPass.html')
+
+
+def resetPassword(request, urlCode):
+    user = None
+    try:
+        userByCode = ResetPassword.objects.get(code = urlCode)
+        user = userByCode.user
+    except:
+        return render(request, 'users/wrongURL.html')
+    if user and request.method == 'POST':
+        if request.POST.get('password'):
+            user.set_password(request.POST.get('password'))
+            user.save()
+            userByCode.delete()
+            return redirect('login')
+    return render(request, 'users/resetPassword.html', {'username': user.username, 'email': user.email})
 
 
 def resetPass(request):
