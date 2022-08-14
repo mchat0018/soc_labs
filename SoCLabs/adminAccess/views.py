@@ -299,3 +299,5 @@ def board_page(request,course_id):
     }
 
     return render(request,'adminAccess/config.html',context=context)
+
+    # 
