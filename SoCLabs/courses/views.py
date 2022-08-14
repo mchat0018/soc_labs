@@ -62,7 +62,7 @@ def course_page(request,course_id):
     lab_days = ret_lab_days(offset)
     curr_day -= offset
     if curr_day < 0: curr_day += 7
-    
+    days = []
     if curr_day != 6:
         days = lab_days[curr_day+1:]
         booked_slots += list(Board.objects.filter(board_user=request.user).filter(course=course).filter(day__in=days).all())

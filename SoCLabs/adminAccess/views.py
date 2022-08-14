@@ -385,13 +385,16 @@ def registerCSV(request, course_id):
             return render(request, 'adminAccess/regUsers.html', {'courseID': course_id, 'message': 'Sheet access Revoked or Invalid Data Format'})
         except:
             return redirect("adminRts", course_id=course_id)
-        pat = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
+        pat1 = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]+\.[a-z]{0,3}$"
+        pat2 = "^[a-zA-Z0-9-_]+@[a-zA-Z0-9]+\.[a-z]{1,3}$"
         userLst = []
         course = Course.objects.get(id=course_id)
         for i in data.itertuples():
             username = str(i[1])
             email = str(i[2])
-            if (not username) or (not re.match(pat, email)):
+            if (not username) or (not re.match(pat1, email) and not re.match(pat2,email)):
+                print(f"{email},{re.match(pat1, email)}")
+                print(f"{email},{re.match(pat2, email)}")
                 continue
             if User.objects.filter(username=username, email=email):
                 if not course.students.filter(username=username, email=email):

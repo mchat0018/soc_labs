@@ -62,8 +62,13 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
 
-                    <a class="nav-link active" href="/">Profile</a>
-                    <a class="nav-link" href="/logout/">Logout</a>
+                    <a class="nav-link" href="{% url 'course-page' course.id %}">Course Page</a>
+                    <a class="nav-link" href="{% url 'book-slots' course.id %}">Book Slots</a>
+                    {% if user.profile.staff_cred %}
+                        <a class="nav-link" href="{% url 'adminRts' course.id %}">Course Admin Page</a>  
+                    {% endif %}
+                    <a class="nav-link" aria-current="page" href="{% url 'profile' %}">Profile</a>
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
 
                 </div>
             </div>
