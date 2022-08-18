@@ -49,8 +49,7 @@ def register(request):
 
 def sendPass(request):
     if request.method == 'POST':
-        user = User.objects.get(
-            username=request.POST.get('username'), email=request.POST.get('email'))
+        user = User.objects.get(email=request.POST.get('email'))
         if user:
             try:
                 #Create your SMTP session
@@ -69,7 +68,7 @@ def sendPass(request):
                     if chkUser:
                         code = chkUser.code
                 except:
-                    characters = string.ascii_letters + string.digits + string.punctuation
+                    characters = string.ascii_letters + string.digits
                     code = ''.join(random.choice(characters) for i in range(8))
                     code += str(user.username)
 
