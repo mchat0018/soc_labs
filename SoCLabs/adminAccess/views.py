@@ -393,8 +393,8 @@ def registerCSV(request, course_id):
             email = str(i[2])
             if (not username) or (not re.match(pat, email)):
                 continue
-            if User.objects.filter(username=username, email=email):
-                if not course.students.filter(username=username, email=email):
+            if User.objects.filter(username=username):
+                if not course.students.filter(username=username):
                     course.students.add(User.objects.get(username=username))
                     userLst.append([username, email])
                 continue
