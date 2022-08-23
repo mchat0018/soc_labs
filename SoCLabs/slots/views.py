@@ -55,10 +55,12 @@ def bookSlots(request,course_id):
         for key,value in request.POST.lists():
             print(key,value)
             
-        if 'select_day' in request.POST:
+        if "select_day" in request.POST:
+            print('Day form submitted')
             selected_day = request.POST['days'] 
         
         elif 'select_time' in request.POST:
+            print('time form submitted')
             time_slot = request.POST.get('time-slot',None)
             board = request.POST.get('board',None)
             selected_day = request.POST.get('selected_day',None)

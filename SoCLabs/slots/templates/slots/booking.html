@@ -102,14 +102,14 @@
                     <div class="input-group">
                         <select class="form-select" name="days" id="days" aria-label="Example select with button addon">
                             {% for day in days %}
-                            {% if day == selected_day %}
-                            <option value="{{ day }}" selected>{{day}}</option>
-                            {% else %}
-                            <option value="{{ day }}">{{day}}</option>
-                            {% endif %}
+                                {% if day == selected_day %}
+                                <option value="{{ day }}" selected>{{day}}</option>
+                                {% else %}
+                                <option value="{{ day }}">{{day}}</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
-                        <button class="btn btn-outline-primary btn-form-submit" type="submit" name="select_day ">Search</button>
+                        <button class="btn btn-outline-primary btn-form-submit" type="submit" name="select_day">Search</button>
                     </div>
                 </form>
                 {% csrf_token %}
