@@ -10,15 +10,9 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <link rel="stylesheet" href="{% static 'users/styles.css' %}" type="text/css">
         <title>Profile</title>
-        <link href='https://fonts.googleapis.com/css?family=Open Sans' rel='stylesheet'>
-        <style>
-        body {
-            font-family: 'Open Sans';
-        }
-        </style>
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3fadab; font-size:x-large;">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #3fadab; font-size:x-large; border-radius: 10px;margin: 10px;">
             <div class="container-fluid">
                 <a class="navbar-brand"><img src="https://www.iiitd.ac.in/sites/default/files/images/logo/style1invertedgreyscalelarge.png" class="logo" width="80"></a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -37,52 +31,44 @@
                 </div>
             </div>
         </nav>
-        <div class="card text-center mx-auto" style="width: 40rem;">
-            <div class="card-header">
-                <h1 class="page-header profile-header">User Profile</h1>
+        <div class="card text-center mx-auto" style="width: 450px;border: none;background-color:#136a8a;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #267871, #136a8a);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #267871, #136a8a); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        ;">
+            <div class="card-header" style="background-color: #3fadab;">
+                <!-- <h1 class="page-header profile-header">User Profile</h1> -->
             </div>
-            <div class="card-body">
+            <div class="card-body" >
                 <section class="content profile-info">
                     <div class="card-title content-section">
                         <div class="media">
-                            <img class="rounded-circle account-img" src="https://www.focusedu.org/wp-content/uploads/2018/12/circled-user-male-skin-type-1-2.png" style=" margin-right: 15px; width : 100px;">
-                            <h2 class="account-heading">{{user.username}}</h2>
-                            <p class="text-secondary">{{user.email}}</p>
+                            <img class="rounded-circle account-img" src="https://cdni.iconscout.com/illustration/premium/thumb/user-profile-4487155-3726305.png" style=" margin-right: 15px; width : 200px;">
+                            <br>
+                            <h1 style="font-size: 50px;"> 👨🏻‍🎓</h1>
+                            <h3 class="account-heading">{{user.username}}</h3>
                             {% if flag %}
                                 <p class="text-secondary">Staff</p>
                             {% else %}
                                 <p class="text-secondary">Student</p>
                             {% endif %}
+                            <h2>✉️</h1>
+                                <br>
+                            <p class="text-light" >{{user.email}}</p>
                         </div>
-                        <!-- FORM HERE -->
-                    </div>
-                    <div>
-                        <form method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <fieldset class="form-group">
-                                <legend class="border-bottom mb-4">Profile Info</legend>
-                                {{ u_form|crispy }}
-                                <hr>
-                                {{ p_form|crispy }}
-                            </fieldset>
-                            <br>
-                            <div class="form-group">
-                                <button class="btn btn-outline-warning" type="submit">Update</button>
-                            </div>
-                        </form>
-                    </div>
+                    </div>    
                 </section>
             </div>
+            
             <div class="card-footer">
                 <h4>Registered Courses</h2>
                 <div class="courses">
                     {% for course in reg_courses %}
                         <p>
-                            <button style="width:100%  ; color: white; font-size: 20px;" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample1" aria-expanded="false" aria-controls="collapseExample">
+                            <button style="width:100%  ; color: white; font-size: 20px;" class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample{{course.pk}}" aria-expanded="false" aria-controls="collapseExample">
                             {{course.name}}
                             </button>
                         </p>
-                        <div class="collapse" id="collapseExample1">
+                        <div class="collapse" id="collapseExample{{course.pk}}">
                             <div class="card card-body" style="margin: 10px ;font-size: 15px;">
                                 {{course.description}}
                                 <hr>
@@ -92,24 +78,13 @@
                                         <a class="btn btn-primary" href="{% url 'adminRts' course.pk %}" style="width:150px; text-align: center; font-size: 12px;" target="_blank">Course Admin page</a>
                                     {% endif %}
                                 </div>
-                            </div>
-                            
+                            </div>  
                         </div>
                     {% endfor %}
                   </div>
             </div>
+            
         </div>
-        <!--div class="mx-auto" style="width: 40rem;">
-            {% comment %}
-            <form action="{% url 'addCourse' user.id %}" method="post">
-                {% csrf_token %}
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Course Code" name="CourseCode">
-                    <button class="btn btn-primary" type="submit">Add Course</button>
-                </div>
-            </form>
-            {% endcomment %}
-        </div-->
 
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>

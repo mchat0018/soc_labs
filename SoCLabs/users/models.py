@@ -21,9 +21,12 @@ class Profile(models.Model):
             img.thumbnail(output_size)
             img.save(self.image.path)
 
-# class Staff(models.Model):
-#     profile = models.OneToOneField(Profile,on_delete=models.CASCADE)
-#     courses = models.ManyToManyField(Course)
+class ResetPassword(models.Model):
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    code = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.code
     
 # class SlotLimit(models.Model):
 #     user = models.OneToOneField(User,on_delete=models.CASCADE)

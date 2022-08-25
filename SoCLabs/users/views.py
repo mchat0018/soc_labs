@@ -3,7 +3,6 @@ import re
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.db.models import Q
 import pandas as pd
@@ -11,12 +10,9 @@ import secrets
 import string
 
 from courses.models import Course
-from .models import Profile
-from slots.models import Board, TimeConfig, TimeSchedule, TimeSlot
+from .models import ResetPassword
 from .forms import UserRegisterForm, UserUpdateForm, ProfileForm
-from datetime import datetime
-import time
-import pytz
+import random
 
 
 def run_authentication(user):
@@ -47,22 +43,33 @@ def register(request):
 
 def sendPass(request):
     if request.method == 'POST':
-        user = User.objects.get(
-            username=request.POST.get('username'), email=request.POST.get('email'))
+        user = User.objects.get(email=request.POST.get('email'))
         if user:
             try:
                 #Create your SMTP session
                 smtp = smtplib.SMTP('smtp.gmail.com', 587)
 
-            #Use TLS to add security
+                #Use TLS to add security
                 smtp.starttls()
 
                 #User Authentication
                 smtp.login("arpajitofficial@gmail.com", "skcgsgxxtiohpiqm")
 
+                #Check for previous attempts
+                chkUser = None
+                try:
+                    chkUser = ResetPassword.objects.get(user = user)
+                    if chkUser:
+                        code = chkUser.code
+                except:
+                    characters = string.ascii_letters + string.digits
+                    code = ''.join(random.choice(characters) for i in range(8))
+                    code += str(user.username)
+
                 #Defining The Message
                 message = '\nReset password here: ' + \
-                    str(request.get_host()) + '/resetPass/'
+                    str(request.get_host()) + '/resetPassword/' + \
+                    str(code)
 
                 #Sending the Email
                 smtp.sendmail("arpajitofficial@gmail.com",
@@ -72,6 +79,10 @@ def sendPass(request):
                 smtp.quit()
                 print("Email sent successfully!")
 
+                if not chkUser:
+                    urlCode = ResetPassword(user = user, code = code)
+                    urlCode.save()
+
             except Exception as ex:
                 print("Something went wrong....", ex)
 
@@ -79,19 +90,21 @@ def sendPass(request):
     return render(request, 'users/sendPass.html')
 
 
-def resetPass(request):
-    if request.method == 'POST':
-        try:
-            user = User.objects.get(
-                username=request.POST.get('username'), email=request.POST.get('email'))
-        except:
-            return render(request, 'users/resetPass.html')
-        if user:
-            if request.POST.get('password'):
-                user.set_password(request.POST.get('password'))
-                user.save()
+def resetPassword(request, urlCode):
+    user = None
+    try:
+        userByCode = ResetPassword.objects.get(code = urlCode)
+        user = userByCode.user
+    except:
+        return render(request, 'users/wrongURL.html')
+    if user and request.method == 'POST':
+        if request.POST.get('password'):
+            user.set_password(request.POST.get('password'))
+            user.save()
+            userByCode.delete()
             return redirect('login')
-    return render(request, 'users/resetPass.html')
+    return render(request, 'users/resetPassword.html', {'username': user.username, 'email': user.email})
+
 
 
 @login_required
@@ -117,7 +130,7 @@ def profile(request):
         'reg_courses':reg_courses,
         'flag': run_authentication(request.user)
     }
-    return render(request,'users/profile.html',context)
+    return render(request,'users/profile-1.html',context)
 
 
 @login_required
