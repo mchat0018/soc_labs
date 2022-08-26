@@ -3,14 +3,15 @@ from itertools import chain
 import profile
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import FormView
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from django.db.models import Q
-from courses.models import Course,Lab
+from courses.models import Course,Tutorial
 from slots.models import IPAddress,Board,TimeConfig,TimeSchedule,TimeSlot
 from users.models import Profile
-from .forms import ConfigsCRUD
+from .forms import ConfigsCRUD, TutorialForm
 import re
 import pandas as pd
 import secrets
@@ -53,6 +54,7 @@ def adminRts(request, course_id):
     # coursenames = [(str(i), str(i)) for i in coursenames]
     # coursenames.insert(0, ('Select Course', 'Select Course'))
     form = ConfigsCRUD()
+    tut_form = TutorialForm()
     students = course.students.all()
     filterbtn = 'Search'
     params = [' collapsed','false',' collapse']
@@ -76,8 +78,10 @@ def adminRts(request, course_id):
             filterbtn = 'Reset'
             params = ['', 'true', '']
 
-       # if form data was submitted
+    # if form data was submitted
     if request.method == "POST":
+        # -----------------board form-------------------------------------------------------------------
+
         # getting the checked board objects from the submitted form
         checked_board_names = request.POST.getlist('board_name')
         print(checked_board_names)
@@ -115,6 +119,8 @@ def adminRts(request, course_id):
 
             messages.success(
                 request, 'Boards selected...Slots created successfully')
+
+    # ------------------timing form----------------------------------------------------------------------
 
         form = ConfigsCRUD(request.POST)
         if form.is_valid():
@@ -176,6 +182,18 @@ def adminRts(request, course_id):
             messages.success(request, f'Slots successfully created')
             return redirect("adminRts", course_id=course_id)
 
+    # ---------------------tutorial upload form-----------------------------------------------------------
+        tut_form = TutorialForm(request.POST)
+        print('3rd form reached')
+
+        if tut_form.is_valid():
+            print('Valid Entry')
+            tut_form.instance.course = course
+            tut_form.save()
+
+            return redirect('adminRts',course_id=course_id)
+    
+
     # getting all available boards and the ones already included in the course
     available_boards = IPAddress.objects.filter(
         Q(course__isnull=True) | Q(course=course)).all()
@@ -187,6 +205,7 @@ def adminRts(request, course_id):
                  reverse=False
                  )
     context = {'form': form,
+               'tut_form':tut_form,
                "configs": configs,
                "course": course,
                "boards": available_boards,
@@ -199,8 +218,29 @@ def adminRts(request, course_id):
     return render(request, "adminAccess/adminRts1.html", context=context)
 
 
+# def tutorial_upload(request, course_id):
+#     course = Course.objects.get(id=course_id)
+
+#     # running authentication for user
+#     if not run_authentication(request.user, course):
+#         raise PermissionDenied
+
+#     if request.method == 'POST':
+#         form = TutorialForm(request.POST,request.FILES)
+
+#         if form.is_valid():
+#             form.instance.course = course
+#             form.save()
+#             return redirect('adminRts',course_id=course_id)
+        
+#     else:
+#         form = TutorialForm()
+
+#     return render(request,'adminAccess/adminRts1.html',context={'tutorial_form':form})
+
+
 @login_required
-def delete_config2(request, course_id, pk):
+def delete_config(request, course_id, pk):
     course = Course.objects.get(id=course_id)
 
     # running authentication for user

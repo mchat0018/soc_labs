@@ -2,7 +2,7 @@ from pyexpat import model
 from random import choices
 from django import forms
 from django.core.validators import MaxValueValidator,MinValueValidator
-from courses.models import Course,Lab
+from courses.models import Course,Tutorial
 from slots.models import TimeConfig,TimeSchedule,TimeSlot,IPAddress
 from datetime import datetime
 
@@ -103,3 +103,12 @@ class ConfigsCRUD(forms.ModelForm):
             MinValueValidator(1),
         ]
     )
+
+class TutorialForm(forms.ModelForm):
+
+    class Meta:
+        model = Tutorial
+        fields = ['title','link']
+        # widgets = {
+        #     'tutorial': forms.ClearableFileInput(attrs={'multiple':True})
+        # }

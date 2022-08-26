@@ -127,58 +127,31 @@
                 <p class="description" style="font-size:1.5em;">{{description}}</p>
                 <br>
                 <hr>
-                <h2 style="font-size:33px;">Tutorials</h3>
+                
+                <h2 style="font-size:33px;">Tutorials</h2>
+                    {% if tutorials %}
                     <div class="onlabs">
-                        <p>
-                            <button
-                                style="width:100%  ; color: white; font-size: 20px;"
-                                class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseExample1" aria-expanded="false"
-                                aria-controls="collapseExample">
-                                Tutorial-1
-                            </button>
-                        </p>
-                        <div class="collapse" id="collapseExample1">
-                            
-                            <a href="https://www.youtube.com/embed/nBdXxRwb-Pg" ><iframe width="420" height="315" src="https://www.youtube.com/embed/nBdXxRwb-Pg" ></iframe>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></a>
-                            
-                        </div>
-                        <p>
-                            <button
-                                style="width:100%  ; color: white; font-size: 20px;"
-                                class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseExample1" aria-expanded="false"
-                                aria-controls="collapseExample">
-                                Tutorial-2
-                            </button>
-                        </p>
-                        <div class="collapse" id="collapseExample2">
-                            
-                            <a href="https://www.youtube.com/embed/HXUB2Lymguc"><iframe width="420" height="315" src="https://www.youtube.com/embed/HXUB2Lymguc"></iframe>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></a>
-                            
-                        </div>
-                        <!-- <p>
-                            <button
-                                style="width:100%  ; color: white; font-size: 20px;"
-                                class="btn btn-secondary" type="button" data-bs-toggle="collapse"
-                                data-bs-target="#collapseExample1" aria-expanded="false"
-                                aria-controls="collapseExample">
-                                Tutorial-3
-                            </button>
-                        </p>s
-                        <div class="collapse" id="collapseExample3">
-                            <div class="card card-body" style="margin: 10px ;font-size: 15px;">
-                                <a href="https://www.youtube.com/embed/lLg1AgA2Xoo"><iframe width="420" height="315" src="https://www.youtube.com/embed/lLg1AgA2Xoo"></iframe>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p></a>
-                            </div>
+                        {% for tutorial in tutorials %}
+                            <p>
+                                <button
+                                    style="width:100%  ; color: white; font-size: 20px;"
+                                    class="btn btn-secondary" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseExample{{tutorial.pk}}" aria-expanded="false"
+                                    aria-controls="collapseExample">
+                                    {{tutorial.title}}
+                                </button>
+                            </p>
+                            <div class="collapse" id="collapseExample{{tutorial.pk}}">
+                                    
+                                <a href="{{tutorial.link}}"><iframe width="420" height="315" src="{{tutorial.link}}"></iframe></a>
 
-                        </div> -->
+                            </div>
+                        {% endfor %}   
                     </div>
+                    {% endif %}
                     <hr>
                     <div>
-                        <h2 style="font-size:33px;">Your Pending Slots</h3>
+                        <h2 style="font-size:33px;">Your Pending Slots</h2>
                             <table class="table table-striped">
                                 <thead class="thead-dark">
                                     <tr>

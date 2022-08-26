@@ -5,7 +5,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.models import User
 from django.db.models import Q
 from slots.models import Board,IPAddress,TimeSlot,TimeSchedule,StartDay
-from .models import Course,Lab
+from .models import Course,Lab, Tutorial
 from django.utils import timezone
 from datetime import date, timedelta, datetime
 import pytz
@@ -81,7 +81,7 @@ def course_page(request,course_id):
         'professors':course.professors.all(),
         'staff':course.staff.all(),
         'description':course.description,
-        'labs':Lab.objects.filter(course=course).all(),
+        'tutorials':Tutorial.objects.filter(course=course).all(),
         'pending_slots':booked_slots,
         'curr_day':today,
         'curr_time_hours': curr_time_hours,
